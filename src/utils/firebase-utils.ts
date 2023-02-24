@@ -1,22 +1,26 @@
-import {serverTimestamp} from 'firebase/firestore';
+import {serverTimestamp, Timestamp} from 'firebase/firestore';
 import {StorageReference} from 'firebase/storage';
-import {Dict} from '../interfaces/dict';
 
 export abstract class FirebaseUtils {
-  public static getCreatedTimestamp(): Dict {
+  public static getCreatedTimestamp(): {created: Timestamp; modified: Timestamp} {
     return {
-      created: serverTimestamp(),
-      modified: serverTimestamp(),
+      created: serverTimestamp() as Timestamp,
+      modified: serverTimestamp() as Timestamp,
     };
   }
 
-  public static getModifiedTimestamp(): Dict {
+  public static getModifiedTimestamp(): {modified: Timestamp} {
     return {
-      modified: serverTimestamp(),
+      modified: serverTimestamp() as Timestamp,
     };
   }
 
   public static storageRefToPublicPath(ref: StorageReference): string {
     return `https://storage.googleapis.com/${ref.bucket}/${ref.fullPath}`;
   }
+}
+
+export class FirestoreCollections {
+  public static readonly USERS = 'users';
+  public static readonly PRODUCTS = 'products';
 }

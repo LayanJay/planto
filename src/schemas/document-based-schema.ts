@@ -4,6 +4,13 @@ import {Dict} from '../interfaces/dict';
 /**
  * Base of all the DocumentSnapshot based models
  */
+
+export interface IDocumentBase {
+  id?: string;
+  created: Timestamp | null;
+  modified: Timestamp | null;
+}
+
 export abstract class DocumentBasedSchema {
   public static readonly CREATED: string = 'created';
   public static readonly MODIFIED: string = 'modified';

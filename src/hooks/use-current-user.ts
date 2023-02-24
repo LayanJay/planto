@@ -4,7 +4,7 @@ import {useAuthState} from 'react-firebase-hooks/auth';
 import {useDocumentData} from 'react-firebase-hooks/firestore';
 import {auth, db} from '../config/firebase-config';
 import {userConverter, UserSchema} from '../schemas/user-schema';
-import {FirestoreCollections} from '../utils/firestore-collections';
+import {FirestoreCollections} from '../utils/firebase-utils';
 
 interface Props {
   fetchUserDoc: boolean;

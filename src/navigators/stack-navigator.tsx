@@ -10,7 +10,7 @@ export type RootStackParamList = {
 
 const StackNavigator = () => {
   return (
-    <Stack.Navigator screenOptions={{headerShadowVisible: false}}>
+    <Stack.Navigator>
       <Stack.Screen
         component={HomeScreen}
         name='Home'

@@ -14,6 +14,24 @@ const HomeScreen = () => {
   const navigation = useNavigation<RootStackScreenProps<'Home'>['navigation']>();
   const backgroundStyle = 'bg-white dark:bg-slate-900 h-screen';
 
+  // const userRef = doc(db, `${FirestoreCollections.USERS}/1`).withConverter(userConverter);
+  // setDoc(userRef, {
+  //   first_name: 'dsfsdf',
+  //   last_name: 'dsf',
+  //   email: 'dsfsdf@gmail.com',
+  //   role: 'sdfg',
+  //   purchases: [],
+  //   reviews: [],
+  //   ...FirebaseUtils.getCreatedTimestamp(),
+
+  // });
+  // updateDoc(userRef, {
+  //   first_name: 'dsfsdf',
+  //   purchases: [],
+  //   ...FirebaseUtils.getCreatedTimestamp(),
+  //   email: 'dsfsdf@gmail.com',
+  // });
+
   return (
     <SafeAreaView className='-mt-12 bg-white'>
       <ScrollView className={backgroundStyle}>
