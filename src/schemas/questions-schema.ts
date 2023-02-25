@@ -3,36 +3,44 @@
  */
 import {
   DocumentData,
+  FirestoreDataConverter,
   QueryDocumentSnapshot,
   SnapshotOptions,
   Timestamp,
   WithFieldValue,
 } from '@firebase/firestore';
+import {DataPointer} from '../interfaces/data-pointer';
+import {FirebaseUtils} from '../utils/firebase-utils';
 import {DocumentBasedSchema, IDocumentBase} from './document-based-schema';
 import {UserDataPointer} from './user-schema';
 
 export interface IQuestionDocument extends IDocumentBase {
-  title: string | null;
-  question: string | null;
+  title: string;
+  question: string;
   votes: number;
   is_answered: boolean;
   author: UserDataPointer;
   answers: AnswersDataPointer;
 }
 
-export interface QuestionDataPointer {
-  id: string;
-  title: string | null;
+export interface QuestionDataPointer extends DataPointer {
+  title: string;
   votes: number;
 }
 
 export interface AnswersDataPointer {
-  text: string | null;
-  answered_by: UserDataPointer | null;
-  created_at: Timestamp | null;
+  text: string;
+  answered_by: UserDataPointer;
+  created_at: Timestamp;
 }
 
-export class QuestionSchema extends DocumentBasedSchema {
+export class QuestionSchema extends DocumentBasedSchema implements IQuestionDocument {
+  readonly title: string;
+  readonly question: string;
+  readonly votes: number;
+  readonly is_answered: boolean;
+  readonly author: UserDataPointer;
+  readonly answers: AnswersDataPointer;
   static readonly TITLE: string = 'title';
   static readonly QUESTION: string = 'question';
   static readonly VOTES: string = 'votes';
@@ -40,28 +48,14 @@ export class QuestionSchema extends DocumentBasedSchema {
   static readonly AUTHOR: string = 'author';
   static readonly ANSWERS: string = 'answers';
 
-  public get title(): string | null {
-    return this.doc.get(QuestionSchema.TITLE) ?? null;
-  }
-
-  public get question(): string | null {
-    return this.doc.get(QuestionSchema.QUESTION) ?? null;
-  }
-
-  public get votes(): number {
-    return this.doc.get(QuestionSchema.VOTES) ?? 0;
-  }
-
-  public get is_answered(): boolean {
-    return this.doc.get(QuestionSchema.ISANSWERED) ?? false;
-  }
-
-  public get author(): UserDataPointer | null {
-    return this.doc.get(QuestionSchema.AUTHOR) ?? null;
-  }
-
-  public get answers(): Array<AnswersDataPointer> {
-    return this.doc.get(QuestionSchema.ANSWERS) ?? [];
+  public constructor(doc: IQuestionDocument) {
+    super(doc);
+    this.title = doc.title;
+    this.question = doc.question;
+    this.votes = doc.votes;
+    this.is_answered = doc.is_answered;
+    this.author = doc.author;
+    this.answers = doc.answers;
   }
 
   public toPointer(): QuestionDataPointer {
@@ -71,13 +65,34 @@ export class QuestionSchema extends DocumentBasedSchema {
       votes: this.votes,
     };
   }
+
+  public static toJson(doc: QuestionSchema | WithFieldValue<QuestionSchema>) {
+    return {
+      [QuestionSchema.TITLE]: doc.title,
+      [QuestionSchema.QUESTION]: doc.question,
+      [QuestionSchema.VOTES]: doc.votes,
+      [QuestionSchema.ISANSWERED]: doc.is_answered,
+      [QuestionSchema.AUTHOR]: doc.author,
+      [QuestionSchema.ANSWERS]: doc.answers,
+      [QuestionSchema.CREATED]: doc.created,
+      [QuestionSchema.MODIFIED]: doc.modified,
+    };
+  }
+
+  public static createDocFromJson(
+    json: Omit<IQuestionDocument, 'id' | 'created' | 'modified'> &
+      Partial<Pick<IQuestionDocument, 'created' | 'modified'>>
+  ): QuestionSchema {
+    return new QuestionSchema({id: null, ...FirebaseUtils.getCreatedTimestamp(), ...json});
+  }
 }
 
-export const questionConverter = {
-  toFirestore(post: WithFieldValue<IQuestionDocument>): DocumentData {
-    return post;
+export const questionConverter: FirestoreDataConverter<QuestionSchema> = {
+  toFirestore(question: WithFieldValue<QuestionSchema>): DocumentData {
+    return QuestionSchema.toJson(question);
   },
   fromFirestore(snapshot: QueryDocumentSnapshot, options: SnapshotOptions): QuestionSchema {
-    return new QuestionSchema(snapshot);
+    const data = {...snapshot.data(options)!, id: snapshot.id} as IQuestionDocument;
+    return new QuestionSchema(data);
   },
 };

@@ -15,23 +15,37 @@ const HomeScreen = () => {
   const backgroundStyle = 'bg-white dark:bg-slate-900 h-screen';
 
   // const userRef = doc(db, `${FirestoreCollections.USERS}/1`).withConverter(userConverter);
-  // setDoc(userRef, {
-  //   first_name: 'dsfsdf',
-  //   last_name: 'dsf',
-  //   email: 'dsfsdf@gmail.com',
-  //   role: 'sdfg',
-  //   purchases: [],
-  //   reviews: [],
-  //   ...FirebaseUtils.getCreatedTimestamp(),
-
-  // });
+  // const userCollRef = collection(db, `${FirestoreCollections.USERS}`).withConverter(userConverter);
+  // addDoc(
+  //   userCollRef,
+  //   UserSchema.createDocFromJson({
+  //     uid: '',
+  //     first_name: '',
+  //     last_name: '',
+  //     email: '',
+  //     role: '',
+  //     purchases: [],
+  //     reviews: [],
+  //   })
+  // );
+  // setDoc(
+  //   userRef,
+  //   UserSchema.createDocFromJson({
+  //     uid: '',
+  //     first_name: '',
+  //     last_name: '',
+  //     email: '',
+  //     role: '',
+  //     purchases: [],
+  //     reviews: [],
+  //   })
+  // );
   // updateDoc(userRef, {
-  //   first_name: 'dsfsdf',
+  //   first_name: '',
+  //   email: '',
   //   purchases: [],
-  //   ...FirebaseUtils.getCreatedTimestamp(),
-  //   email: 'dsfsdf@gmail.com',
+  //   ...FirebaseUtils.getModifiedTimestamp(),
   // });
-
   return (
     <SafeAreaView className='-mt-12 bg-white'>
       <ScrollView className={backgroundStyle}>

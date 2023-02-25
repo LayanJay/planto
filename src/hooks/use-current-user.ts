@@ -24,6 +24,7 @@ export function useCurrentUser({fetchUserDoc = false}: Props): {
       ? doc(db, `${FirestoreCollections.USERS}/${authUser?.uid}`).withConverter(userConverter)
       : null
   );
+
   return {
     authUser: authUser ?? null,
     user: user ?? null,

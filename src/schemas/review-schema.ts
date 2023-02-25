@@ -8,35 +8,38 @@ import {
   SnapshotOptions,
   WithFieldValue,
 } from '@firebase/firestore';
-import {DocumentBasedSchema} from './document-based-schema';
+import {DataPointer} from '../interfaces/data-pointer';
+import {FirebaseUtils} from '../utils/firebase-utils';
+import {DocumentBasedSchema, IDocumentBase} from './document-based-schema';
 import {UserDataPointer} from './user-schema';
 
-export interface ReviewDataPointer {
-  id: string;
-  title: string | null;
+export interface IReviewDocument extends IDocumentBase {
+  title: string;
+  text: string;
+  author: UserDataPointer;
+  rating: number;
+}
+export interface ReviewDataPointer extends DataPointer {
+  title: string;
   rating: number;
 }
 
-export class ReviewSchema extends DocumentBasedSchema {
+export class ReviewSchema extends DocumentBasedSchema implements IReviewDocument {
   static readonly TITLE: string = 'title';
   static readonly TEXT: string = 'text';
   static readonly AUTHOR: string = 'author';
   static readonly RATING: string = 'rating';
+  readonly title: string;
+  readonly text: string;
+  readonly author: UserDataPointer;
+  readonly rating: number;
 
-  public get title(): string | null {
-    return this.doc.get(ReviewSchema.TITLE) ?? null;
-  }
-
-  public get text(): string | null {
-    return this.doc.get(ReviewSchema.TEXT) ?? null;
-  }
-
-  public get author(): UserDataPointer | null {
-    return this.doc.get(ReviewSchema.AUTHOR) ?? null;
-  }
-
-  public get rating(): number {
-    return this.doc.get(ReviewSchema.RATING) ?? 0;
+  public constructor(doc: IReviewDocument) {
+    super(doc);
+    this.title = doc.title;
+    this.text = doc.text;
+    this.author = doc.author;
+    this.rating = doc.rating;
   }
 
   public toPointer(): ReviewDataPointer {
@@ -46,13 +49,32 @@ export class ReviewSchema extends DocumentBasedSchema {
       rating: this.rating,
     };
   }
+
+  public static toJson(doc: ReviewSchema | WithFieldValue<ReviewSchema>) {
+    return {
+      [ReviewSchema.TITLE]: doc.title,
+      [ReviewSchema.TEXT]: doc.text,
+      [ReviewSchema.AUTHOR]: doc.author,
+      [ReviewSchema.RATING]: doc.rating,
+      [ReviewSchema.CREATED]: doc.created,
+      [ReviewSchema.MODIFIED]: doc.modified,
+    };
+  }
+
+  public static createDocFromJson(
+    json: Omit<IReviewDocument, 'id' | 'created' | 'modified'> &
+      Partial<Pick<IReviewDocument, 'created' | 'modified'>>
+  ): ReviewSchema {
+    return new ReviewSchema({id: null, ...FirebaseUtils.getCreatedTimestamp(), ...json});
+  }
 }
 
-export const ReviewConverter: FirestoreDataConverter<ReviewSchema> = {
-  toFirestore(post: WithFieldValue<ReviewSchema>): DocumentData {
-    return post;
+export const reviewConverter: FirestoreDataConverter<ReviewSchema> = {
+  toFirestore(review: WithFieldValue<ReviewSchema>): DocumentData {
+    return ReviewSchema.toJson(review);
   },
   fromFirestore(snapshot: QueryDocumentSnapshot, options: SnapshotOptions): ReviewSchema {
-    return new ReviewSchema(snapshot);
+    const data = {...snapshot.data(options)!, id: snapshot.id} as IReviewDocument;
+    return new ReviewSchema(data);
   },
 };

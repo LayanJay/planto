@@ -1,6 +1,4 @@
-import {Dict} from './dict';
-
-export interface DataPointer extends Dict {
+export interface DataPointer {
   label?: string;
-  id: string;
+  id: string | null;
 }
