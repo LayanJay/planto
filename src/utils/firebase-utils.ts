@@ -23,4 +23,7 @@ export abstract class FirebaseUtils {
 export class FirestoreCollections {
   public static readonly USERS = 'users';
   public static readonly PRODUCTS = 'products';
+  public static readonly QUESTIONS = 'questions';
+  public static readonly CARTS = 'carts';
+  public static readonly REVIEWS = 'reviews';
 }

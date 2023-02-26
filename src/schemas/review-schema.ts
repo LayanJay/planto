@@ -11,6 +11,7 @@ import {
 import {DataPointer} from '../interfaces/data-pointer';
 import {FirebaseUtils} from '../utils/firebase-utils';
 import {DocumentBasedSchema, IDocumentBase} from './document-based-schema';
+import {ProductDataPointer} from './product-schema';
 import {UserDataPointer} from './user-schema';
 
 export interface IReviewDocument extends IDocumentBase {
@@ -18,10 +19,12 @@ export interface IReviewDocument extends IDocumentBase {
   text: string;
   author: UserDataPointer;
   rating: number;
+  product: ProductDataPointer;
 }
 export interface ReviewDataPointer extends DataPointer {
   title: string;
   rating: number;
+  product: ProductDataPointer;
 }
 
 export class ReviewSchema extends DocumentBasedSchema implements IReviewDocument {
@@ -29,10 +32,12 @@ export class ReviewSchema extends DocumentBasedSchema implements IReviewDocument
   static readonly TEXT: string = 'text';
   static readonly AUTHOR: string = 'author';
   static readonly RATING: string = 'rating';
+  static readonly PRODUCT: string = 'product';
   readonly title: string;
   readonly text: string;
   readonly author: UserDataPointer;
   readonly rating: number;
+  readonly product: ProductDataPointer;
 
   public constructor(doc: IReviewDocument) {
     super(doc);
@@ -40,6 +45,7 @@ export class ReviewSchema extends DocumentBasedSchema implements IReviewDocument
     this.text = doc.text;
     this.author = doc.author;
     this.rating = doc.rating;
+    this.product = doc.product;
   }
 
   public toPointer(): ReviewDataPointer {
@@ -47,6 +53,7 @@ export class ReviewSchema extends DocumentBasedSchema implements IReviewDocument
       id: this.id,
       title: this.title,
       rating: this.rating,
+      product: this.product,
     };
   }
 
@@ -56,6 +63,7 @@ export class ReviewSchema extends DocumentBasedSchema implements IReviewDocument
       [ReviewSchema.TEXT]: doc.text,
       [ReviewSchema.AUTHOR]: doc.author,
       [ReviewSchema.RATING]: doc.rating,
+      [ReviewSchema.PRODUCT]: doc.product,
       [ReviewSchema.CREATED]: doc.created,
       [ReviewSchema.MODIFIED]: doc.modified,
     };

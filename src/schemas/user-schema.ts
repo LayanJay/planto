@@ -11,7 +11,7 @@ import {
 import {DataPointer} from '../interfaces/data-pointer';
 import {FirebaseUtils} from '../utils/firebase-utils';
 import {DocumentBasedSchema, IDocumentBase} from './document-based-schema';
-import {ProductDataPointer} from './product-schema';
+import {ProductPurchasedDataPointer} from './product-schema';
 import {ReviewDataPointer} from './review-schema';
 
 export interface IUserDocument extends IDocumentBase {
@@ -20,7 +20,7 @@ export interface IUserDocument extends IDocumentBase {
   last_name: string;
   email: string;
   role: string;
-  purchases: Array<ProductDataPointer>;
+  purchases: Array<ProductPurchasedDataPointer>;
   reviews: Array<ReviewDataPointer>;
 }
 export interface UserDataPointer extends DataPointer {
@@ -33,7 +33,7 @@ export class UserSchema extends DocumentBasedSchema implements IUserDocument {
   readonly last_name: string;
   readonly email: string;
   readonly role: string;
-  readonly purchases: ProductDataPointer[];
+  readonly purchases: ProductPurchasedDataPointer[];
   readonly reviews: ReviewDataPointer[];
   static readonly UID: string = 'uid';
   static readonly FIRST_NAME: string = 'first_name';

@@ -32,6 +32,11 @@ export interface IProductDocument extends IDocumentBase {
 export interface ProductDataPointer extends DataPointer {
   name: string;
   price: string;
+}
+
+export interface ProductPurchasedDataPointer extends DataPointer {
+  name: string;
+  price: string;
   purchased_date: Timestamp;
 }
 
@@ -70,6 +75,14 @@ export class ProductSchema extends DocumentBasedSchema implements IProductDocume
   }
 
   public toPointer(): ProductDataPointer {
+    return {
+      id: this.id,
+      name: this.name,
+      price: this.price,
+    };
+  }
+
+  public toPurchasedPointer(): ProductPurchasedDataPointer {
     return {
       id: this.id,
       name: this.name,
