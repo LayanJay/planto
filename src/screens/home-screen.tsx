@@ -1,4 +1,3 @@
-import {useNavigation} from '@react-navigation/native';
 import {ScrollView, Text, View} from 'react-native';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import {
@@ -6,46 +5,14 @@ import {
   LearnMoreLinks,
   ReloadInstructions,
 } from 'react-native/Libraries/NewAppScreen';
-import ButtonBase from '../components/common/buttons/ButtonBase';
+import ButtonBase from '../components/common/buttons/button-base';
 import Section from '../components/common/section';
-import {RootStackScreenProps} from '../interfaces/navigation';
 
 const HomeScreen = () => {
-  const navigation = useNavigation<RootStackScreenProps<'Home'>['navigation']>();
+  // const navigation = useNavigation<RootStackScreenProps<'Home'>['navigation']>();
+  // const route = useRoute<RootStackScreenProps<'Home'>['route']>();
   const backgroundStyle = 'bg-white dark:bg-slate-900 h-screen';
 
-  // const userRef = doc(db, `${FirestoreCollections.USERS}/1`).withConverter(userConverter);
-  // const userCollRef = collection(db, `${FirestoreCollections.USERS}`).withConverter(userConverter);
-  // addDoc(
-  //   userCollRef,
-  //   UserSchema.createDocFromJson({
-  //     uid: '',
-  //     first_name: '',
-  //     last_name: '',
-  //     email: '',
-  //     role: '',
-  //     purchases: [],
-  //     reviews: [],
-  //   })
-  // );
-  // setDoc(
-  //   userRef,
-  //   UserSchema.createDocFromJson({
-  //     uid: '',
-  //     first_name: '',
-  //     last_name: '',
-  //     email: '',
-  //     role: '',
-  //     purchases: [],
-  //     reviews: [],
-  //   })
-  // );
-  // updateDoc(userRef, {
-  //   first_name: '',
-  //   email: '',
-  //   purchases: [],
-  //   ...FirebaseUtils.getModifiedTimestamp(),
-  // });
   return (
     <SafeAreaView className='-mt-12 bg-white'>
       <ScrollView className={backgroundStyle}>
