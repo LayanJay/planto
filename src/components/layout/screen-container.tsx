@@ -4,7 +4,7 @@ import Container from './container';
 
 const ScreenContainer = (props: PropsWithChildren) => {
   return (
-    <SafeAreaView className='h-screen'>
+    <SafeAreaView className='min-h-screen'>
       <Container containerClassNames='h-full'>{props.children}</Container>
     </SafeAreaView>
   );

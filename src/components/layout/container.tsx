@@ -1,3 +1,4 @@
+import {cx} from 'class-variance-authority';
 import React, {PropsWithChildren} from 'react';
 import {View} from 'react-native';
 
@@ -6,7 +7,11 @@ interface Props extends PropsWithChildren {
 }
 
 const Container = (props: Props) => {
-  return <View className='container px-4 bg-white'>{props.children}</View>;
+  return (
+    <View className={cx('container px-4 bg-white', props.containerClassNames)}>
+      {props.children}
+    </View>
+  );
 };
 
 export default Container;
