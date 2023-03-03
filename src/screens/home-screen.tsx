@@ -1,3 +1,4 @@
+import {useNavigation} from '@react-navigation/native';
 import {ScrollView, Text, View} from 'react-native';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import {
@@ -7,9 +8,10 @@ import {
 } from 'react-native/Libraries/NewAppScreen';
 import ButtonBase from '../components/common/buttons/button-base';
 import Section from '../components/common/section';
+import {RootStackScreenProps} from '../interfaces/navigation';
 
 const HomeScreen = () => {
-  // const navigation = useNavigation<RootStackScreenProps<'Home'>['navigation']>();
+  const navigation = useNavigation<RootStackScreenProps<'Home'>['navigation']>();
   // const route = useRoute<RootStackScreenProps<'Home'>['route']>();
   const backgroundStyle = 'bg-white dark:bg-slate-900 h-screen';
 
@@ -23,7 +25,11 @@ const HomeScreen = () => {
           </Section>
           {/* Reuse the button base to create customized buttons */}
 
-          <ButtonBase buttonClassName='mt-3' variant={'primary'}>
+          <ButtonBase
+            onPress={() => navigation.replace('Getting Started')}
+            buttonClassName='mt-3'
+            variant={'primary'}
+          >
             <Text>Hello</Text>
           </ButtonBase>
 

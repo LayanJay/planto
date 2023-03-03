@@ -1,6 +1,6 @@
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
+import GetStartedScreen from '../screens/get-started-screen';
 import HomeScreen from '../screens/home-screen';
-import SplashScreen from '../screens/splash-screen';
 import {Colors} from '../utils/colors';
 
 const Stack = createNativeStackNavigator();
@@ -29,7 +29,7 @@ const StackNavigator = () => {
       }}
     >
       <Stack.Screen
-        component={SplashScreen}
+        component={GetStartedScreen}
         name='Getting Started'
         options={{
           headerTitle: '',
