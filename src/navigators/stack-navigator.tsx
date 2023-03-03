@@ -1,25 +1,41 @@
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
+import GetStartedScreen from '../screens/get-started-screen';
 import HomeScreen from '../screens/home-screen';
+import {Colors} from '../utils/colors';
 
 const Stack = createNativeStackNavigator();
 
 export type RootStackParamList = {
   Home: undefined;
+  'Getting Started': undefined;
   // TODO: Add other routes and it's params here
 };
 
 const StackNavigator = () => {
   return (
-    <Stack.Navigator>
+    <Stack.Navigator
+      initialRouteName='Getting Started'
+      screenOptions={{
+        headerShadowVisible: false,
+        headerTitleStyle: {
+          fontFamily: 'Poppins',
+          fontWeight: '500',
+          fontSize: 18,
+          color: Colors.BLACK,
+        },
+        headerStyle: {
+          backgroundColor: Colors.WHITE,
+        },
+      }}
+    >
       <Stack.Screen
-        component={HomeScreen}
-        name='Home'
+        component={GetStartedScreen}
+        name='Getting Started'
         options={{
-          headerStyle: {
-            backgroundColor: '#eee',
-          },
+          headerTitle: '',
         }}
       />
+      <Stack.Screen component={HomeScreen} name='Home' />
     </Stack.Navigator>
   );
 };
