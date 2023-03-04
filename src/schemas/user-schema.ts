@@ -8,18 +8,18 @@ import {
   SnapshotOptions,
   WithFieldValue,
 } from '@firebase/firestore';
-import {DataPointer} from '../interfaces/data-pointer';
-import {FirebaseUtils} from '../utils/firebase-utils';
-import {DocumentBasedSchema, IDocumentBase} from './document-based-schema';
-import {ProductPurchasedDataPointer} from './product-schema';
-import {ReviewDataPointer} from './review-schema';
+import { DataPointer } from '../interfaces/data-pointer';
+import { FirebaseUtils } from '../utils/firebase-utils';
+import { DocumentBasedSchema, IDocumentBase } from './document-based-schema';
+import { ProductPurchasedDataPointer } from './product-schema';
+import { ReviewDataPointer } from './review-schema';
 
 export interface IUserDocument extends IDocumentBase {
   uid: string;
-  first_name: string;
-  last_name: string;
-  email: string;
-  role: string;
+  first_name?: string;
+  last_name?: string;
+  email: string | null;
+  role: UserRoles;
   purchases: Array<ProductPurchasedDataPointer>;
   reviews: Array<ReviewDataPointer>;
 }
@@ -27,12 +27,17 @@ export interface UserDataPointer extends DataPointer {
   first_name: string;
   last_name: string;
 }
+
+export const enum UserRoles {
+  CUSTOMER = 'customer',
+  ADMIN = 'admin',
+}
 export class UserSchema extends DocumentBasedSchema implements IUserDocument {
   readonly uid: string;
-  readonly first_name: string;
-  readonly last_name: string;
-  readonly email: string;
-  readonly role: string;
+  readonly first_name?: string;
+  readonly last_name?: string;
+  readonly email: string | null;
+  readonly role: UserRoles;
   readonly purchases: ProductPurchasedDataPointer[];
   readonly reviews: ReviewDataPointer[];
   static readonly UID: string = 'uid';
@@ -46,8 +51,8 @@ export class UserSchema extends DocumentBasedSchema implements IUserDocument {
   public constructor(doc: IUserDocument) {
     super(doc);
     this.uid = doc.uid;
-    this.first_name = doc.first_name;
-    this.last_name = doc.last_name;
+    this.first_name = doc.first_name ?? '';
+    this.last_name = doc.last_name ?? '';
     this.email = doc.email;
     this.role = doc.role;
     this.purchases = doc.purchases;
@@ -57,16 +62,16 @@ export class UserSchema extends DocumentBasedSchema implements IUserDocument {
   public toPointer(): UserDataPointer {
     return {
       id: this.id,
-      first_name: this.first_name,
-      last_name: this.last_name,
+      first_name: this.first_name ?? '',
+      last_name: this.last_name ?? '',
     };
   }
 
   public static toJson(doc: UserSchema | WithFieldValue<UserSchema>) {
     return {
       [UserSchema.UID]: doc.uid,
-      [UserSchema.FIRST_NAME]: doc.first_name,
-      [UserSchema.LAST_NAME]: doc.last_name,
+      [UserSchema.FIRST_NAME]: doc.first_name ?? '',
+      [UserSchema.LAST_NAME]: doc.last_name ?? '',
       [UserSchema.EMAIL]: doc.email,
       [UserSchema.ROLE]: doc.role,
       [UserSchema.PURCHASES]: doc.purchases,
@@ -80,7 +85,7 @@ export class UserSchema extends DocumentBasedSchema implements IUserDocument {
     json: Omit<IUserDocument, 'id' | 'created' | 'modified'> &
       Partial<Pick<IUserDocument, 'created' | 'modified'>>
   ): UserSchema {
-    return new UserSchema({id: null, ...FirebaseUtils.getCreatedTimestamp(), ...json});
+    return new UserSchema({ id: null, ...FirebaseUtils.getCreatedTimestamp(), ...json });
   }
 }
 
@@ -89,7 +94,7 @@ export const userConverter: FirestoreDataConverter<UserSchema> = {
     return UserSchema.toJson(user);
   },
   fromFirestore(snapshot: DocumentSnapshot, options: SnapshotOptions): UserSchema {
-    const data = {...snapshot.data(options)!, id: snapshot.id} as IUserDocument;
+    const data = { ...snapshot.data(options)!, id: snapshot.id } as IUserDocument;
     return new UserSchema(data);
   },
 };

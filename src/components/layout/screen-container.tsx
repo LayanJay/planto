@@ -1,5 +1,5 @@
-import {PropsWithChildren} from 'react';
-import {SafeAreaView} from 'react-native';
+import { PropsWithChildren } from 'react';
+import { SafeAreaView } from 'react-native';
 import Container from './container';
 
 const ScreenContainer = (props: PropsWithChildren) => {
