@@ -1,6 +1,6 @@
-import {cva, VariantProps} from 'class-variance-authority';
-import {PropsWithChildren} from 'react';
-import {Pressable, PressableProps} from 'react-native';
+import { cva, VariantProps } from 'class-variance-authority';
+import { PropsWithChildren } from 'react';
+import { Pressable, PressableProps } from 'react-native';
 
 export const enum ButtonVariants {
   PRIMARY = 'primary',
@@ -64,10 +64,7 @@ export const buttonBase = cva(['rounded-full shadow-xl'], {
       custom: [],
     },
     disabled: {
-      true: [
-        'opacity-60',
-        //     TODO: add other styles here. use 'disabled:... selector'
-      ],
+      true: ['opacity-70'],
     },
   },
   //   compoundVariants: [{variant: 'primary', size: 'medium', className: ''}],
