@@ -1,0 +1,54 @@
+{
+  "project_info": {
+    "project_number": "291970194958",
+    "project_id": "planto-v1",
+    "storage_bucket": "planto-v1.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:291970194958:android:b7dd3267d6fb88f554265f",
+        "android_client_info": {
+          "package_name": "com.planto"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "291970194958-1lor6b833jdklfgttv1o8btivvkijlns.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.planto",
+            "certificate_hash": "5e8f16062ea3cd2c4a0d547876baa6f38cabf625"
+          }
+        },
+        {
+          "client_id": "291970194958-olfn5vp6gfrb61hs1lod5beth8rfofja.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDE5ZqMRb-5y4cmHmsSZ0KG3xuRQzf9iDo"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "291970194958-e8pq315u4lge37kaurju7aa34p6ggbru.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "291970194958-q73jeee6d64srv4hemhidjrs14084jci.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.planto"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

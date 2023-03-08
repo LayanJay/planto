@@ -1,13 +1,8 @@
 /**
  * Wraps a user document to make accessing attributes easier
  */
-import {
-  DocumentData,
-  DocumentSnapshot,
-  FirestoreDataConverter,
-  SnapshotOptions,
-  WithFieldValue,
-} from '@firebase/firestore';
+
+import { FirebaseFirestoreTypes } from '@react-native-firebase/firestore';
 import { DataPointer } from '../interfaces/data-pointer';
 import { FirebaseUtils } from '../utils/firebase-utils';
 import { DocumentBasedSchema, IDocumentBase } from './document-based-schema';
@@ -67,34 +62,31 @@ export class UserSchema extends DocumentBasedSchema implements IUserDocument {
     };
   }
 
-  public static toJson(doc: UserSchema | WithFieldValue<UserSchema>) {
+  public toJson() {
     return {
-      [UserSchema.UID]: doc.uid,
-      [UserSchema.FIRST_NAME]: doc.first_name ?? '',
-      [UserSchema.LAST_NAME]: doc.last_name ?? '',
-      [UserSchema.EMAIL]: doc.email,
-      [UserSchema.ROLE]: doc.role,
-      [UserSchema.PURCHASES]: doc.purchases,
-      [UserSchema.REVIEWS]: doc.reviews,
-      [UserSchema.CREATED]: doc.created,
-      [UserSchema.MODIFIED]: doc.modified,
+      [UserSchema.UID]: this.uid,
+      [UserSchema.FIRST_NAME]: this.first_name ?? '',
+      [UserSchema.LAST_NAME]: this.last_name ?? '',
+      [UserSchema.EMAIL]: this.email,
+      [UserSchema.ROLE]: this.role,
+      [UserSchema.PURCHASES]: this.purchases,
+      [UserSchema.REVIEWS]: this.reviews,
+      [UserSchema.CREATED]: this.created,
+      [UserSchema.MODIFIED]: this.modified,
     };
   }
 
   public static createDocFromJson(
     json: Omit<IUserDocument, 'id' | 'created' | 'modified'> &
       Partial<Pick<IUserDocument, 'created' | 'modified'>>
-  ): UserSchema {
-    return new UserSchema({ id: null, ...FirebaseUtils.getCreatedTimestamp(), ...json });
+  ): {
+    [x: string]:
+      | string
+      | ProductPurchasedDataPointer[]
+      | ReviewDataPointer[]
+      | FirebaseFirestoreTypes.Timestamp
+      | null;
+  } {
+    return new UserSchema({ id: null, ...FirebaseUtils.getCreatedTimestamp(), ...json }).toJson();
   }
 }
-
-export const userConverter: FirestoreDataConverter<UserSchema> = {
-  toFirestore(user: WithFieldValue<UserSchema>): DocumentData {
-    return UserSchema.toJson(user);
-  },
-  fromFirestore(snapshot: DocumentSnapshot, options: SnapshotOptions): UserSchema {
-    const data = { ...snapshot.data(options)!, id: snapshot.id } as IUserDocument;
-    return new UserSchema(data);
-  },
-};

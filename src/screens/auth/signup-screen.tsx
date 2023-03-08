@@ -1,13 +1,13 @@
-import { UserCredential } from 'firebase/auth';
-import { doc, setDoc } from 'firebase/firestore';
-import { useCreateUserWithEmailAndPassword } from 'react-firebase-hooks/auth';
+import { FirebaseAuthTypes } from '@react-native-firebase/auth';
+import { useCreateUserWithEmailAndPassword } from '@skillnation/react-native-firebase-hooks/auth';
 import { useForm } from 'react-hook-form';
 import { Alert, Keyboard, Text, TouchableWithoutFeedback, View } from 'react-native';
 import ButtonBase from '../../components/common/buttons/button-base';
 import InputBase from '../../components/common/inputs/input-base';
 import ScreenContainer from '../../components/layout/screen-container';
 import { auth, db } from '../../config/firebase-config';
-import { userConverter, UserRoles, UserSchema } from '../../schemas/user-schema';
+import { useCurrentUser } from '../../hooks/use-current-user';
+import { UserRoles, UserSchema } from '../../schemas/user-schema';
 import { FirestoreCollections } from '../../utils/firebase-utils';
 
 interface FormData {
@@ -17,42 +17,43 @@ interface FormData {
 
 const SignUpScreen = () => {
   const { control, handleSubmit, formState } = useForm<FormData>();
-  const [createUserWithEmailAndPassword, _, loading] = useCreateUserWithEmailAndPassword(auth);
+  const { user } = useCurrentUser(true);
+  console.log('🚀 ~ file: signup-screen.tsx:21 ~ SignUpScreen ~ authUser:', user);
+  const [createUserWithEmailAndPassword, userCred, loading] =
+    useCreateUserWithEmailAndPassword(auth);
 
-  const createUserDocument = async (userCred: UserCredential) => {
-    const userRef = doc(db, FirestoreCollections.USERS, userCred.user.uid).withConverter(
-      userConverter
-    );
-    await setDoc(
-      userRef,
-      UserSchema.createDocFromJson({
-        email: userCred.user.email,
-        first_name: userCred.user.displayName?.split(' ')[0] ?? '',
-        last_name: userCred.user.displayName?.split(' ')[1] ?? '',
-        purchases: [],
-        reviews: [],
-        role: UserRoles.CUSTOMER,
-        uid: userCred.user.uid,
-      })
-    );
+  const createUserDocument = async (userCred: FirebaseAuthTypes.UserCredential) => {
+    await db()
+      .collection(FirestoreCollections.USERS)
+      .doc(userCred.user.uid)
+      .set(
+        UserSchema.createDocFromJson({
+          email: userCred.user.email,
+          first_name: userCred.user.displayName?.split(' ')[0] ?? '',
+          last_name: userCred.user.displayName?.split(' ')[1] ?? '',
+          purchases: [],
+          reviews: [],
+          role: UserRoles.CUSTOMER,
+          uid: userCred.user.uid,
+        })
+      );
+
+    // TODO: remove later
     Alert.alert('Successful!', '', [{ text: 'Ok' }], { cancelable: true });
   };
 
-  const onSubmit = handleSubmit((data) => {
-    createUserWithEmailAndPassword(data.email, data.password)
-      .then(async (userCred) => {
-        Keyboard.dismiss();
-        if (!userCred || !userCred.user) {
-          return;
-        }
+  const onSubmit = handleSubmit(async (data) => {
+    try {
+      Keyboard.dismiss();
+      await createUserWithEmailAndPassword(data.email, data.password);
+      if (!loading && userCred) {
         await createUserDocument(userCred);
-      })
-      .catch((error) => {
-        console.log(error);
-
-        Keyboard.dismiss();
-        Alert.alert('Error!', error.message, [{ text: 'Try Later' }], { cancelable: true });
-      });
+      }
+    } catch (error: any) {
+      console.log(error);
+      Keyboard.dismiss();
+      Alert.alert('Error!', error.message, [{ text: 'Try Later' }], { cancelable: true });
+    }
   });
 
   return (
