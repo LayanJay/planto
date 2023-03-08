@@ -1,10 +1,9 @@
 import { UserCredential } from 'firebase/auth';
 import { doc, setDoc } from 'firebase/firestore';
-import { useCreateUserWithEmailAndPassword, useSignInWithGoogle } from 'react-firebase-hooks/auth';
+import { useCreateUserWithEmailAndPassword } from 'react-firebase-hooks/auth';
 import { useForm } from 'react-hook-form';
 import { Alert, Keyboard, Text, TouchableWithoutFeedback, View } from 'react-native';
 import ButtonBase from '../../components/common/buttons/button-base';
-import GoogleButton from '../../components/common/buttons/google-button';
 import InputBase from '../../components/common/inputs/input-base';
 import ScreenContainer from '../../components/layout/screen-container';
 import { auth, db } from '../../config/firebase-config';
@@ -18,9 +17,7 @@ interface FormData {
 
 const SignUpScreen = () => {
   const { control, handleSubmit, formState } = useForm<FormData>();
-  const [createUserWithEmailAndPassword, userCred, loading] =
-    useCreateUserWithEmailAndPassword(auth);
-  const [signInWithGoogle, googleUserCred, googleLoading] = useSignInWithGoogle(auth);
+  const [createUserWithEmailAndPassword, _, loading] = useCreateUserWithEmailAndPassword(auth);
 
   const createUserDocument = async (userCred: UserCredential) => {
     const userRef = doc(db, FirestoreCollections.USERS, userCred.user.uid).withConverter(
@@ -38,26 +35,25 @@ const SignUpScreen = () => {
         uid: userCred.user.uid,
       })
     );
+    Alert.alert('Successful!', '', [{ text: 'Ok' }], { cancelable: true });
   };
 
   const onSubmit = handleSubmit((data) => {
     createUserWithEmailAndPassword(data.email, data.password)
-      .then(async () => {
+      .then(async (userCred) => {
         Keyboard.dismiss();
         if (!userCred || !userCred.user) {
-          throw new Error('user credentials are invalid');
+          return;
         }
         await createUserDocument(userCred);
       })
       .catch((error) => {
+        console.log(error);
+
         Keyboard.dismiss();
         Alert.alert('Error!', error.message, [{ text: 'Try Later' }], { cancelable: true });
       });
   });
-
-  const signInWithGoogleProvider = async () => {
-    // TODO: refer https://rnfirebase.io/auth/social-auth#google
-  };
 
   return (
     <ScreenContainer>
@@ -107,14 +103,6 @@ const SignUpScreen = () => {
                 Continue
               </Text>
             </ButtonBase>
-          </View>
-          <View className='flex flex-1 flex-row space-x-2 items-center mb-4'>
-            <View className='h-1 border-b border-black/20 grow'></View>
-            <Text className='font-main text-black/40'>or</Text>
-            <View className='h-1 border-b border-black/20 grow'></View>
-          </View>
-          <View className='w-full'>
-            <GoogleButton onPress={signInWithGoogleProvider} />
           </View>
         </View>
       </TouchableWithoutFeedback>
