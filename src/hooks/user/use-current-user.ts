@@ -8,6 +8,8 @@ import { FirestoreCollections } from '../../utils/firebase-utils';
 export function useCurrentUser(fetchUserDoc = false): {
   userError: Error | undefined;
   userLoading: boolean;
+  loading: boolean;
+  error: Error | undefined;
   authUserError: Error | undefined;
   authUser: FirebaseAuthTypes.User | null;
   user: UserSchema | null;
@@ -21,6 +23,8 @@ export function useCurrentUser(fetchUserDoc = false): {
   return {
     authUser: authUser ?? null,
     user: user ? new UserSchema(user) : null,
+    loading: authUserLoading || userLoading,
+    error: authUserError || userError,
     authUserLoading,
     authUserError,
     userLoading,
