@@ -39,7 +39,7 @@ const ButtonBase = (props: ButtonBaseProps) => {
   );
 };
 
-export const buttonBase = cva(['rounded-full shadow-xl'], {
+export const buttonBase = cva(['rounded-full'], {
   variants: {
     variant: {
       primary: [

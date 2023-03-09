@@ -1,8 +1,7 @@
-import { useNavigation } from '@react-navigation/native';
 import type { PropsWithChildren } from 'react';
 import { Text, View } from 'react-native';
+import useRouter from '../../hooks/use-router';
 import { useCurrentUser } from '../../hooks/user/use-current-user';
-import { AuthStackScreenProps } from '../../interfaces/navigation';
 import { UserRoles } from '../../schemas/user-schema';
 import ButtonBase from '../common/buttons/button-base';
 import ScreenContainer from '../layout/screen-container';
@@ -12,7 +11,7 @@ interface Props extends PropsWithChildren {
 }
 
 const ProtectedRoute = (props: Props) => {
-  const navigation = useNavigation<AuthStackScreenProps<'Login'>['navigation']>();
+  const router = useRouter('Getting Started');
   const { authUser, user, loading, error } = useCurrentUser(true);
 
   if (!loading && error) {
@@ -20,7 +19,7 @@ const ProtectedRoute = (props: Props) => {
       <ScreenContainer>
         <View className='h-full'>
           <Text>Something went wrong! Try again later</Text>
-          <ButtonBase onPress={() => navigation.navigate('Login')}>
+          <ButtonBase onPress={() => router.navigate('Login')}>
             <Text>Go Back</Text>
           </ButtonBase>
         </View>
@@ -29,12 +28,12 @@ const ProtectedRoute = (props: Props) => {
   }
 
   if (!loading && authUser && user) {
-    if (user.role !== props.role) {
+    if (!!props.role && user.role !== props.role) {
       return (
         <ScreenContainer>
           <View className='h-full'>
             <Text>You are not authorized to access this content</Text>
-            <ButtonBase onPress={() => navigation.navigate('Login')}>
+            <ButtonBase onPress={() => router.navigate('Login')}>
               <Text>Go Back</Text>
             </ButtonBase>
           </View>
@@ -43,11 +42,6 @@ const ProtectedRoute = (props: Props) => {
     }
 
     return <>{props.children}</>;
-  }
-
-  if (!authUser) {
-    navigation.navigate('Login');
-    return;
   }
 
   return (
