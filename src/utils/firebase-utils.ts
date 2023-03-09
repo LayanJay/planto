@@ -1,21 +1,25 @@
-import {serverTimestamp, Timestamp} from 'firebase/firestore';
-import {StorageReference} from 'firebase/storage';
+import { FirebaseFirestoreTypes } from '@react-native-firebase/firestore';
+import { FirebaseStorageTypes } from '@react-native-firebase/storage';
+import { db } from '../config/firebase-config';
 
 export abstract class FirebaseUtils {
-  public static getCreatedTimestamp(): {created: Timestamp; modified: Timestamp} {
+  public static getCreatedTimestamp(): {
+    created: FirebaseFirestoreTypes.Timestamp;
+    modified: FirebaseFirestoreTypes.Timestamp;
+  } {
     return {
-      created: serverTimestamp() as Timestamp,
-      modified: serverTimestamp() as Timestamp,
+      created: db.FieldValue.serverTimestamp() as FirebaseFirestoreTypes.Timestamp,
+      modified: db.FieldValue.serverTimestamp() as FirebaseFirestoreTypes.Timestamp,
     };
   }
 
-  public static getModifiedTimestamp(): {modified: Timestamp} {
+  public static getModifiedTimestamp(): { modified: FirebaseFirestoreTypes.Timestamp } {
     return {
-      modified: serverTimestamp() as Timestamp,
+      modified: db.FieldValue.serverTimestamp() as FirebaseFirestoreTypes.Timestamp,
     };
   }
 
-  public static storageRefToPublicPath(ref: StorageReference): string {
+  public static storageRefToPublicPath(ref: FirebaseStorageTypes.Reference): string {
     return `https://storage.googleapis.com/${ref.bucket}/${ref.fullPath}`;
   }
 }
