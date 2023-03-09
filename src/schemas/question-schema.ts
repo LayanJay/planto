@@ -1,18 +1,11 @@
 /**
  * Wraps a question document to make accessing attributes easier
  */
-import {
-  DocumentData,
-  FirestoreDataConverter,
-  QueryDocumentSnapshot,
-  SnapshotOptions,
-  Timestamp,
-  WithFieldValue,
-} from '@firebase/firestore';
-import {DataPointer} from '../interfaces/data-pointer';
-import {FirebaseUtils} from '../utils/firebase-utils';
-import {DocumentBasedSchema, IDocumentBase} from './document-based-schema';
-import {UserDataPointer} from './user-schema';
+import { FirebaseFirestoreTypes } from '@react-native-firebase/firestore';
+import { DataPointer } from '../interfaces/data-pointer';
+import { FirebaseUtils } from '../utils/firebase-utils';
+import { DocumentBasedSchema, IDocumentBase } from './document-based-schema';
+import { UserDataPointer } from './user-schema';
 
 export interface IQuestionDocument extends IDocumentBase {
   title: string;
@@ -20,7 +13,7 @@ export interface IQuestionDocument extends IDocumentBase {
   votes: number;
   is_answered: boolean;
   author: UserDataPointer;
-  answers: AnswersDataPointer;
+  answers: AnswersDataPointer[];
 }
 
 export interface QuestionDataPointer extends DataPointer {
@@ -31,16 +24,10 @@ export interface QuestionDataPointer extends DataPointer {
 export interface AnswersDataPointer {
   text: string;
   answered_by: UserDataPointer;
-  created_at: Timestamp;
+  created_at: FirebaseFirestoreTypes.Timestamp;
 }
 
-export class QuestionSchema extends DocumentBasedSchema implements IQuestionDocument {
-  readonly title: string;
-  readonly question: string;
-  readonly votes: number;
-  readonly is_answered: boolean;
-  readonly author: UserDataPointer;
-  readonly answers: AnswersDataPointer;
+export class QuestionSchema extends DocumentBasedSchema {
   static readonly TITLE: string = 'title';
   static readonly QUESTION: string = 'question';
   static readonly VOTES: string = 'votes';
@@ -48,14 +35,23 @@ export class QuestionSchema extends DocumentBasedSchema implements IQuestionDocu
   static readonly AUTHOR: string = 'author';
   static readonly ANSWERS: string = 'answers';
 
-  public constructor(doc: IQuestionDocument) {
-    super(doc);
-    this.title = doc.title;
-    this.question = doc.question;
-    this.votes = doc.votes;
-    this.is_answered = doc.is_answered;
-    this.author = doc.author;
-    this.answers = doc.answers;
+  public get title(): string {
+    return this.doc.get(QuestionSchema.TITLE);
+  }
+  public get question(): string {
+    return this.doc.get(QuestionSchema.QUESTION);
+  }
+  public get votes(): number {
+    return this.doc.get(QuestionSchema.VOTES);
+  }
+  public get is_answered(): boolean {
+    return this.doc.get(QuestionSchema.ISANSWERED);
+  }
+  public get author(): UserDataPointer {
+    return this.doc.data()?.[QuestionSchema.AUTHOR];
+  }
+  public get answers(): AnswersDataPointer[] {
+    return this.doc.data()?.[QuestionSchema.ANSWERS] ?? [];
   }
 
   public toPointer(): QuestionDataPointer {
@@ -66,33 +62,24 @@ export class QuestionSchema extends DocumentBasedSchema implements IQuestionDocu
     };
   }
 
-  public static toJson(doc: QuestionSchema | WithFieldValue<QuestionSchema>) {
+  public toJson(): IQuestionDocument {
     return {
-      [QuestionSchema.TITLE]: doc.title,
-      [QuestionSchema.QUESTION]: doc.question,
-      [QuestionSchema.VOTES]: doc.votes,
-      [QuestionSchema.ISANSWERED]: doc.is_answered,
-      [QuestionSchema.AUTHOR]: doc.author,
-      [QuestionSchema.ANSWERS]: doc.answers,
-      [QuestionSchema.CREATED]: doc.created,
-      [QuestionSchema.MODIFIED]: doc.modified,
+      id: this.id,
+      title: this.title,
+      question: this.question,
+      votes: this.votes,
+      is_answered: this.is_answered,
+      author: this.author,
+      answers: this.answers,
+      created: this.created,
+      modified: this.modified,
     };
   }
 
   public static createDocFromJson(
     json: Omit<IQuestionDocument, 'id' | 'created' | 'modified'> &
       Partial<Pick<IQuestionDocument, 'created' | 'modified'>>
-  ): QuestionSchema {
-    return new QuestionSchema({id: null, ...FirebaseUtils.getCreatedTimestamp(), ...json});
+  ) {
+    return { ...FirebaseUtils.getCreatedTimestamp(), ...json };
   }
 }
-
-export const questionConverter: FirestoreDataConverter<QuestionSchema> = {
-  toFirestore(question: WithFieldValue<QuestionSchema>): DocumentData {
-    return QuestionSchema.toJson(question);
-  },
-  fromFirestore(snapshot: QueryDocumentSnapshot, options: SnapshotOptions): QuestionSchema {
-    const data = {...snapshot.data(options)!, id: snapshot.id} as IQuestionDocument;
-    return new QuestionSchema(data);
-  },
-};
