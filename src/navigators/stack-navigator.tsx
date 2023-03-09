@@ -12,7 +12,7 @@ export type RootStackParamList = {
   'Getting Started': undefined;
   Login: undefined;
   'Sign Up': undefined;
-  // TODO: Add other routes and it's params here
+  // TODO: Add other public routes and it's params here
 };
 
 const StackNavigator = () => {
@@ -25,7 +25,12 @@ const StackNavigator = () => {
           fontFamily: 'Poppins',
           fontWeight: '500',
           fontSize: 18,
-          color: Colors.BLACK,
+          color: Colors.TEAL_DARKER,
+        },
+        headerBackVisible: true,
+        headerBackTitleStyle: {
+          fontFamily: 'Poppins',
+          fontSize: 10,
         },
         headerStyle: {
           backgroundColor: Colors.WHITE,
@@ -40,20 +45,8 @@ const StackNavigator = () => {
         }}
       />
       <Stack.Screen component={HomeScreen} name='Home' />
-      <Stack.Screen
-        component={LoginScreen}
-        name='Login'
-        options={{
-          headerTitle: '',
-        }}
-      />
-      <Stack.Screen
-        component={SignUpScreen}
-        name='Sign Up'
-        options={{
-          headerTitle: '',
-        }}
-      />
+      <Stack.Screen component={LoginScreen} name='Login' options={{ headerTitle: 'Login' }} />
+      <Stack.Screen component={SignUpScreen} name='Sign Up' options={{ headerTitle: 'Sign Up' }} />
     </Stack.Navigator>
   );
 };
