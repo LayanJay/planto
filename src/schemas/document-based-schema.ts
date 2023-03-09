@@ -16,7 +16,7 @@ export abstract class DocumentBasedSchema {
   public static readonly CREATED: string = 'created';
   public static readonly MODIFIED: string = 'modified';
 
-  public constructor(public readonly doc: FirebaseFirestoreTypes.DocumentSnapshot) {}
+  public constructor(protected readonly doc: FirebaseFirestoreTypes.DocumentSnapshot) {}
 
   get id(): string {
     return this.doc.id;

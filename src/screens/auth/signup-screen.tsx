@@ -6,7 +6,7 @@ import ButtonBase from '../../components/common/buttons/button-base';
 import InputBase from '../../components/common/inputs/input-base';
 import ScreenContainer from '../../components/layout/screen-container';
 import { auth, db } from '../../config/firebase-config';
-import { useCurrentUser } from '../../hooks/use-current-user';
+import { useCurrentUser } from '../../hooks/user/use-current-user';
 import { UserRoles, UserSchema } from '../../schemas/user-schema';
 import { FirestoreCollections } from '../../utils/firebase-utils';
 
@@ -15,32 +15,32 @@ interface FormData {
   password: string;
 }
 
+const createUserDocument = async (userCred: FirebaseAuthTypes.UserCredential) => {
+  await db()
+    .collection(FirestoreCollections.USERS)
+    .doc(userCred.user.uid)
+    .set(
+      UserSchema.createDocFromJson({
+        email: userCred.user.email,
+        first_name: userCred.user.displayName?.split(' ')[0] ?? '',
+        last_name: userCred.user.displayName?.split(' ')[1] ?? '',
+        purchases: [],
+        reviews: [],
+        role: UserRoles.CUSTOMER,
+        uid: userCred.user.uid,
+      })
+    );
+
+  // TODO: remove later
+  Alert.alert('Successful!', '', [{ text: 'Ok' }], { cancelable: true });
+};
+
 const SignUpScreen = () => {
   const { control, handleSubmit, formState } = useForm<FormData>();
   const { user } = useCurrentUser(true);
-  console.log('🚀 ~ file: signup-screen.tsx:21 ~ SignUpScreen ~ authUser:', user);
+  console.log('🚀 ~ file: signup-screen.tsx:21 ~ SignUpScreen ~ authUser:', user?.toJson());
   const [createUserWithEmailAndPassword, userCred, loading] =
     useCreateUserWithEmailAndPassword(auth);
-
-  const createUserDocument = async (userCred: FirebaseAuthTypes.UserCredential) => {
-    await db()
-      .collection(FirestoreCollections.USERS)
-      .doc(userCred.user.uid)
-      .set(
-        UserSchema.createDocFromJson({
-          email: userCred.user.email,
-          first_name: userCred.user.displayName?.split(' ')[0] ?? '',
-          last_name: userCred.user.displayName?.split(' ')[1] ?? '',
-          purchases: [],
-          reviews: [],
-          role: UserRoles.CUSTOMER,
-          uid: userCred.user.uid,
-        })
-      );
-
-    // TODO: remove later
-    Alert.alert('Successful!', '', [{ text: 'Ok' }], { cancelable: true });
-  };
 
   const onSubmit = handleSubmit(async (data) => {
     try {
