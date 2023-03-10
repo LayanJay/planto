@@ -32,6 +32,13 @@ const HomeScreen = () => {
           >
             <Text>Hello</Text>
           </ButtonBase>
+          <ButtonBase
+            onPress={() => navigation.replace('All Questions')}
+            buttonClassName='mt-3'
+            variant={'primary'}
+          >
+            <Text>Forum</Text>
+          </ButtonBase>
 
           <Section title='See Your Changes'>
             <ReloadInstructions />
