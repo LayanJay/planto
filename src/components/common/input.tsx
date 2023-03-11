@@ -1,6 +1,6 @@
 import React from 'react';
-import {Control, Controller, RegisterOptions} from 'react-hook-form';
-import {Text, TextInput, View} from 'react-native';
+import { Control, Controller, RegisterOptions } from 'react-hook-form';
+import { Text, TextInput, View } from 'react-native';
 
 interface Props {
   label: string;
@@ -36,7 +36,7 @@ const Input = ({
         <Controller
           control={control}
           rules={registerOptions}
-          render={({field: {onChange, onBlur, value}}) => (
+          render={({ field: { onChange, onBlur, value } }) => (
             <TextInput
               secureTextEntry={secureTextEntry}
               placeholder={placeholder}

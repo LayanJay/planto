@@ -1,15 +1,14 @@
-import {useNavigation} from '@react-navigation/native';
-import {Text, TouchableOpacity, View} from 'react-native';
-import {RootStackScreenProps} from '../../../interfaces/navigation';
+import { Text, TouchableOpacity, View } from 'react-native';
+import useRouter from '../../../hooks/use-router';
 
 type Props = {};
 
 const QuestionCard = (props: Props) => {
-  const navigation = useNavigation<RootStackScreenProps<'All Questions'>['navigation']>();
+  const router = useRouter('All Questions');
   return (
     <TouchableOpacity
-      className='mb-2 py-3 px-4 flex flex-row justify-around items-center bg-secondary-dark'
-      onPress={() => navigation.push('Single Question', {id: 'sdfs'})}
+      className='mb-2 py-3 px-4 flex flex-row justify-around items-center bg-primary-main rounded-md'
+      onPress={() => router.push('Single Question', { id: 'sdfs' })}
     >
       <View className='pl-1 pr-6 flex items-center'>
         <Text className='font-bold font-main text-xs pt-1'>2</Text>
