@@ -1,4 +1,5 @@
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import { useCurrentUser } from '../hooks/user/use-current-user';
 import LoginScreen from '../screens/auth/login-screen';
 import SignUpScreen from '../screens/auth/signup-screen';
 import GetStartedScreen from '../screens/get-started-screen';
@@ -16,9 +17,10 @@ export type RootStackParamList = {
 };
 
 const StackNavigator = () => {
+  const { authUser, loading } = useCurrentUser();
   return (
     <Stack.Navigator
-      initialRouteName='Getting Started'
+      initialRouteName={!loading && authUser ? 'Home' : 'Getting Started'}
       screenOptions={{
         headerShadowVisible: false,
         headerTitleStyle: {

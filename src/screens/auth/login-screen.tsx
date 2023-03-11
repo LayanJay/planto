@@ -15,6 +15,7 @@ import InputBase from '../../components/common/inputs/input-base';
 import ScreenContainer from '../../components/layout/screen-container';
 import { auth } from '../../config/firebase-config';
 import useRouter from '../../hooks/use-router';
+import { FirebaseAuthUtils } from '../../utils/firebase-utils';
 
 interface FormData {
   email: string;
@@ -49,8 +50,6 @@ const LoginScreen = () => {
       );
     }
   });
-
-  const signInWithGoogleProvider = () => {};
 
   return (
     <ScreenContainer>
@@ -117,7 +116,13 @@ const LoginScreen = () => {
             <View className='h-1 border-b border-black/20 grow'></View>
           </View>
           <View className='w-full'>
-            <GoogleButton onPress={signInWithGoogleProvider} />
+            <GoogleButton
+              onPress={async () => {
+                await FirebaseAuthUtils.signInWithGoogleProvider().then(() => {
+                  router.replace('Home');
+                });
+              }}
+            />
           </View>
         </View>
       </KeyboardAvoidingView>
