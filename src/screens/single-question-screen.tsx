@@ -1,7 +1,7 @@
 import { useRoute } from '@react-navigation/native';
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
-import { Modal, ScrollView, Text, View } from 'react-native';
+import { Image, Modal, ScrollView, Text, View } from 'react-native';
 import ButtonBase from '../components/common/buttons/button-base';
 import AnswerCard from '../components/common/forum/answer-card';
 import Input from '../components/common/input';
@@ -35,6 +35,10 @@ const SingleQuestionScreen = (props: Props) => {
           <Text className='font-main text-xs pt-1 text-black/70'>2020/10/10</Text>
         </View>
         <View className='pl-1 pr-6 flex items-center'>
+          <View>
+            <Image source={require('../assets/images/like.png')} className='h-4 w-4' />
+          </View>
+
           <Text className='font-main text-xs pt-1 text-black/70'>5</Text>
         </View>
         <Text className='font-main text-base w-4/5 text-black/70'>This is the question</Text>
