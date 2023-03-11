@@ -5,7 +5,7 @@ import useRouter from '../hooks/use-router';
 
 const GetStartedScreen = () => {
   const router = useRouter('Getting Started');
-  // direct user here only if the user is a new user or haven't logged in yet
+
   return (
     <ScreenContainer>
       <View className='px-6 py-8'>

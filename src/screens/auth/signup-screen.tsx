@@ -1,4 +1,3 @@
-import { FirebaseAuthTypes } from '@react-native-firebase/auth';
 import { useCreateUserWithEmailAndPassword } from '@skillnation/react-native-firebase-hooks/auth';
 import { useForm } from 'react-hook-form';
 import {
@@ -14,35 +13,14 @@ import ButtonBase from '../../components/common/buttons/button-base';
 import GoogleButton from '../../components/common/buttons/google-button';
 import InputBase from '../../components/common/inputs/input-base';
 import ScreenContainer from '../../components/layout/screen-container';
-import { auth, db } from '../../config/firebase-config';
+import { auth } from '../../config/firebase-config';
 import useRouter from '../../hooks/use-router';
-import { UserRoles, UserSchema } from '../../schemas/user-schema';
-import { FirestoreCollections } from '../../utils/firebase-utils';
+import { FirebaseAuthUtils, FirebaseFirestoreUtils } from '../../utils/firebase-utils';
 
 interface FormData {
   email: string;
   password: string;
 }
-
-const createUserDocument = async (userCred: FirebaseAuthTypes.UserCredential) => {
-  await db()
-    .collection(FirestoreCollections.USERS)
-    .doc(userCred.user.uid)
-    .set(
-      UserSchema.createDocFromJson({
-        email: userCred.user.email,
-        first_name: userCred.user.displayName?.split(' ')[0] ?? '',
-        last_name: userCred.user.displayName?.split(' ')[1] ?? '',
-        purchases: [],
-        reviews: [],
-        role: UserRoles.CUSTOMER,
-        uid: userCred.user.uid,
-      })
-    );
-
-  // TODO: remove later
-  Alert.alert('Successful!', '', [{ text: 'Ok' }], { cancelable: true });
-};
 
 const SignUpScreen = () => {
   const { control, handleSubmit, formState } = useForm<FormData>();
@@ -57,7 +35,7 @@ const SignUpScreen = () => {
 
       if (!loading && error) throw error;
       if (!loading && userCred) {
-        await createUserDocument(userCred);
+        await FirebaseFirestoreUtils.createUserDocument(userCred);
         router.replace('Home');
       }
     } catch (error: any) {
@@ -74,8 +52,6 @@ const SignUpScreen = () => {
       );
     }
   });
-
-  const signInWithGoogleProvider = () => {};
 
   return (
     <ScreenContainer>
@@ -142,7 +118,13 @@ const SignUpScreen = () => {
             <View className='h-1 border-b border-black/20 grow'></View>
           </View>
           <View className='w-full'>
-            <GoogleButton onPress={signInWithGoogleProvider} />
+            <GoogleButton
+              onPress={async () => {
+                await FirebaseAuthUtils.signInWithGoogleProvider().then(() => {
+                  router.replace('Home');
+                });
+              }}
+            />
           </View>
         </View>
       </KeyboardAvoidingView>
