@@ -1,40 +1,32 @@
 /**
  * Wraps a user document to make accessing attributes easier
  */
-import {
-  DocumentData,
-  DocumentSnapshot,
-  FirestoreDataConverter,
-  SnapshotOptions,
-  WithFieldValue,
-} from '@firebase/firestore';
-import {DataPointer} from '../interfaces/data-pointer';
-import {FirebaseUtils} from '../utils/firebase-utils';
-import {DocumentBasedSchema, IDocumentBase} from './document-based-schema';
-import {ProductPurchasedDataPointer} from './product-schema';
-import {ReviewDataPointer} from './review-schema';
+
+import { DataPointer } from '../interfaces/data-pointer';
+import { FirebaseUtils } from '../utils/firebase-utils';
+import { DocumentBasedSchema, IDocumentBase } from './document-based-schema';
+import { ProductPurchasedDataPointer } from './product-schema';
+import { ReviewDataPointer } from './review-schema';
 
 export interface IUserDocument extends IDocumentBase {
   uid: string;
-  first_name: string;
-  last_name: string;
-  email: string;
-  role: string;
+  first_name: string | null;
+  last_name: string | null;
+  email: string | null;
+  role: UserRoles;
   purchases: Array<ProductPurchasedDataPointer>;
   reviews: Array<ReviewDataPointer>;
 }
 export interface UserDataPointer extends DataPointer {
-  first_name: string;
-  last_name: string;
+  first_name: string | null;
+  last_name: string | null;
 }
-export class UserSchema extends DocumentBasedSchema implements IUserDocument {
-  readonly uid: string;
-  readonly first_name: string;
-  readonly last_name: string;
-  readonly email: string;
-  readonly role: string;
-  readonly purchases: ProductPurchasedDataPointer[];
-  readonly reviews: ReviewDataPointer[];
+
+export const enum UserRoles {
+  CUSTOMER = 'customer',
+  ADMIN = 'admin',
+}
+export class UserSchema extends DocumentBasedSchema {
   static readonly UID: string = 'uid';
   static readonly FIRST_NAME: string = 'first_name';
   static readonly LAST_NAME: string = 'last_name';
@@ -43,15 +35,26 @@ export class UserSchema extends DocumentBasedSchema implements IUserDocument {
   static readonly PURCHASES: string = 'purchases';
   static readonly REVIEWS: string = 'reviews';
 
-  public constructor(doc: IUserDocument) {
-    super(doc);
-    this.uid = doc.uid;
-    this.first_name = doc.first_name;
-    this.last_name = doc.last_name;
-    this.email = doc.email;
-    this.role = doc.role;
-    this.purchases = doc.purchases;
-    this.reviews = doc.reviews;
+  public get uid(): string {
+    return this.doc.get(UserSchema.UID) ?? this.doc.id;
+  }
+  public get first_name(): string | null {
+    return this.doc.get(UserSchema.FIRST_NAME) ?? null;
+  }
+  public get last_name(): string | null {
+    return this.doc.get(UserSchema.LAST_NAME) ?? null;
+  }
+  public get email(): string | null {
+    return this.doc.get(UserSchema.EMAIL) ?? null;
+  }
+  public get role(): UserRoles {
+    return this.doc.get(UserSchema.ROLE) ?? '';
+  }
+  public get purchases(): Array<ProductPurchasedDataPointer> {
+    return this.doc.data()?.[UserSchema.PURCHASES] ?? [];
+  }
+  public get reviews(): Array<ReviewDataPointer> {
+    return this.doc.data()?.[UserSchema.REVIEWS] ?? [];
   }
 
   public toPointer(): UserDataPointer {
@@ -62,34 +65,25 @@ export class UserSchema extends DocumentBasedSchema implements IUserDocument {
     };
   }
 
-  public static toJson(doc: UserSchema | WithFieldValue<UserSchema>) {
+  public toJson(): IUserDocument {
     return {
-      [UserSchema.UID]: doc.uid,
-      [UserSchema.FIRST_NAME]: doc.first_name,
-      [UserSchema.LAST_NAME]: doc.last_name,
-      [UserSchema.EMAIL]: doc.email,
-      [UserSchema.ROLE]: doc.role,
-      [UserSchema.PURCHASES]: doc.purchases,
-      [UserSchema.REVIEWS]: doc.reviews,
-      [UserSchema.CREATED]: doc.created,
-      [UserSchema.MODIFIED]: doc.modified,
+      id: this.id,
+      uid: this.uid,
+      first_name: this.first_name,
+      last_name: this.last_name,
+      email: this.email,
+      role: this.role,
+      purchases: this.purchases,
+      reviews: this.reviews,
+      created: this.created,
+      modified: this.modified,
     };
   }
 
   public static createDocFromJson(
     json: Omit<IUserDocument, 'id' | 'created' | 'modified'> &
       Partial<Pick<IUserDocument, 'created' | 'modified'>>
-  ): UserSchema {
-    return new UserSchema({id: null, ...FirebaseUtils.getCreatedTimestamp(), ...json});
+  ) {
+    return { ...FirebaseUtils.getCreatedTimestamp(), ...json };
   }
 }
-
-export const userConverter: FirestoreDataConverter<UserSchema> = {
-  toFirestore(user: WithFieldValue<UserSchema>): DocumentData {
-    return UserSchema.toJson(user);
-  },
-  fromFirestore(snapshot: DocumentSnapshot, options: SnapshotOptions): UserSchema {
-    const data = {...snapshot.data(options)!, id: snapshot.id} as IUserDocument;
-    return new UserSchema(data);
-  },
-};

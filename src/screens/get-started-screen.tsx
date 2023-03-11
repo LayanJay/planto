@@ -1,15 +1,14 @@
-import {useNavigation} from '@react-navigation/native';
-import {Image, Text, View} from 'react-native';
+import { Image, Text, View } from 'react-native';
 import ButtonBase from '../components/common/buttons/button-base';
 import ScreenContainer from '../components/layout/screen-container';
-import {RootStackScreenProps} from '../interfaces/navigation';
+import useRouter from '../hooks/use-router';
 
 const GetStartedScreen = () => {
-  const navigation = useNavigation<RootStackScreenProps<'Getting Started'>['navigation']>();
-  // direct user here only if the user is a new user or haven't logged in yet
+  const router = useRouter('Getting Started');
+
   return (
     <ScreenContainer>
-      <View className='p-8'>
+      <View className='px-6 py-8'>
         <View className='flex items-center'>
           <View>
             <Text className='font-semibold font-main text-lg text-primary-dark mb-2'>
@@ -20,20 +19,26 @@ const GetStartedScreen = () => {
           </View>
         </View>
         <View>
-          <Image source={require('../assets/images/plant-1.png')} className='w-full h-96' />
+          <Image source={require('../assets/images/plant-1.png')} className='w-full h-80' />
         </View>
-        <View className='mb-8'>
+        <View className='mb-4'>
           <Text className='font-main font-medium text-lg text-center text-black/90'>
-            Worldwide delivery
-          </Text>
-          <Text className='font-main font-medium text-lg text-center text-black/90'>
-            within 10-15 days
+            Get started with Planto
           </Text>
         </View>
-        <View className='flex items-center'>
-          <ButtonBase onPress={() => navigation.replace('Home')}>
+        <View className='flex flex-col w-full'>
+          <ButtonBase buttonClassName='mb-3' onPress={() => router.navigate('Login')}>
             <Text className='text-white font-main font-semibold text-lg text-center uppercase'>
-              Get Started
+              Login
+            </Text>
+          </ButtonBase>
+          <ButtonBase
+            variant={'custom'}
+            buttonClassName='flex flex-row items-center justify-center space-x-3 bg-transparent active:bg-black/5 border border-black/20'
+            onPress={() => router.navigate('Sign Up')}
+          >
+            <Text className='text-black/80 font-main font-semibold text-lg text-center uppercase'>
+              Sign Up
             </Text>
           </ButtonBase>
         </View>

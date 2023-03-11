@@ -1,33 +1,46 @@
-import {createNativeStackNavigator} from '@react-navigation/native-stack';
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import { useCurrentUser } from '../hooks/user/use-current-user';
 import AddQuestionScreen from '../screens/add-question-screen';
 import AllQuestionsScreen from '../screens/all-questions-screen';
+import LoginScreen from '../screens/auth/login-screen';
+import SignUpScreen from '../screens/auth/signup-screen';
 import GetStartedScreen from '../screens/get-started-screen';
 import HomeScreen from '../screens/home-screen';
 import SingleQuestionScreen from '../screens/single-question-screen';
-import {Colors} from '../utils/colors';
+import { Colors } from '../utils/colors';
 
 const Stack = createNativeStackNavigator();
 
 export type RootStackParamList = {
   Home: undefined;
+
+  'Sign Up': undefined;
   'Getting Started': undefined;
   'All Questions': undefined;
-  'Single Question': {id: string};
+  'Single Question': { id: string };
   'Add Question': undefined;
-  // TODO: Add other routes and it's params here
+  Login: undefined;
+
+  // TODO: Add other public routes and it's params here
 };
 
 const StackNavigator = () => {
+  const { authUser, loading } = useCurrentUser();
   return (
     <Stack.Navigator
-      initialRouteName='Getting Started'
+      initialRouteName={!loading && authUser ? 'Home' : 'Getting Started'}
       screenOptions={{
         headerShadowVisible: false,
         headerTitleStyle: {
           fontFamily: 'Poppins',
           fontWeight: '500',
           fontSize: 18,
-          color: Colors.BLACK,
+          color: Colors.TEAL_DARKER,
+        },
+        headerBackVisible: true,
+        headerBackTitleStyle: {
+          fontFamily: 'Poppins',
+          fontSize: 10,
         },
         headerStyle: {
           backgroundColor: Colors.WHITE,
@@ -45,6 +58,8 @@ const StackNavigator = () => {
       <Stack.Screen component={AllQuestionsScreen} name='All Questions' />
       <Stack.Screen component={SingleQuestionScreen} name='Single Question' />
       <Stack.Screen component={AddQuestionScreen} name='Add Question' />
+      <Stack.Screen component={LoginScreen} name='Login' options={{ headerTitle: 'Login' }} />
+      <Stack.Screen component={SignUpScreen} name='Sign Up' options={{ headerTitle: 'Sign Up' }} />
     </Stack.Navigator>
   );
 };
