@@ -1,17 +1,17 @@
-import {useNavigation} from '@react-navigation/native';
-import {useForm} from 'react-hook-form';
-import {Pressable, Text, View} from 'react-native';
-import Input from '../components/common/input';
-import {RootStackScreenProps} from '../interfaces/navigation';
+import { useForm } from 'react-hook-form';
+import { Text, View } from 'react-native';
+import ButtonBase from '../components/common/buttons/button-base';
+import InputBase from '../components/common/inputs/input-base';
+import useRouter from '../hooks/use-router';
 
 type Props = {};
 const AddQuestionScreen = (props: Props) => {
-  const navigation = useNavigation<RootStackScreenProps<'Add Question'>['navigation']>();
+  const router = useRouter('Add Question');
   const {
     control,
     reset,
     handleSubmit,
-    formState: {errors},
+    formState: { errors },
   } = useForm({
     defaultValues: {
       reply: '',
@@ -19,44 +19,38 @@ const AddQuestionScreen = (props: Props) => {
   });
   return (
     <View className='pt-4 px-4 h-full'>
-      <Text className='font-main text-2xl font-semibold pb-3'>Ask A Question</Text>
-      <Text className='text-black pb-2 font-main'>What do you have in mind?</Text>
+      <Text className='font-main font-medium text-center text-black/70 text-2xl pb-3'>
+        Ask A Question
+      </Text>
+      <Text className='text-black/70 pb-2 font-main font-medium text-center'>
+        What do you have in mind?
+      </Text>
       <View className='pt-2 h-full flex flex-col'>
-        <Input
-          style={'border p-2 rounded-sm mb-2'}
-          labelStyle={'pb-1'}
-          control={control as any}
-          errors={errors}
+        <InputBase
+          label='Question title'
           name='title'
-          label='Question Title'
           placeholder='Add a title for your question'
-          registerOptions={{
-            required: {
-              value: true,
-              message: '*Required',
-            },
+          control={control}
+          inputWrapperClassNames='mb-6'
+          rules={{
+            required: '*Required',
           }}
         />
-        <Input
-          style={'border p-2 rounded-sm mb-2'}
-          inputStyle={'h-28'}
-          labelStyle={'pb-1'}
-          multiline
-          control={control as any}
-          errors={errors}
+        <InputBase
+          label='Description'
           name='description'
-          label='Question'
           placeholder='Add a description for your question'
-          registerOptions={{
-            required: {
-              value: true,
-              message: '*Required',
-            },
+          control={control}
+          inputWrapperClassNames='mb-6'
+          rules={{
+            required: '*Required',
           }}
         />
-        <Pressable className='bg-primary-main text-white flex flex-row items-center justify-center py-2 mt-4'>
-          <Text className='text-white text-lg font-main'>Post Question</Text>
-        </Pressable>
+        <ButtonBase>
+          <Text className='font-main font-semibold text-lg text-white text-center'>
+            Post Question
+          </Text>
+        </ButtonBase>
       </View>
     </View>
   );

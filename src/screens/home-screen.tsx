@@ -31,7 +31,7 @@ const HomeScreen = () => {
             <Text>Hello</Text>
           </ButtonBase>
           <ButtonBase
-            onPress={() => navigation.replace('All Questions')}
+            onPress={() => router.replace('All Questions')}
             buttonClassName='mt-3'
             variant={'primary'}
           >
