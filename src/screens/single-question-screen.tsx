@@ -1,7 +1,7 @@
 import { useRoute } from '@react-navigation/native';
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
-import { Image, Modal, ScrollView, Text, View } from 'react-native';
+import { Image, Modal, ScrollView, Text, TouchableOpacity, View } from 'react-native';
 import ButtonBase from '../components/common/buttons/button-base';
 import AnswerCard from '../components/common/forum/answer-card';
 import Input from '../components/common/input';
@@ -14,6 +14,7 @@ const SingleQuestionScreen = (props: Props) => {
   const route = useRoute<RootStackScreenProps<'Single Question'>['route']>();
 
   const [openDeleteModal, setOpenDeleteModal] = useState(false);
+  const [voted, setVoted] = useState<boolean>(false);
 
   const {
     control,
@@ -36,7 +37,15 @@ const SingleQuestionScreen = (props: Props) => {
         </View>
         <View className='pl-1 pr-6 flex items-center'>
           <View>
-            <Image source={require('../assets/images/like.png')} className='h-4 w-4' />
+            {voted ? (
+              <TouchableOpacity onPress={() => setVoted(false)}>
+                <Image source={require('../assets/images/like.png')} className='h-4 w-4' />
+              </TouchableOpacity>
+            ) : (
+              <TouchableOpacity onPress={() => setVoted(true)}>
+                <Image source={require('../assets/images/heart.png')} className='h-4 w-4' />
+              </TouchableOpacity>
+            )}
           </View>
 
           <Text className='font-main text-xs pt-1 text-black/70'>5</Text>
