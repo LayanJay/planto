@@ -1,7 +1,7 @@
 import { useNavigation, useRoute } from '@react-navigation/native';
-import { RootStackScreenProps } from '../interfaces/navigation';
-import { RootStackParamList } from '../navigators/stack-navigator';
-import { useCurrentUser } from './user/use-current-user';
+import { RootStackScreenProps } from '../../interfaces/navigation';
+import { RootStackParamList } from '../../navigators/stack-navigator';
+import { useCurrentUser } from '../user/use-current-user';
 
 const useProtectedRouter = (currentRoute: keyof RootStackParamList) => {
   const { authUser, authUserLoading } = useCurrentUser();

@@ -7,10 +7,12 @@ import {
 } from 'react-native/Libraries/NewAppScreen';
 import ButtonBase from '../components/common/buttons/button-base';
 import Section from '../components/common/section';
-import useRouter from '../hooks/use-router';
+import useProtectedRouter from '../hooks/router/use-protected-router';
+import useRouter from '../hooks/router/use-router';
 
 const HomeScreen = () => {
   const router = useRouter('Home');
+  const protectedRouter = useProtectedRouter('Home');
   const backgroundStyle = 'bg-white dark:bg-slate-900 h-screen';
 
   return (
@@ -29,6 +31,13 @@ const HomeScreen = () => {
             variant={'primary'}
           >
             <Text>Hello</Text>
+          </ButtonBase>
+          <ButtonBase
+            onPress={() => protectedRouter.navigate('Profile')}
+            buttonClassName='mt-3'
+            variant={'primary'}
+          >
+            <Text>Profile</Text>
           </ButtonBase>
 
           <Section title='See Your Changes'>

@@ -14,7 +14,7 @@ import GoogleButton from '../../components/common/buttons/google-button';
 import InputBase from '../../components/common/inputs/input-base';
 import ScreenContainer from '../../components/layout/screen-container';
 import { auth } from '../../config/firebase-config';
-import useRouter from '../../hooks/use-router';
+import useRouter from '../../hooks/router/use-router';
 import { FirebaseAuthUtils, FirebaseFirestoreUtils } from '../../utils/firebase-utils';
 
 interface FormData {
@@ -98,7 +98,7 @@ const SignUpScreen = () => {
             {/* TODO: create a submit button with loading state */}
             <ButtonBase onPress={onSubmit} disabled={!formState.isDirty} loading={loading}>
               <Text className='font-main font-semibold text-lg text-white text-center'>
-                Continue
+                Sign Up
               </Text>
             </ButtonBase>
             <View className='flex flex-row items-center justify-center space-x-1 mt-3'>
