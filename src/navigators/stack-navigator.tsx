@@ -1,6 +1,7 @@
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { useCurrentUser } from '../hooks/user/use-current-user';
 import AddQuestionScreen from '../screens/add-question-screen';
+import AddReviewScreen from '../screens/add-review-screen';
 import AllQuestionsScreen from '../screens/all-questions-screen';
 import LoginScreen from '../screens/auth/login-screen';
 import SignUpScreen from '../screens/auth/signup-screen';
@@ -13,12 +14,12 @@ const Stack = createNativeStackNavigator();
 
 export type RootStackParamList = {
   Home: undefined;
-
   'Sign Up': undefined;
   'Getting Started': undefined;
   'All Questions': undefined;
   'Single Question': { id: string };
   'Add Question': undefined;
+  'Add Review': { id: string; rating: number };
   Login: undefined;
 
   // TODO: Add other public routes and it's params here
@@ -60,6 +61,11 @@ const StackNavigator = () => {
       <Stack.Screen component={AddQuestionScreen} name='Add Question' />
       <Stack.Screen component={LoginScreen} name='Login' options={{ headerTitle: 'Login' }} />
       <Stack.Screen component={SignUpScreen} name='Sign Up' options={{ headerTitle: 'Sign Up' }} />
+      <Stack.Screen
+        component={AddReviewScreen}
+        name='Add Review'
+        options={{ headerTitle: 'Add a Review' }}
+      />
     </Stack.Navigator>
   );
 };

@@ -7,8 +7,8 @@ import {
 } from 'react-native/Libraries/NewAppScreen';
 import ButtonBase from '../components/common/buttons/button-base';
 import Section from '../components/common/section';
+import ReviewPrompt from '../components/reviews/review-prompt';
 import useRouter from '../hooks/use-router';
-
 const HomeScreen = () => {
   const router = useRouter('Home');
   const backgroundStyle = 'bg-white dark:bg-slate-900 h-screen';
@@ -16,7 +16,7 @@ const HomeScreen = () => {
   return (
     <SafeAreaView className='-mt-12 bg-white'>
       <ScrollView className={backgroundStyle}>
-        <View className='bg-white dark:bg-black px-4 mt-4 mb-24'>
+        <View className='bg-white dark:bg-black px-6 mt-4 mb-24'>
           <Section title='Step One'>
             Edit <Text className='font-bold'>App.js</Text> to change this screen and then come back
             to see your edits.
@@ -46,6 +46,7 @@ const HomeScreen = () => {
           </Section>
           <Section title='Learn More'>Read the docs to discover what to do next:</Section>
           <LearnMoreLinks />
+          <ReviewPrompt />
         </View>
       </ScrollView>
     </SafeAreaView>
