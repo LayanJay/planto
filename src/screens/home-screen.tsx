@@ -38,6 +38,14 @@ const HomeScreen = () => {
             <Text>Forum</Text>
           </ButtonBase>
 
+          <ButtonBase
+            onPress={() => router.replace('All Products')}
+            buttonClassName='mt-3'
+            variant={'primary'}
+          >
+            <Text>All products</Text>
+          </ButtonBase>
+
           <Section title='See Your Changes'>
             <ReloadInstructions />
           </Section>
