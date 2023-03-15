@@ -1,20 +1,52 @@
-import { Image, Text, TouchableOpacity, View } from 'react-native';
+import { useRef, useState } from 'react';
+import { Animated, Image, Text, TouchableOpacity, View } from 'react-native';
 import Icon from 'react-native-vector-icons/Feather';
 import ProtectedRoute from '../../components/auth/protected-route';
 import IconButton from '../../components/common/buttons/icon-button';
 import ScreenContainer from '../../components/layout/screen-container';
+import UserInformation from '../../components/pages/profile/uesr-information';
+import UserPurchases from '../../components/pages/profile/user-purchases';
+import useProtectedRouter from '../../hooks/router/use-protected-router';
 import { useCurrentUser } from '../../hooks/user/use-current-user';
 import { Colors } from '../../utils/colors';
 
 const ProfileScreen = () => {
   const { authUser } = useCurrentUser();
+  const protectedRouter = useProtectedRouter('Profile');
+  const [isMyInformationCollapsed, setIsMyInformationCollapsed] = useState(false);
+  let userInformationRef = useRef(new Animated.Value(100));
+
+  const shrinkHeight = () => {
+    Animated.spring(userInformationRef.current, {
+      toValue: 100,
+      tension: 30,
+      // duration: 200,
+      useNativeDriver: false,
+      // easing: Easing.cubic,
+    }).start();
+
+    setIsMyInformationCollapsed(true);
+  };
+
+  const expandHeight = () => {
+    Animated.spring(userInformationRef.current, {
+      toValue: 400,
+      tension: 30,
+      // duration: 200,
+      useNativeDriver: false,
+      // easing: Easing.cubic,
+    }).start();
+
+    setIsMyInformationCollapsed(false);
+  };
+
   return (
     <ProtectedRoute>
       <ScreenContainer>
         <View className='relative flex h-[90vh]'>
           <View className='flex flex-row justify-between items-center mb-3'>
-            {/* profile photo collapsed + edit button */}
             <TouchableOpacity
+              onPress={isMyInformationCollapsed ? () => expandHeight() : () => shrinkHeight()}
               activeOpacity={0.7}
               className='flex justify-center items-center w-14 h-14 rounded-full border border-primary-dark/50'
             >
@@ -28,6 +60,7 @@ const ProfileScreen = () => {
               />
             </TouchableOpacity>
             <IconButton
+              onPress={() => protectedRouter.navigate('EditProfile')}
               variant={'custom'}
               buttonClassName='flex justify-center bg-white border border-primary-dark/50'
             >
@@ -35,7 +68,6 @@ const ProfileScreen = () => {
             </IconButton>
           </View>
           <View className='flex justify-center items-center mb-3'>
-            {/* profile photo not collapsed */}
             <View className='flex justify-center items-center w-32 h-32 rounded-full border border-separate border-spacing-3 border-primary-dark/50'>
               <Image
                 source={
@@ -48,7 +80,6 @@ const ProfileScreen = () => {
             </View>
           </View>
           <View className='flex items-center mb-10'>
-            {/* profile name, email not collapsed (hide when collapsed) */}
             <Text className='font-semibold font-main text-2xl text-black/90 capitalize mb-1'>
               {authUser && authUser.displayName
                 ? authUser.displayName
@@ -58,10 +89,12 @@ const ProfileScreen = () => {
               {authUser ? authUser.email : ''}
             </Text>
           </View>
-          <View className='flex-1 bg-primary-dark -mx-6 rounded-t-[32px] px-6 py-6'>
-            {/* collapsable menu and accordian */}
-            <Text className='font-main font-semibold text-xl text-white'>My Information</Text>
-          </View>
+          <UserInformation
+            expandHeight={expandHeight}
+            userInformationRef={userInformationRef}
+            isMyInformationCollapsed={isMyInformationCollapsed}
+          />
+          <UserPurchases shrinkHeight={shrinkHeight} />
         </View>
       </ScreenContainer>
     </ProtectedRoute>

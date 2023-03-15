@@ -15,7 +15,7 @@ import InputBase from '../../components/common/inputs/input-base';
 import ScreenContainer from '../../components/layout/screen-container';
 import { auth } from '../../config/firebase-config';
 import useRouter from '../../hooks/router/use-router';
-import { FirebaseAuthUtils } from '../../utils/firebase-utils';
+import { UserUtils } from '../../utils/user-utils';
 
 interface FormData {
   email: string;
@@ -116,7 +116,7 @@ const LoginScreen = () => {
           <View className='w-full'>
             <GoogleButton
               onPress={async () => {
-                await FirebaseAuthUtils.signInWithGoogleProvider().then(() => {
+                await UserUtils.signInWithGoogleProvider().then(() => {
                   router.replace('Home');
                 });
               }}
