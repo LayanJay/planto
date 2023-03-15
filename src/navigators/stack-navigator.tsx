@@ -1,5 +1,6 @@
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { useCurrentUser } from '../hooks/user/use-current-user';
+import EditProfileScreen from '../screens/auth/edit-profile-screen';
 import LoginScreen from '../screens/auth/login-screen';
 import ProfileScreen from '../screens/auth/profile-screen';
 import SignUpScreen from '../screens/auth/signup-screen';
@@ -15,6 +16,7 @@ export type RootStackParamList = {
   Login: undefined;
   'Sign Up': undefined;
   Profile: undefined;
+  EditProfile: undefined;
   // TODO: Add other public routes and it's params here
 };
 
@@ -50,6 +52,11 @@ const StackNavigator = () => {
       />
       <Stack.Screen component={HomeScreen} name='Home' />
       <Stack.Screen component={ProfileScreen} name='Profile' />
+      <Stack.Screen
+        component={EditProfileScreen}
+        name='EditProfile'
+        options={{ headerTitle: 'Edit Profile' }}
+      />
       <Stack.Screen component={LoginScreen} name='Login' options={{ headerTitle: 'Login' }} />
       <Stack.Screen component={SignUpScreen} name='Sign Up' options={{ headerTitle: 'Sign Up' }} />
     </Stack.Navigator>
