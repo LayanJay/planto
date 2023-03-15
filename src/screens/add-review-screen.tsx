@@ -1,7 +1,9 @@
 import React, { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { Image, Text, View } from 'react-native';
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import Icon from 'react-native-vector-icons/MaterialIcons';
+import ButtonBase from '../components/common/buttons/button-base';
 import InputBase from '../components/common/inputs/input-base';
 import useRouter from '../hooks/use-router';
 import { useCurrentUser } from '../hooks/user/use-current-user';
@@ -9,15 +11,18 @@ import { useCurrentUser } from '../hooks/user/use-current-user';
 const AddReviewScreen = () => {
   const { control, handleSubmit, formState } = useForm<FormData>();
   const router = useRouter('Add Review');
+
   const [rating, setRating] = useState(router.params?.rating);
   const { authUser, loading: userLoading } = useCurrentUser();
 
+  const onSubmit = handleSubmit(async (data) => {});
+
   return (
-    <View className='px-6 '>
+    <View className='px-6'>
       {userLoading ? (
         <Text>Loading..</Text>
       ) : (
-        <View>
+        <KeyboardAwareScrollView resetScrollToCoords={{ x: 0, y: 0 }} scrollEnabled={false}>
           <View className=' mt-6 mb-8 flex flex-row space-x-4 bg-secondary-light px-4 py-4 rounded-2xl'>
             <Image className='h-24 w-24' source={require('../assets/images/plant-5.png')} />
             <View>
@@ -59,7 +64,7 @@ const AddReviewScreen = () => {
               {rating} star rating
             </Text>
           </View>
-          <View>
+          <View className='mb-4'>
             <Text className='font-main text-xl text-black dark:text-white '>
               Describe your experience (optional)
             </Text>
@@ -77,7 +82,11 @@ const AddReviewScreen = () => {
               }}
             />
           </View>
-        </View>
+
+          <ButtonBase onPress={onSubmit}>
+            <Text className='font-main font-semibold text-lg text-white text-center'>Submit</Text>
+          </ButtonBase>
+        </KeyboardAwareScrollView>
       )}
     </View>
   );
