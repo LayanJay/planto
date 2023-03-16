@@ -1,12 +1,13 @@
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { useCurrentUser } from '../hooks/user/use-current-user';
 import AddQuestionScreen from '../screens/add-question-screen';
-import AddReviewScreen from '../screens/add-review-screen';
 import AllQuestionsScreen from '../screens/all-questions-screen';
 import LoginScreen from '../screens/auth/login-screen';
 import SignUpScreen from '../screens/auth/signup-screen';
 import GetStartedScreen from '../screens/get-started-screen';
 import HomeScreen from '../screens/home-screen';
+import AddReviewScreen from '../screens/review/add-review-screen';
+import ReviewsScreen from '../screens/review/reviews-screen';
 import SingleQuestionScreen from '../screens/single-question-screen';
 import { Colors } from '../utils/colors';
 
@@ -21,6 +22,7 @@ export type RootStackParamList = {
   'Add Question': undefined;
   'Add Review': { id: string; rating: number };
   Login: undefined;
+  Reviews: { id: string };
 
   // TODO: Add other public routes and it's params here
 };
@@ -66,6 +68,7 @@ const StackNavigator = () => {
         name='Add Review'
         options={{ headerTitle: 'Add a Review' }}
       />
+      <Stack.Screen component={ReviewsScreen} name='Reviews' options={{ headerTitle: 'Reviews' }} />
     </Stack.Navigator>
   );
 };

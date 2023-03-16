@@ -3,32 +3,73 @@ import { useForm } from 'react-hook-form';
 import { Image, Text, View } from 'react-native';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import Icon from 'react-native-vector-icons/MaterialIcons';
-import ButtonBase from '../components/common/buttons/button-base';
-import InputBase from '../components/common/inputs/input-base';
-import useRouter from '../hooks/use-router';
-import { useCurrentUser } from '../hooks/user/use-current-user';
+import ButtonBase from '../../components/common/buttons/button-base';
+import InputBase from '../../components/common/inputs/input-base';
+import { db } from '../../config/firebase-config';
+import { useGetProduct } from '../../hooks/product/use-get-product';
+import { useLoading } from '../../hooks/use-loading';
+import useRouter from '../../hooks/use-router';
+import { useCurrentUser } from '../../hooks/user/use-current-user';
+import { IReviewDocument, ReviewSchema } from '../../schemas/review-schema';
+import { FirestoreCollections } from '../../utils/firebase-utils';
+
+const addReview = async (review: Omit<IReviewDocument, 'id' | 'created' | 'modified'>) => {
+  const ref = db()
+    .collection(FirestoreCollections.PRODUCTS)
+    .doc(review.product as string)
+    .collection(FirestoreCollections.REVIEWS);
+  await ref.add(ReviewSchema.createDocFromJson(review));
+};
 
 const AddReviewScreen = () => {
-  const { control, handleSubmit, formState } = useForm<FormData>();
+  const { control, handleSubmit } = useForm();
   const router = useRouter('Add Review');
-
-  const [rating, setRating] = useState(router.params?.rating);
+  // @ts-ignore
+  const [rating, setRating] = useState<number>(router.params?.rating);
   const { authUser, loading: userLoading } = useCurrentUser();
+  const { product, loading } = useGetProduct(router.params!.id);
+  const { isLoading, setIsLoading } = useLoading();
 
-  const onSubmit = handleSubmit(async (data) => {});
+  const onSubmit = handleSubmit(async (data) => {
+    setIsLoading(true);
+    try {
+      if (authUser && authUser.uid && router.params && router.params.id) {
+        const review = {
+          text: data.text || null,
+          product: router.params.id,
+          author: authUser.uid,
+          rating: rating,
+        };
+
+        await addReview(review);
+        router.goBack();
+      }
+      setIsLoading(false);
+    } catch (error) {
+      console.log(error);
+      setIsLoading(false);
+    }
+  });
 
   return (
     <View className='px-6'>
-      {userLoading ? (
+      {userLoading || loading ? (
         <Text>Loading..</Text>
       ) : (
         <KeyboardAwareScrollView resetScrollToCoords={{ x: 0, y: 0 }} scrollEnabled={false}>
-          <View className=' mt-6 mb-8 flex flex-row space-x-4 bg-secondary-light px-4 py-4 rounded-2xl'>
-            <Image className='h-24 w-24' source={require('../assets/images/plant-5.png')} />
+          <View className=' mt-6 mb-8 flex flex-row items-center space-x-4 bg-secondary-light px-4 py-4 rounded-xl'>
+            <Image
+              className='h-24 w-24 rounded-xl'
+              source={{
+                uri: product?.image,
+              }}
+            />
             <View>
-              <Text className='font-main text-black text-base font-bold'>Generic Pot Plant</Text>
+              <Text className='font-main text-black text-base font-bold capitalize'>
+                {product?.name}
+              </Text>
               <Text className='font-main text-black text-base mt-1 mr-24'>
-                Lorem ipsum dolor sit, amet consectetur adipisicing elit. Quod, omnis.
+                {product?.description}
               </Text>
             </View>
           </View>
@@ -69,21 +110,14 @@ const AddReviewScreen = () => {
               Describe your experience (optional)
             </Text>
             <InputBase
-              name='review'
+              name='text'
               placeholder='Enter your review'
               control={control}
               inputWrapperClassNames='mb-6'
-              rules={{
-                required: '*Required',
-                pattern: {
-                  value: /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/,
-                  message: 'Email must be a valid email',
-                },
-              }}
             />
           </View>
 
-          <ButtonBase onPress={onSubmit}>
+          <ButtonBase onPress={onSubmit} loading={isLoading}>
             <Text className='font-main font-semibold text-lg text-white text-center'>Submit</Text>
           </ButtonBase>
         </KeyboardAwareScrollView>

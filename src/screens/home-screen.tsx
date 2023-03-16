@@ -9,6 +9,8 @@ import ButtonBase from '../components/common/buttons/button-base';
 import Section from '../components/common/section';
 import ReviewPrompt from '../components/reviews/review-prompt';
 import useRouter from '../hooks/use-router';
+
+const product_id = 'SXlUlrf0646JAvA3ClNz';
 const HomeScreen = () => {
   const router = useRouter('Home');
   const backgroundStyle = 'bg-white dark:bg-slate-900 h-screen';
@@ -31,6 +33,17 @@ const HomeScreen = () => {
             <Text>Hello</Text>
           </ButtonBase>
           <ButtonBase
+            onPress={() =>
+              router.replace('Reviews', {
+                id: product_id,
+              })
+            }
+            buttonClassName='mt-3'
+            variant={'secondary'}
+          >
+            <Text>Reviews</Text>
+          </ButtonBase>
+          <ButtonBase
             onPress={() => router.replace('All Questions')}
             buttonClassName='mt-3'
             variant={'primary'}
@@ -46,7 +59,7 @@ const HomeScreen = () => {
           </Section>
           <Section title='Learn More'>Read the docs to discover what to do next:</Section>
           <LearnMoreLinks />
-          <ReviewPrompt />
+          <ReviewPrompt product_id={product_id} />
         </View>
       </ScrollView>
     </SafeAreaView>

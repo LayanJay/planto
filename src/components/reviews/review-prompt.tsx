@@ -2,9 +2,11 @@ import React, { useState } from 'react';
 import { Text, View } from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import useRouter from '../../hooks/use-router';
-type Props = {};
+type Props = {
+  product_id: string;
+};
 
-const ReviewPrompt = (props: Props) => {
+const ReviewPrompt = ({ product_id }: Props) => {
   const [rating, setRating] = useState(0);
   const router = useRouter('Add Review');
   return (
@@ -20,7 +22,7 @@ const ReviewPrompt = (props: Props) => {
             onTouchStart={() => setRating(i + 1)}
             onTouchEnd={() => {
               router.push('Add Review', {
-                id: 'productid',
+                id: product_id,
                 rating: rating,
               });
               setRating(0);
