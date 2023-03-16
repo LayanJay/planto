@@ -2,7 +2,7 @@ import { useForm } from 'react-hook-form';
 import { Text, View } from 'react-native';
 import ButtonBase from '../components/common/buttons/button-base';
 import InputBase from '../components/common/inputs/input-base';
-import useRouter from '../hooks/use-router';
+import useRouter from '../hooks/router/use-router';
 
 type Props = {};
 const AddQuestionScreen = (props: Props) => {

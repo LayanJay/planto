@@ -2,7 +2,9 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { useCurrentUser } from '../hooks/user/use-current-user';
 import AddQuestionScreen from '../screens/add-question-screen';
 import AllQuestionsScreen from '../screens/all-questions-screen';
+import EditProfileScreen from '../screens/auth/edit-profile-screen';
 import LoginScreen from '../screens/auth/login-screen';
+import ProfileScreen from '../screens/auth/profile-screen';
 import SignUpScreen from '../screens/auth/signup-screen';
 import GetStartedScreen from '../screens/get-started-screen';
 import HomeScreen from '../screens/home-screen';
@@ -13,14 +15,18 @@ const Stack = createNativeStackNavigator();
 
 export type RootStackParamList = {
   Home: undefined;
-
-  'Sign Up': undefined;
   'Getting Started': undefined;
   'All Questions': undefined;
   'Single Question': { id: string };
   'Add Question': undefined;
   Login: undefined;
-
+  'Sign Up': undefined;
+  Profile: undefined;
+  EditProfile: {
+    email: string;
+    first_name: string;
+    last_name: string;
+  };
   // TODO: Add other public routes and it's params here
 };
 
@@ -55,6 +61,12 @@ const StackNavigator = () => {
         }}
       />
       <Stack.Screen component={HomeScreen} name='Home' />
+      <Stack.Screen component={ProfileScreen} name='Profile' />
+      <Stack.Screen
+        component={EditProfileScreen}
+        name='EditProfile'
+        options={{ headerTitle: 'Edit Profile' }}
+      />
       <Stack.Screen component={AllQuestionsScreen} name='All Questions' />
       <Stack.Screen component={SingleQuestionScreen} name='Single Question' />
       <Stack.Screen component={AddQuestionScreen} name='Add Question' />
