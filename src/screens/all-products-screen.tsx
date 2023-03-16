@@ -3,6 +3,7 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import Chip from '../components/common/buttons/chip-button';
 import ProductCard from '../components/common/producs/product-card';
 import useRouter from '../hooks/use-router';
+import { CategoryType, IProductDocument } from '../schemas/product-schema';
 
 type Props = {};
 
@@ -12,21 +13,37 @@ const AllProducts = (props: Props) => {
 
   const filterOptions = ['All', 'Outdoor', 'Indoor'];
 
-  const data = [
+  // TODO: Remove ts ignore
+  const data: IProductDocument[] = [
+    // @ts-ignore
     {
-      id: 'kjhiuhi',
-      title: 'test',
-      image: 'sdjhkjh',
+      id: 'ID_KJKHKJSDHFKJKS',
+      name: 'Bo gaha',
+      description: 'ljhsdkjn',
+      price: '33',
+      category: CategoryType.Indoor,
+      image: 'https://',
+      inventory: 23,
+      seller: {
+        first_name: 'lskdjf',
+        last_name: 'skdjhfsjd',
+        id: 'lksksdj',
+      },
     },
+    // @ts-ignore
     {
-      id: 'sdkjhfkjsd',
-      title: 'stdfgdf',
-      image: 'sdjhkjh',
-    },
-    {
-      id: 'sdkjhfkjssd',
-      title: 'iiouwekjhksdjfh skjdfh',
-      image: 'sdjhkjh',
+      id: 'ID_KsdfsdfDHFKJKS',
+      name: 'Kos gaha',
+      description: 'ljhsdkjn',
+      price: '33',
+      category: CategoryType.Indoor,
+      image: 'https://',
+      inventory: 23,
+      seller: {
+        first_name: 'lskdjf',
+        last_name: 'skdjhfsjd',
+        id: 'lksksdj',
+      },
     },
   ];
 
@@ -45,7 +62,6 @@ const AllProducts = (props: Props) => {
           <Image className='h-24 w-24 p-3' source={require('../assets/images/plant-4.png')} />
         </View>
 
-        {/* ⚠️ Tailwind "gap" property DOES NOT work properly here */}
         <View className='flex flex-row mt-4' style={{ gap: 7 }}>
           {filterOptions.map((opt) => {
             return (
@@ -57,19 +73,13 @@ const AllProducts = (props: Props) => {
         </View>
 
         <View className='flex flex-wrap flex-row justify-between mt-6' style={{ gap: 2 }}>
-          <FlatList
-            horizontal
-            data={data}
-            renderItem={({ item }) => <ProductCard title={item.title} />}
-            keyExtractor={(item) => item.id}
-          />
+          <FlatList horizontal data={data} renderItem={({ item }) => <ProductCard {...item} />} />
         </View>
 
         <View className='absolute bottom-0 right-0 mx-3 my-3 z-20'>
-          {/* FIXME: */}
           <TouchableOpacity
             className='bg-primary-main p-4 rounded-full'
-            // onPress={() => router.navigate('Add Product')}
+            onPress={() => router.navigate('Add Product')}
           >
             <Image className='h-6 w-6 p-3' source={require('../assets/images/plus.png')} />
           </TouchableOpacity>

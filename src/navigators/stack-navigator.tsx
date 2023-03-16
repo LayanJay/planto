@@ -1,5 +1,7 @@
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { useCurrentUser } from '../hooks/user/use-current-user';
+import { IProductDocument } from '../schemas/product-schema';
+import AddProductScreen from '../screens/add-product-screen';
 import AddQuestionScreen from '../screens/add-question-screen';
 import AllProducts from '../screens/all-products-screen';
 import AllQuestionsScreen from '../screens/all-questions-screen';
@@ -7,6 +9,7 @@ import LoginScreen from '../screens/auth/login-screen';
 import SignUpScreen from '../screens/auth/signup-screen';
 import GetStartedScreen from '../screens/get-started-screen';
 import HomeScreen from '../screens/home-screen';
+import SingleProductScreen from '../screens/single-product-screen';
 import SingleQuestionScreen from '../screens/single-question-screen';
 import { Colors } from '../utils/colors';
 
@@ -22,6 +25,8 @@ export type RootStackParamList = {
   'Add Question': undefined;
   'All Products': undefined;
   Login: undefined;
+  'Single Product': Partial<IProductDocument>; // TODO: @Nav: remove partial
+  'Add Product': undefined;
 
   // TODO: Add other public routes and it's params here
 };
@@ -63,6 +68,8 @@ const StackNavigator = () => {
       <Stack.Screen component={LoginScreen} name='Login' options={{ headerTitle: 'Login' }} />
       <Stack.Screen component={SignUpScreen} name='Sign Up' options={{ headerTitle: 'Sign Up' }} />
       <Stack.Screen component={AllProducts} name='All Products' />
+      <Stack.Screen component={SingleProductScreen} name='Single Product' />
+      <Stack.Screen component={AddProductScreen} name='Add Product' />
     </Stack.Navigator>
   );
 };
