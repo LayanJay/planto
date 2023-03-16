@@ -1,6 +1,7 @@
 import { cva, VariantProps } from 'class-variance-authority';
 import { PropsWithChildren } from 'react';
-import { Pressable, PressableProps } from 'react-native';
+import { ActivityIndicator, TouchableOpacity, TouchableOpacityProps } from 'react-native';
+import { Colors } from '../../../utils/colors';
 
 export const enum ButtonVariants {
   PRIMARY = 'primary',
@@ -16,7 +17,7 @@ export const enum ButtonSizes {
 }
 
 export interface ButtonBaseProps
-  extends PropsWithChildren<Partial<PressableProps>>,
+  extends PropsWithChildren<Partial<TouchableOpacityProps>>,
     VariantProps<typeof buttonBase> {
   buttonClassName?: string;
   loading?: boolean;
@@ -24,18 +25,19 @@ export interface ButtonBaseProps
 
 const ButtonBase = (props: ButtonBaseProps) => {
   return (
-    <Pressable
+    <TouchableOpacity
+      activeOpacity={0.7}
       onPress={props.onPress}
       className={buttonBase({
         variant: props.variant,
         size: props.size,
-        disabled: props.disabled,
+        isDisabled: props.disabled,
         className: props.buttonClassName,
       })}
       disabled={!!props.disabled}
     >
-      {props.children}
-    </Pressable>
+      {props.loading ? <ActivityIndicator color={Colors.WHITE} /> : props.children}
+    </TouchableOpacity>
   );
 };
 
@@ -64,7 +66,7 @@ export const buttonBase = cva(['rounded-full'], {
       large: ['px-5', 'h-16', 'min-w-[150px]'],
       custom: [],
     },
-    disabled: {
+    isDisabled: {
       true: ['opacity-70'],
     },
   },
@@ -72,7 +74,7 @@ export const buttonBase = cva(['rounded-full'], {
   defaultVariants: {
     variant: 'primary',
     size: 'medium',
-    disabled: false,
+    isDisabled: false,
   },
 });
 

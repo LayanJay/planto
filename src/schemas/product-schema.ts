@@ -25,6 +25,7 @@ export interface IProductDocument extends IDocumentBase {
 export interface ProductDataPointer extends DataPointer {
   name: string;
   price: string;
+  seller: UserDataPointer;
 }
 
 export interface ProductPurchasedDataPointer extends DataPointer {
@@ -76,6 +77,7 @@ export class ProductSchema extends DocumentBasedSchema {
       id: this.id,
       name: this.name,
       price: this.price,
+      seller: this.seller,
     };
   }
 

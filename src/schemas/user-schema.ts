@@ -86,4 +86,8 @@ export class UserSchema extends DocumentBasedSchema {
   ) {
     return { ...FirebaseUtils.getCreatedTimestamp(), ...json };
   }
+
+  public static updateDocFromJson(json: Partial<IUserDocument>) {
+    return { ...FirebaseUtils.getModifiedTimestamp(), ...json };
+  }
 }

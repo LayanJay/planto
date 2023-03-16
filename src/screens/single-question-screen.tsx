@@ -5,7 +5,7 @@ import { Image, Modal, ScrollView, Text, View } from 'react-native';
 import ButtonBase from '../components/common/buttons/button-base';
 import AnswerCard from '../components/common/forum/answer-card';
 import Input from '../components/common/input';
-import useRouter from '../hooks/use-router';
+import useRouter from '../hooks/router/use-router';
 import { RootStackScreenProps } from '../interfaces/navigation';
 
 type Props = {};

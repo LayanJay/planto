@@ -1,6 +1,6 @@
 import type { PropsWithChildren } from 'react';
 import { Text, View } from 'react-native';
-import useRouter from '../../hooks/use-router';
+import useRouter from '../../hooks/router/use-router';
 import { useCurrentUser } from '../../hooks/user/use-current-user';
 import { UserRoles } from '../../schemas/user-schema';
 import ButtonBase from '../common/buttons/button-base';

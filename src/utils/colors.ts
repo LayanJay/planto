@@ -1,6 +1,7 @@
 export class Colors {
   public static readonly BLACK = '#121212';
   public static readonly WHITE = '#FFFFFF';
+  public static readonly RED = '#dc2626';
   public static readonly TEAL_LIGHTER = '#58BCA8';
   public static readonly TEAL_BASE = '#53AC9A';
   public static readonly TEAL_DARKER = '#38786B';
