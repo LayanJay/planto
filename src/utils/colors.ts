@@ -8,4 +8,5 @@ export class Colors {
   public static readonly GREEN_LIGHTER = '#D2EBC1';
   public static readonly GREEN_BASE = '#99E36C';
   public static readonly GREEN_DARKER = '#78AE57';
+  public static readonly RED = '#9b2c2c';
 }
