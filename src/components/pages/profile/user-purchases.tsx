@@ -7,7 +7,7 @@ interface Props {
 
 const UserPurchases = (props: Props) => {
   const userPurchases = UserHelper.getSamplePurchases();
-  console.log('🚀 ~ file: user-purchases.tsx:10 ~ UserPurchases ~ userPurchases:', userPurchases);
+  // console.log('🚀 ~ file: user-purchases.tsx:10 ~ UserPurchases ~ userPurchases:', userPurchases);
 
   return (
     <TouchableWithoutFeedback onPress={() => props.shrinkHeight()}>

@@ -4,14 +4,14 @@ import Icon from 'react-native-vector-icons/Feather';
 import ProtectedRoute from '../../components/auth/protected-route';
 import IconButton from '../../components/common/buttons/icon-button';
 import ScreenContainer from '../../components/layout/screen-container';
-import UserInformation from '../../components/pages/profile/uesr-information';
+import UserInformation from '../../components/pages/profile/user-information';
 import UserPurchases from '../../components/pages/profile/user-purchases';
 import useProtectedRouter from '../../hooks/router/use-protected-router';
 import { useCurrentUser } from '../../hooks/user/use-current-user';
 import { Colors } from '../../utils/colors';
 
 const ProfileScreen = () => {
-  const { authUser } = useCurrentUser();
+  const { authUser, user } = useCurrentUser(true);
   const protectedRouter = useProtectedRouter('Profile');
   const [isMyInformationCollapsed, setIsMyInformationCollapsed] = useState(false);
   let userInformationRef = useRef(new Animated.Value(100));
@@ -60,7 +60,13 @@ const ProfileScreen = () => {
               />
             </TouchableOpacity>
             <IconButton
-              onPress={() => protectedRouter.navigate('EditProfile')}
+              onPress={() =>
+                protectedRouter.navigate('EditProfile', {
+                  email: user?.email,
+                  first_name: user?.first_name,
+                  last_name: user?.last_name,
+                })
+              }
               variant={'custom'}
               buttonClassName='flex justify-center bg-white border border-primary-dark/50'
             >

@@ -16,7 +16,11 @@ export type RootStackParamList = {
   Login: undefined;
   'Sign Up': undefined;
   Profile: undefined;
-  EditProfile: undefined;
+  EditProfile: {
+    email: string;
+    first_name: string;
+    last_name: string;
+  };
   // TODO: Add other public routes and it's params here
 };
 

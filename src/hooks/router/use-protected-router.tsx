@@ -10,28 +10,28 @@ const useProtectedRouter = (currentRoute: keyof RootStackParamList) => {
 
   return {
     ...navigation,
-    replace: (routeName: keyof RootStackParamList) => {
+    replace: (routeName: keyof RootStackParamList, params?: any) => {
       if (!authUserLoading) {
         if (authUser) {
-          navigation.replace(routeName);
+          navigation.replace(routeName, params);
         } else {
           navigation.replace('Login');
         }
       }
     },
-    push: (routeName: keyof RootStackParamList) => {
+    push: (routeName: keyof RootStackParamList, params?: any) => {
       if (!authUserLoading) {
         if (authUser) {
-          navigation.push(routeName);
+          navigation.push(routeName, params);
         } else {
           navigation.push('Login');
         }
       }
     },
-    navigate: (routeName: keyof RootStackParamList) => {
+    navigate: (routeName: keyof RootStackParamList, params?: any) => {
       if (!authUserLoading) {
         if (authUser) {
-          navigation.navigate(routeName);
+          navigation.navigate(routeName, params);
         } else {
           navigation.navigate('Login');
         }
