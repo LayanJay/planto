@@ -87,9 +87,7 @@ const ProfileScreen = () => {
           </View>
           <View className='flex items-center mb-10'>
             <Text className='font-semibold font-main text-2xl text-black/90 capitalize mb-1'>
-              {authUser && authUser.displayName
-                ? authUser.displayName
-                : authUser?.email?.split('@')[0]}
+              {user ? `${user.first_name} ${user.last_name}` : authUser?.email?.split('@')[0]}
             </Text>
             <Text className='font-main text-xs text-black/75'>
               {authUser ? authUser.email : ''}

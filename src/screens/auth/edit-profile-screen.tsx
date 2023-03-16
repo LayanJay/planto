@@ -4,7 +4,7 @@ import ButtonBase from '../../components/common/buttons/button-base';
 import InputBase from '../../components/common/inputs/input-base';
 import ScreenContainer from '../../components/layout/screen-container';
 import useProtectedRouter from '../../hooks/router/use-protected-router';
-
+import { UserUtils } from '../../utils/user-utils';
 interface FormData {
   email: string;
   first_name: string;
@@ -21,7 +21,17 @@ const EditProfileScreen = () => {
     },
   });
 
-  const onSubmit = handleSubmit(async (data) => {});
+  const onSubmit = handleSubmit(async (data) => {
+    try {
+      await UserUtils.updateUserAccount({
+        first_name: data.first_name,
+        last_name: data.last_name,
+      });
+      protectedRouter.goBack();
+    } catch (error) {
+      console.log('🚀 ~ file: edit-profile-screen.tsx:28 ~ onSubmit ~ error:', error);
+    }
+  });
   return (
     <ScreenContainer>
       <KeyboardAvoidingView behavior={Platform.OS === 'ios' ? 'padding' : 'height'}>
@@ -61,6 +71,7 @@ const EditProfileScreen = () => {
             placeholder='Enter your email'
             control={control}
             inputWrapperClassNames='mb-8'
+            disabled
             rules={{
               required: '*Required',
               pattern: {
@@ -70,7 +81,6 @@ const EditProfileScreen = () => {
             }}
           />
 
-          {/* TODO: create a submit button with loading state */}
           <ButtonBase
             onPress={formState.isDirty ? onSubmit : () => protectedRouter.replace('Profile')}
             disabled={!formState.isDirty}

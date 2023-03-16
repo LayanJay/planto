@@ -96,7 +96,11 @@ const SignUpScreen = () => {
               }}
             />
             {/* TODO: create a submit button with loading state */}
-            <ButtonBase onPress={onSubmit} disabled={!formState.isDirty} loading={loading}>
+            <ButtonBase
+              onPress={onSubmit}
+              disabled={!formState.isDirty}
+              loading={formState.isSubmitting}
+            >
               <Text className='font-main font-semibold text-lg text-white text-center'>
                 Sign Up
               </Text>

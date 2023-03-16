@@ -1,6 +1,7 @@
 import { cva, VariantProps } from 'class-variance-authority';
 import { PropsWithChildren } from 'react';
-import { TouchableOpacity, TouchableOpacityProps } from 'react-native';
+import { ActivityIndicator, TouchableOpacity, TouchableOpacityProps } from 'react-native';
+import { Colors } from '../../../utils/colors';
 
 export const enum ButtonVariants {
   PRIMARY = 'primary',
@@ -35,7 +36,7 @@ const ButtonBase = (props: ButtonBaseProps) => {
       })}
       disabled={!!props.disabled}
     >
-      {props.children}
+      {props.loading ? <ActivityIndicator color={Colors.WHITE} /> : props.children}
     </TouchableOpacity>
   );
 };
