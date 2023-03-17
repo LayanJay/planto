@@ -10,9 +10,9 @@ import { UserDataPointer } from './user-schema';
 
 export interface IReviewDocument extends IDocumentBase {
   text?: string;
-  author: UserDataPointer | string;
+  author: UserDataPointer;
   rating: number;
-  product: ProductDataPointer | string;
+  product: ProductDataPointer;
 }
 export interface ReviewDataPointer extends DataPointer {
   text?: string;

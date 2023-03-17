@@ -5,6 +5,7 @@ import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import ButtonBase from '../../components/common/buttons/button-base';
 import InputBase from '../../components/common/inputs/input-base';
+import Container from '../../components/layout/container';
 import { db } from '../../config/firebase-config';
 import { useGetProduct } from '../../hooks/product/use-get-product';
 import { useLoading } from '../../hooks/use-loading';
@@ -16,7 +17,7 @@ import { FirestoreCollections } from '../../utils/firebase-utils';
 const addReview = async (review: Omit<IReviewDocument, 'id' | 'created' | 'modified'>) => {
   const ref = db()
     .collection(FirestoreCollections.PRODUCTS)
-    .doc(review.product as string)
+    .doc(review.product.id as string)
     .collection(FirestoreCollections.REVIEWS);
   await ref.add(ReviewSchema.createDocFromJson(review));
 };
@@ -26,7 +27,7 @@ const AddReviewScreen = () => {
   const router = useRouter('Add Review');
   // @ts-ignore
   const [rating, setRating] = useState<number>(router.params?.rating);
-  const { authUser, loading: userLoading } = useCurrentUser();
+  const { authUser, user, loading: userLoading } = useCurrentUser();
   const { product, loading } = useGetProduct(router.params!.id);
   const { isLoading, setIsLoading } = useLoading();
 
@@ -34,10 +35,18 @@ const AddReviewScreen = () => {
     setIsLoading(true);
     try {
       if (authUser && authUser.uid && router.params && router.params.id) {
-        const review = {
+        const review: Omit<IReviewDocument, 'id' | 'created' | 'modified'> = {
           text: data.text || null,
-          product: router.params.id,
-          author: authUser.uid,
+          product: {
+            id: router.params.id,
+            name: product?.name || '',
+            price: product?.price || '',
+          },
+          author: {
+            id: authUser.uid,
+            first_name: user?.first_name || '',
+            last_name: user?.last_name || '',
+          },
           rating: rating,
         };
 
@@ -52,12 +61,12 @@ const AddReviewScreen = () => {
   });
 
   return (
-    <View className='px-6'>
+    <Container>
       {userLoading || loading ? (
         <Text>Loading..</Text>
       ) : (
         <KeyboardAwareScrollView resetScrollToCoords={{ x: 0, y: 0 }} scrollEnabled={false}>
-          <View className=' mt-6 mb-8 flex flex-row items-center space-x-4 bg-secondary-light px-4 py-4 rounded-xl'>
+          <View className=' mt-4 mb-8 flex flex-row items-center space-x-4 bg-secondary-light px-4 py-4 rounded-xl'>
             <Image
               className='h-24 w-24 rounded-xl'
               source={{
@@ -122,7 +131,7 @@ const AddReviewScreen = () => {
           </ButtonBase>
         </KeyboardAwareScrollView>
       )}
-    </View>
+    </Container>
   );
 };
 

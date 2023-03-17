@@ -7,17 +7,31 @@ export function useListReviews(product_id: string): {
   loading: boolean;
   error: Error | undefined;
   reviews: ReviewSchema[] | null;
+  count: number | null;
+  averageRating: number | null;
 } {
   const [reviews, loading, error] = useCollection(
-    db()
-      .collection(FirestoreCollections.PRODUCTS)
-      .doc(product_id)
-      .collection(FirestoreCollections.REVIEWS)
+    product_id
+      ? db()
+          .collection(FirestoreCollections.PRODUCTS)
+          .doc(product_id)
+          .collection(FirestoreCollections.REVIEWS)
+      : null
   );
 
   return {
-    reviews: reviews ? reviews.docs.map((doc) => new ReviewSchema(doc)) : null,
+    reviews: reviews ? reviews.docs.map((doc) => new ReviewSchema(doc)) : [],
     loading,
     error,
+    count: reviews ? reviews.size : null,
+    averageRating: reviews
+      ? parseFloat(
+          (
+            reviews.docs.reduce((acc, obj) => {
+              return acc + parseInt(obj.get('rating') as string);
+            }, 0) / reviews.size
+          ).toFixed(2)
+        )
+      : null,
   };
 }
