@@ -1,7 +1,7 @@
 import { Image, ScrollView, TouchableOpacity, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import QuestionCard from '../components/common/forum/question-card';
-import useRouter from '../hooks/use-router';
+import useRouter from '../hooks/router/use-router';
 type Props = {};
 const AllQuestionsScreen = (props: Props) => {
   const router = useRouter('All Questions');

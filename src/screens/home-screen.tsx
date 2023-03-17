@@ -8,11 +8,13 @@ import {
 import ButtonBase from '../components/common/buttons/button-base';
 import Section from '../components/common/section';
 import ReviewPrompt from '../components/reviews/review-prompt';
-import useRouter from '../hooks/use-router';
+import useProtectedRouter from '../hooks/router/use-protected-router';
+import useRouter from '../hooks/router/use-router';
 
 const product_id = 'SXlUlrf0646JAvA3ClNz';
 const HomeScreen = () => {
   const router = useRouter('Home');
+  const protectedRouter = useProtectedRouter('Home');
   const backgroundStyle = 'bg-white dark:bg-slate-900 h-screen';
 
   return (
@@ -33,8 +35,22 @@ const HomeScreen = () => {
             <Text>Hello</Text>
           </ButtonBase>
           <ButtonBase
+            onPress={() => protectedRouter.navigate('Profile')}
+            buttonClassName='mt-3'
+            variant={'secondary'}
+          >
+            <Text>Profile</Text>
+          </ButtonBase>
+          <ButtonBase
+            onPress={() => router.navigate('All Questions')}
+            buttonClassName='mt-3'
+            variant={'primary'}
+          >
+            <Text>Forum</Text>
+          </ButtonBase>
+          <ButtonBase
             onPress={() =>
-              router.replace('Reviews', {
+              router.navigate('Reviews', {
                 id: product_id,
               })
             }
@@ -43,12 +59,13 @@ const HomeScreen = () => {
           >
             <Text>Reviews</Text>
           </ButtonBase>
+
           <ButtonBase
-            onPress={() => router.replace('All Questions')}
+            onPress={() => router.replace('All Products')}
             buttonClassName='mt-3'
             variant={'primary'}
           >
-            <Text>Forum</Text>
+            <Text>All products</Text>
           </ButtonBase>
 
           <Section title='See Your Changes'>

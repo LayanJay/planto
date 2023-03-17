@@ -12,6 +12,7 @@ interface Props {
   inputWrapperClassNames?: string;
   inputClassNames?: string;
   secureTextEntry?: boolean;
+  disabled?: boolean;
   rules?: Omit<
     RegisterOptions<FieldValues, string>,
     'valueAsNumber' | 'valueAsDate' | 'setValueAs' | 'disabled'
@@ -37,12 +38,14 @@ const InputBase = (props: Props) => {
             className={cx(
               `${
                 isFocused ? 'border-[1.5px] border-primary-main' : 'border border-black/20'
-              } w-full rounded-full p-4 font-main`,
+              } w-full rounded-full p-4 font-main ${props.disabled && 'placeholder:text-black/50'}`,
               props.inputClassNames
             )}
             onFocus={() => setIsFocused(true)}
             onBlur={() => setIsFocused(false)}
             secureTextEntry={props.secureTextEntry}
+            editable={!props.disabled}
+            selectTextOnFocus={!props.disabled}
           />
           {formState.errors && formState.errors[props.name]?.message?.toString() && (
             <Text className='absolute -bottom-4 right-2 text-red text-right text-xs truncate'>
