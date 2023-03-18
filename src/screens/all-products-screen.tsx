@@ -1,8 +1,8 @@
-import { FlatList, Image, Pressable, ScrollView, Text, TouchableOpacity, View } from 'react-native';
+import { FlatList, Image, Text, TouchableOpacity, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import Chip from '../components/common/buttons/chip-button';
 import ProductCard from '../components/common/producs/product-card';
-import useRouter from '../hooks/use-router';
+import useRouter from '../hooks/router/use-router';
 import { CategoryType, IProductDocument } from '../schemas/product-schema';
 
 type Props = {};
