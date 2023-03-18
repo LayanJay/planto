@@ -1,5 +1,5 @@
 import { Image, Text, TouchableOpacity, View } from 'react-native';
-import useRouter from '../../../hooks/use-router';
+import useRouter from '../../../hooks/router/use-router';
 
 type Props = {};
 

@@ -1,10 +1,10 @@
 import { Image, Text, View } from 'react-native';
 import ButtonBase from '../components/common/buttons/button-base';
 import ScreenContainer from '../components/layout/screen-container';
-import useRouter from '../hooks/use-router';
+import usePublicRouter from '../hooks/router/use-public-router';
 
 const GetStartedScreen = () => {
-  const router = useRouter('Getting Started');
+  const publicRouter = usePublicRouter('Getting Started');
 
   return (
     <ScreenContainer>
@@ -27,7 +27,7 @@ const GetStartedScreen = () => {
           </Text>
         </View>
         <View className='flex flex-col w-full'>
-          <ButtonBase buttonClassName='mb-3' onPress={() => router.navigate('Login')}>
+          <ButtonBase buttonClassName='mb-3' onPress={() => publicRouter.navigate('Login')}>
             <Text className='text-white font-main font-semibold text-lg text-center uppercase'>
               Login
             </Text>
@@ -35,7 +35,7 @@ const GetStartedScreen = () => {
           <ButtonBase
             variant={'custom'}
             buttonClassName='flex flex-row items-center justify-center space-x-3 bg-transparent active:bg-black/5 border border-black/20'
-            onPress={() => router.navigate('Sign Up')}
+            onPress={() => publicRouter.navigate('Sign Up')}
           >
             <Text className='text-black/80 font-main font-semibold text-lg text-center uppercase'>
               Sign Up

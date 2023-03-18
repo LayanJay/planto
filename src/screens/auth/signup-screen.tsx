@@ -14,8 +14,8 @@ import GoogleButton from '../../components/common/buttons/google-button';
 import InputBase from '../../components/common/inputs/input-base';
 import ScreenContainer from '../../components/layout/screen-container';
 import { auth } from '../../config/firebase-config';
-import useRouter from '../../hooks/use-router';
-import { FirebaseAuthUtils, FirebaseFirestoreUtils } from '../../utils/firebase-utils';
+import useRouter from '../../hooks/router/use-router';
+import { UserUtils } from '../../utils/user-utils';
 
 interface FormData {
   email: string;
@@ -35,7 +35,7 @@ const SignUpScreen = () => {
 
       if (!loading && error) throw error;
       if (!loading && userCred) {
-        await FirebaseFirestoreUtils.createUserDocument(userCred);
+        await UserUtils.createUserDocument(userCred);
         router.replace('Home');
       }
     } catch (error: any) {
@@ -96,9 +96,13 @@ const SignUpScreen = () => {
               }}
             />
             {/* TODO: create a submit button with loading state */}
-            <ButtonBase onPress={onSubmit} disabled={!formState.isDirty} loading={loading}>
+            <ButtonBase
+              onPress={onSubmit}
+              disabled={!formState.isDirty}
+              loading={formState.isSubmitting}
+            >
               <Text className='font-main font-semibold text-lg text-white text-center'>
-                Continue
+                Sign Up
               </Text>
             </ButtonBase>
             <View className='flex flex-row items-center justify-center space-x-1 mt-3'>
@@ -120,7 +124,7 @@ const SignUpScreen = () => {
           <View className='w-full'>
             <GoogleButton
               onPress={async () => {
-                await FirebaseAuthUtils.signInWithGoogleProvider().then(() => {
+                await UserUtils.signInWithGoogleProvider().then(() => {
                   router.replace('Home');
                 });
               }}

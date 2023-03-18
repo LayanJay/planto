@@ -1,7 +1,6 @@
 /**
  * Wraps a product document to make accessing attributes easier
  */
-import { FirebaseFirestoreTypes } from '@react-native-firebase/firestore';
 import { DataPointer } from '../interfaces/data-pointer';
 import { FirebaseUtils } from '../utils/firebase-utils';
 import { DocumentBasedSchema, IDocumentBase } from './document-based-schema';
@@ -25,12 +24,7 @@ export interface IProductDocument extends IDocumentBase {
 export interface ProductDataPointer extends DataPointer {
   name: string;
   price: string;
-}
-
-export interface ProductPurchasedDataPointer extends DataPointer {
-  name: string;
-  price: string;
-  purchased_date: FirebaseFirestoreTypes.Timestamp;
+  seller: UserDataPointer;
 }
 
 export interface ProductLineItemDataPointer extends DataPointer {
@@ -76,15 +70,7 @@ export class ProductSchema extends DocumentBasedSchema {
       id: this.id,
       name: this.name,
       price: this.price,
-    };
-  }
-
-  public toPurchasedPointer(): ProductPurchasedDataPointer {
-    return {
-      id: this.id,
-      name: this.name,
-      price: this.price,
-      purchased_date: FirebaseUtils.getCreatedTimestamp().created,
+      seller: this.seller,
     };
   }
 
