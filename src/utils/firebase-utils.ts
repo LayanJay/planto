@@ -30,4 +30,5 @@ export class FirestoreCollections {
   public static readonly QUESTIONS = 'questions';
   public static readonly CARTS = 'carts';
   public static readonly REVIEWS = 'reviews';
+  public static readonly PURCHASES = 'purchases';
 }
