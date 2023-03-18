@@ -1,16 +1,17 @@
-import { FlatList, Image, Text, TouchableOpacity, View } from 'react-native';
-import { SafeAreaView } from 'react-native-safe-area-context';
+import { FlatList, Image, Text, View } from 'react-native';
+import Icon from 'react-native-vector-icons/Feather';
 import Chip from '../components/common/buttons/chip-button';
+import IconButton from '../components/common/buttons/icon-button';
 import ProductCard from '../components/common/producs/product-card';
+import ScreenContainer from '../components/layout/screen-container';
 import useRouter from '../hooks/router/use-router';
 import { CategoryType, IProductDocument } from '../schemas/product-schema';
+import { Colors } from '../utils/colors';
 
 type Props = {};
 
 const AllProducts = (props: Props) => {
   const router = useRouter('All Products');
-  const backgroundStyle = 'bg-white dark:bg-slate-900 h-screen';
-
   const filterOptions = ['All', 'Outdoor', 'Indoor'];
 
   // TODO: Remove ts ignore
@@ -48,12 +49,14 @@ const AllProducts = (props: Props) => {
   ];
 
   return (
-    <SafeAreaView className=' bg-white'>
-      <View className='p-4 h-full relative'>
-        <Text className='font-semibold font-main text-3xl text-black/90'>Find your</Text>
-        <Text className='font-semibold font-main text-3xl text-black/90'>favorite plants</Text>
+    <ScreenContainer>
+      <View className='relative flex min-h-[90vh]'>
+        <View className='mt-8'>
+          <Text className='font-semibold font-main text-3xl text-black/90'>Find your</Text>
+          <Text className='font-semibold font-main text-3xl text-black/90'>favorite plants</Text>
+        </View>
 
-        <View className='w-full rounded-2xl h-32 bg-secondary-light mt-4 flex flex-row items-center px-6 '>
+        <View className='w-full rounded-2xl h-32 bg-secondary-light mt-4 flex flex-row items-center px-6'>
           <View className='flex flex-col mr-auto'>
             <Text className='font-bold font-main text-3xl text-black/90 '>30% OFF</Text>
             <Text className='font-c font-main text-lg text-black/50 '>On Sundays</Text>
@@ -62,11 +65,11 @@ const AllProducts = (props: Props) => {
           <Image className='h-24 w-24 p-3' source={require('../assets/images/plant-4.png')} />
         </View>
 
-        <View className='flex flex-row mt-4' style={{ gap: 7 }}>
+        <View className='flex flex-row mt-6' style={{ gap: 7 }}>
           {filterOptions.map((opt) => {
             return (
               <Chip key={opt} selected>
-                <Text>{opt}</Text>
+                <Text className='font-main'>{opt}</Text>
               </Chip>
             );
           })}
@@ -76,16 +79,18 @@ const AllProducts = (props: Props) => {
           <FlatList horizontal data={data} renderItem={({ item }) => <ProductCard {...item} />} />
         </View>
 
-        <View className='absolute bottom-0 right-0 mx-3 my-3 z-20'>
-          <TouchableOpacity
-            className='bg-primary-main p-4 rounded-full'
+        <View className='absolute bottom-10 right-0 z-20'>
+          <IconButton
             onPress={() => router.navigate('Add Product')}
+            variant={'custom'}
+            size='custom'
+            buttonClassName='flex justify-center bg-primary-main shadow-md'
           >
-            <Image className='h-6 w-6 p-3' source={require('../assets/images/plus.png')} />
-          </TouchableOpacity>
+            <Icon name='plus' size={24} color={Colors.WHITE}></Icon>
+          </IconButton>
         </View>
       </View>
-    </SafeAreaView>
+    </ScreenContainer>
   );
 };
 export default AllProducts;

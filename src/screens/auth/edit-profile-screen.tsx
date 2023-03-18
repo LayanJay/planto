@@ -15,8 +15,11 @@ const EditProfileScreen = () => {
   const protectedRouter = useProtectedRouter('EditProfile');
   const { control, handleSubmit, formState } = useForm<FormData>({
     defaultValues: {
+      // @ts-ignore
       email: protectedRouter.params?.email as string,
+      // @ts-ignore
       first_name: protectedRouter.params?.first_name as string,
+      // @ts-ignore
       last_name: protectedRouter.params?.last_name as string,
     },
   });

@@ -61,11 +61,13 @@ const ProfileScreen = () => {
             </TouchableOpacity>
             <IconButton
               onPress={() =>
-                protectedRouter.navigate('EditProfile', {
-                  email: user?.email,
-                  first_name: user?.first_name,
-                  last_name: user?.last_name,
-                })
+                user
+                  ? protectedRouter.navigate('EditProfile', {
+                      email: user.email,
+                      first_name: user.first_name,
+                      last_name: user.last_name,
+                    })
+                  : null
               }
               variant={'custom'}
               buttonClassName='flex justify-center bg-white border border-primary-dark/50'

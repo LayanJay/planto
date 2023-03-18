@@ -21,6 +21,11 @@ export type RootStackParamList = {
   Home: undefined;
   'Getting Started': undefined;
   'All Questions': undefined;
+  EditProfile: {
+    email: string;
+    first_name: string;
+    last_name: string;
+  };
   'Single Question': { id: string };
   'Add Question': undefined;
   'All Products': undefined;
@@ -29,11 +34,6 @@ export type RootStackParamList = {
   'Add Product': undefined;
   'Sign Up': undefined;
   Profile: undefined;
-  EditProfile: {
-    email: string;
-    first_name: string;
-    last_name: string;
-  };
   // TODO: Add other public routes and it's params here
 };
 
