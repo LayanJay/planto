@@ -1,8 +1,9 @@
 import { FirebaseFirestoreTypes } from '@react-native-firebase/firestore';
 import React, { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
-import { Image, Text, View } from 'react-native';
+import { ActivityIndicator, Image, Text, View } from 'react-native';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
+import { Avatar } from 'react-native-paper';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import ButtonBase from '../../components/common/buttons/button-base';
 import InputBase from '../../components/common/inputs/input-base';
@@ -13,7 +14,6 @@ import useRouter from '../../hooks/router/use-router';
 import { useLoading } from '../../hooks/use-loading';
 import { useCurrentUser } from '../../hooks/user/use-current-user';
 import { IReviewDocument, ReviewSchema } from '../../schemas/review-schema';
-
 const updateReview = async (
   review: Partial<IReviewDocument>,
   ref: FirebaseFirestoreTypes.DocumentReference
@@ -25,7 +25,7 @@ const EditReviewScreen = () => {
   const { control, handleSubmit, reset, setValue } = useForm();
   const router = useRouter('Edit Review');
 
-  const { authUser, loading: userLoading } = useCurrentUser(false);
+  const { authUser, user, loading: authLoading, userLoading } = useCurrentUser(true);
 
   const { review, loading: reviewLoading } = useGetReview(
     // @ts-expect-error
@@ -63,8 +63,10 @@ const EditReviewScreen = () => {
 
   return (
     <Container>
-      {userLoading || loading || reviewLoading || !rating ? (
-        <Text className='font-main'>Loading..</Text>
+      {authLoading || loading || reviewLoading || !rating || userLoading ? (
+        <View className='w-full h-screen flex flex-row justify-center items-center'>
+          <ActivityIndicator className='-mt-28' size={50} color='#58BCA8' />
+        </View>
       ) : (
         <KeyboardAwareScrollView resetScrollToCoords={{ x: 0, y: 0 }} scrollEnabled={false}>
           <View className=' mt-4 mb-8 flex flex-row items-center space-x-4 bg-secondary-light px-4 py-4 rounded-xl'>
@@ -84,15 +86,18 @@ const EditReviewScreen = () => {
             </View>
           </View>
           <View className='flex flex-row space-x-4'>
-            <Image
-              className='h-16 w-16 rounded-full'
-              source={{
-                uri: authUser?.photoURL || '',
-              }}
+            <Avatar.Text
+              size={50}
+              label={
+                user?.first_name && user?.last_name
+                  ? user?.first_name[0] + user?.last_name[0]
+                  : (user?.email?.split('@')[0].substring(0, 2) as string)
+              }
             />
+
             <View>
               <Text className='font-main text-black text-base font-bold'>
-                {authUser?.displayName}
+                {authUser?.displayName || authUser?.email?.split('@')[0]}
               </Text>
               <Text className='font-main text-black text-base mt-1 mr-16'>
                 Share your thougths on the product with other customers.

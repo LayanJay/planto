@@ -1,5 +1,5 @@
 import React from 'react';
-import { FlatList, Text, View } from 'react-native';
+import { ActivityIndicator, FlatList, Text, View } from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import ReviewCard from '../../components/review/review-card';
 import { useListReviews } from '../../hooks/review/use-list-reviews';
@@ -12,7 +12,9 @@ const ReviewsScreen = () => {
   return (
     <>
       {loading ? (
-        <Text className='font-main'>Loading...</Text>
+        <View className='w-full h-screen flex flex-row justify-center items-center'>
+          <ActivityIndicator className='-mt-28' size={50} color='#58BCA8' />
+        </View>
       ) : (
         <>
           {reviews && reviews.length > 0 ? (
@@ -43,8 +45,8 @@ const ReviewsScreen = () => {
               renderItem={({ item }) => <ReviewCard key={item.id} review={item} />}
             />
           ) : (
-            <View className='flex flex-row justify-center'>
-              <Text className='font-main'>No reviews found</Text>
+            <View className='w-full h-screen flex flex-row justify-center items-center'>
+              <Text className='font-main -mt-28 text-lg'>No reviews found.</Text>
             </View>
           )}
         </>

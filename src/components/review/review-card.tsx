@@ -1,7 +1,8 @@
 import dayjs from 'dayjs';
 import relativeTime from 'dayjs/plugin/relativeTime';
 import React, { useState } from 'react';
-import { Image, Text, TouchableOpacity, View } from 'react-native';
+import { Text, TouchableOpacity, View } from 'react-native';
+import { Avatar } from 'react-native-paper';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import useRouter from '../../hooks/router/use-router';
 import { useGetUser } from '../../hooks/user/use-get-user';
@@ -25,12 +26,15 @@ const ReviewCard = ({ review, options = false }: Props) => {
         <View className={`w-full py-4 ${!options && 'border-t border-gray'}`}>
           <View className='flex flex-row justify-between items-center'>
             <View className='flex flex-row gap-4 max-w-xs'>
-              <Image
-                className='h-12 w-12 rounded-full'
-                source={{
-                  uri: 'https://cdn.hswstatic.com/gif/play/0b7f4e9b-f59c-4024-9f06-b3dc12850ab7-1920-1080.jpg',
-                }}
+              <Avatar.Text
+                size={50}
+                label={
+                  user?.first_name && user.last_name
+                    ? user?.first_name[0] + user?.last_name[0]
+                    : (user?.email?.split('@')[0].substring(0, 2) as string)
+                }
               />
+
               {user && user.first_name && user.last_name && (
                 <View className=' w-full'>
                   <Text className='font-main text-black'>
