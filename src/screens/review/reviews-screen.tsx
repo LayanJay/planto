@@ -21,7 +21,7 @@ const ReviewsScreen = () => {
               data={reviews}
               ListHeaderComponent={
                 <View className='flex flex-col items-center pb-8'>
-                  <Text className='font-main text-5xl text-black font-main text-center font-semibold'>
+                  <Text className='font-main text-5xl text-black text-center font-semibold'>
                     {averageRating?.toFixed(2)}
                   </Text>
                   <View className='flex flex-row mt-2'>
