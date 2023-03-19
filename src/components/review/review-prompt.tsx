@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
 import { Text, View } from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialIcons';
-import useRouter from '../../hooks/use-router';
+import useRouter from '../../hooks/router/use-router';
+
 type Props = {
   product_id: string;
 };

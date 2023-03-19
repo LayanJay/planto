@@ -7,7 +7,7 @@ import {
 } from 'react-native/Libraries/NewAppScreen';
 import ButtonBase from '../components/common/buttons/button-base';
 import Section from '../components/common/section';
-import ReviewPrompt from '../components/reviews/review-prompt';
+import ReviewSection from '../components/review/review-section';
 import useProtectedRouter from '../hooks/router/use-protected-router';
 import useRouter from '../hooks/router/use-router';
 
@@ -76,7 +76,7 @@ const HomeScreen = () => {
           </Section>
           <Section title='Learn More'>Read the docs to discover what to do next:</Section>
           <LearnMoreLinks />
-          <ReviewPrompt product_id={product_id} />
+          <ReviewSection product_id={product_id} />
         </View>
       </ScrollView>
     </SafeAreaView>

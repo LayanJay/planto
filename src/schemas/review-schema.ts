@@ -66,4 +66,8 @@ export class ReviewSchema extends DocumentBasedSchema {
   ) {
     return { ...FirebaseUtils.getCreatedTimestamp(), ...json };
   }
+
+  public static updateDocFromJson(json: Partial<IReviewDocument>) {
+    return { ...FirebaseUtils.getModifiedTimestamp(), ...json };
+  }
 }

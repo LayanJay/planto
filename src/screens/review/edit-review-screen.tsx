@@ -1,4 +1,5 @@
-import React, { useState } from 'react';
+import { FirebaseFirestoreTypes } from '@react-native-firebase/firestore';
+import React, { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { Image, Text, View } from 'react-native';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
@@ -6,72 +7,64 @@ import Icon from 'react-native-vector-icons/MaterialIcons';
 import ButtonBase from '../../components/common/buttons/button-base';
 import InputBase from '../../components/common/inputs/input-base';
 import Container from '../../components/layout/container';
-import { db } from '../../config/firebase-config';
 import { useGetProduct } from '../../hooks/product/use-get-product';
+import { useGetReview } from '../../hooks/review/use-get-review';
 import useRouter from '../../hooks/router/use-router';
 import { useLoading } from '../../hooks/use-loading';
 import { useCurrentUser } from '../../hooks/user/use-current-user';
 import { IReviewDocument, ReviewSchema } from '../../schemas/review-schema';
-import { FirestoreCollections } from '../../utils/firebase-utils';
 
-const addReview = async (review: Omit<IReviewDocument, 'id' | 'created' | 'modified'>) => {
-  const ref = db()
-    .collection(FirestoreCollections.PRODUCTS)
-    .doc(review.product.id as string)
-    .collection(FirestoreCollections.REVIEWS);
-  await ref.add(ReviewSchema.createDocFromJson(review));
+const updateReview = async (
+  review: Partial<IReviewDocument>,
+  ref: FirebaseFirestoreTypes.DocumentReference
+) => {
+  await ref.update(ReviewSchema.updateDocFromJson(review));
 };
 
-const AddReviewScreen = () => {
-  const { control, handleSubmit, reset } = useForm({});
-  const router = useRouter('Add Review');
+const EditReviewScreen = () => {
+  const { control, handleSubmit, reset, setValue } = useForm();
+  const router = useRouter('Edit Review');
+
+  const { authUser, loading: userLoading } = useCurrentUser(false);
+
+  const { review, loading: reviewLoading } = useGetReview(
+    // @ts-expect-error
+    router.params?.product_id,
+    // @ts-expect-error
+    router.params?.review_id
+  );
   // @ts-expect-error
-  const [rating, setRating] = useState<number>(router.params?.rating);
-  const { authUser, user, loading: userLoading } = useCurrentUser(true);
-  // @ts-expect-error
-  const { product, loading } = useGetProduct(router.params!.id);
+  const { product, loading } = useGetProduct(router.params?.product_id);
+  const [rating, setRating] = useState<number>(0);
   const { isLoading, setIsLoading } = useLoading();
 
   const onSubmit = handleSubmit(async (data) => {
     setIsLoading(true);
     try {
-      // @ts-expect-error
-      if (authUser && authUser.uid && router.params && router.params.id && !loading) {
-        const review: Omit<IReviewDocument, 'id' | 'created' | 'modified'> = {
-          text: data.text || null,
-          product: {
-            // @ts-expect-error
-            id: router.params.id,
-            name: product?.name as string,
-            price: product?.price as string,
-            seller: {
-              id: product?.seller.id as string,
-              first_name: product?.seller.first_name as string,
-              last_name: product?.seller.last_name as string,
-            },
-          },
-          author: {
-            id: authUser.uid,
-            first_name: user?.first_name as string,
-            last_name: user?.last_name as string,
-          },
-          rating: rating,
-        };
-
-        await addReview(review);
-        router.goBack();
-      }
+      const out: Partial<IReviewDocument> = {
+        text: data.text,
+        rating: rating,
+      };
+      await updateReview(out, review!.ref);
       setIsLoading(false);
+      router.goBack();
     } catch (error) {
       console.log(error);
       setIsLoading(false);
     }
   });
 
+  useEffect(() => {
+    if (review) {
+      setValue('text', review.text);
+      if (rating === 0) setRating(review?.rating);
+    }
+  }, [review]);
+
   return (
     <Container>
-      {userLoading || loading ? (
-        <Text>Loading..</Text>
+      {userLoading || loading || reviewLoading || !rating ? (
+        <Text className='font-main'>Loading..</Text>
       ) : (
         <KeyboardAwareScrollView resetScrollToCoords={{ x: 0, y: 0 }} scrollEnabled={false}>
           <View className=' mt-4 mb-8 flex flex-row items-center space-x-4 bg-secondary-light px-4 py-4 rounded-xl'>
@@ -109,7 +102,12 @@ const AddReviewScreen = () => {
           <View className='mb-8'>
             <View className='flex flex-row justify-between pt-6 pb-3 px-4'>
               {[...Array(5)].map((_, i) => (
-                <View key={i} onTouchStart={() => setRating(i + 1)}>
+                <View
+                  key={i}
+                  onTouchStart={() => {
+                    setRating(i + 1);
+                  }}
+                >
                   <Icon
                     name={i + 1 <= rating ? 'star' : 'star-border'}
                     size={40}
@@ -118,7 +116,7 @@ const AddReviewScreen = () => {
                 </View>
               ))}
             </View>
-            <Text className='w-full mx-auto text-center text-md text-black'>
+            <Text className='font-main w-full mx-auto text-center text-md text-black'>
               {rating} star rating
             </Text>
           </View>
@@ -143,4 +141,4 @@ const AddReviewScreen = () => {
   );
 };
 
-export default AddReviewScreen;
+export default EditReviewScreen;
