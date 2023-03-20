@@ -49,7 +49,7 @@ const AddProductScreen = (props: Props) => {
       return;
     }
 
-    const filepath = `plants/${image.fileName}`;
+    const filepath = `products/${image.fileName}`;
     const storageRef = storage().ref(filepath);
     const imageUpload = await storageRef.putFile(image?.uri);
     const downloadUrl = await storageRef.getDownloadURL();
