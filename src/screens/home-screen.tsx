@@ -7,9 +7,11 @@ import {
 } from 'react-native/Libraries/NewAppScreen';
 import ButtonBase from '../components/common/buttons/button-base';
 import Section from '../components/common/section';
+import ReviewSection from '../components/review/review-section';
 import useProtectedRouter from '../hooks/router/use-protected-router';
 import useRouter from '../hooks/router/use-router';
 
+const product_id = 'SXlUlrf0646JAvA3ClNz';
 const HomeScreen = () => {
   const router = useRouter('Home');
   const protectedRouter = useProtectedRouter('Home');
@@ -18,7 +20,7 @@ const HomeScreen = () => {
   return (
     <SafeAreaView className='-mt-12 bg-white'>
       <ScrollView className={backgroundStyle}>
-        <View className='bg-white dark:bg-black px-4 mt-4 mb-24'>
+        <View className='bg-white dark:bg-black px-6 mt-4 mb-24'>
           <Section title='Step One'>
             Edit <Text className='font-bold'>App.js</Text> to change this screen and then come back
             to see your edits.
@@ -35,7 +37,7 @@ const HomeScreen = () => {
           <ButtonBase
             onPress={() => protectedRouter.navigate('Profile')}
             buttonClassName='mt-3'
-            variant={'primary'}
+            variant={'secondary'}
           >
             <Text>Profile</Text>
           </ButtonBase>
@@ -45,6 +47,17 @@ const HomeScreen = () => {
             variant={'primary'}
           >
             <Text>Forum</Text>
+          </ButtonBase>
+          <ButtonBase
+            onPress={() =>
+              router.navigate('Reviews', {
+                id: product_id,
+              })
+            }
+            buttonClassName='mt-3'
+            variant={'secondary'}
+          >
+            <Text>Reviews</Text>
           </ButtonBase>
 
           <ButtonBase
@@ -63,6 +76,7 @@ const HomeScreen = () => {
           </Section>
           <Section title='Learn More'>Read the docs to discover what to do next:</Section>
           <LearnMoreLinks />
+          <ReviewSection product_id={product_id} />
         </View>
       </ScrollView>
     </SafeAreaView>

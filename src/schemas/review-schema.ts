@@ -9,28 +9,23 @@ import { ProductDataPointer } from './product-schema';
 import { UserDataPointer } from './user-schema';
 
 export interface IReviewDocument extends IDocumentBase {
-  title: string;
-  text: string;
+  text?: string;
   author: UserDataPointer;
   rating: number;
   product: ProductDataPointer;
 }
 export interface ReviewDataPointer extends DataPointer {
-  title: string;
+  text?: string;
   rating: number;
   product: ProductDataPointer;
 }
 
 export class ReviewSchema extends DocumentBasedSchema {
-  static readonly TITLE: string = 'title';
   static readonly TEXT: string = 'text';
   static readonly AUTHOR: string = 'author';
   static readonly RATING: string = 'rating';
   static readonly PRODUCT: string = 'product';
 
-  public get title(): string {
-    return this.doc.get(ReviewSchema.TITLE);
-  }
   public get text(): string {
     return this.doc.get(ReviewSchema.TEXT);
   }
@@ -47,7 +42,7 @@ export class ReviewSchema extends DocumentBasedSchema {
   public toPointer(): ReviewDataPointer {
     return {
       id: this.id,
-      title: this.title,
+      text: this.text,
       rating: this.rating,
       product: this.product,
     };
@@ -56,7 +51,6 @@ export class ReviewSchema extends DocumentBasedSchema {
   public toJson(): IReviewDocument {
     return {
       id: this.id,
-      title: this.title,
       text: this.text,
       author: this.author,
       rating: this.rating,
@@ -71,5 +65,9 @@ export class ReviewSchema extends DocumentBasedSchema {
       Partial<Pick<IReviewDocument, 'created' | 'modified'>>
   ) {
     return { ...FirebaseUtils.getCreatedTimestamp(), ...json };
+  }
+
+  public static updateDocFromJson(json: Partial<IReviewDocument>) {
+    return { ...FirebaseUtils.getModifiedTimestamp(), ...json };
   }
 }
