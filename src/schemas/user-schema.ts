@@ -5,7 +5,6 @@
 import { DataPointer } from '../interfaces/data-pointer';
 import { FirebaseUtils } from '../utils/firebase-utils';
 import { DocumentBasedSchema, IDocumentBase } from './document-based-schema';
-import { ReviewDataPointer } from './review-schema';
 
 export interface IUserDocument extends IDocumentBase {
   uid: string;
@@ -13,7 +12,7 @@ export interface IUserDocument extends IDocumentBase {
   last_name: string | null;
   email: string | null;
   role: UserRoles;
-  reviews: Array<ReviewDataPointer>;
+  address: string | null;
 }
 export interface UserDataPointer extends DataPointer {
   first_name: string | null;
@@ -30,7 +29,7 @@ export class UserSchema extends DocumentBasedSchema {
   static readonly LAST_NAME: string = 'last_name';
   static readonly EMAIL: string = 'email';
   static readonly ROLE: string = 'role';
-  static readonly REVIEWS: string = 'reviews';
+  static readonly ADDRESS: string = 'address';
 
   public get uid(): string {
     return this.doc.get(UserSchema.UID) ?? this.doc.id;
@@ -47,8 +46,8 @@ export class UserSchema extends DocumentBasedSchema {
   public get role(): UserRoles {
     return this.doc.get(UserSchema.ROLE) ?? '';
   }
-  public get reviews(): Array<ReviewDataPointer> {
-    return this.doc.data()?.[UserSchema.REVIEWS] ?? [];
+  public get address(): string | null {
+    return this.doc.get(UserSchema.ADDRESS) ?? '';
   }
 
   public toPointer(): UserDataPointer {
@@ -67,7 +66,7 @@ export class UserSchema extends DocumentBasedSchema {
       last_name: this.last_name,
       email: this.email,
       role: this.role,
-      reviews: this.reviews,
+      address: this.address,
       created: this.created,
       modified: this.modified,
     };
