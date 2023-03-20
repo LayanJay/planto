@@ -1,59 +1,40 @@
-import { FlatList, Image, Text, TouchableOpacity, View } from 'react-native';
-import { SafeAreaView } from 'react-native-safe-area-context';
+import { ActivityIndicator, FlatList, Image, Text, View } from 'react-native';
+import Icon from 'react-native-vector-icons/Feather';
 import Chip from '../components/common/buttons/chip-button';
+import IconButton from '../components/common/buttons/icon-button';
 import ProductCard from '../components/common/producs/product-card';
+import ScreenContainer from '../components/layout/screen-container';
+import { useProducts } from '../hooks/product/use-products';
+import useProtectedRouter from '../hooks/router/use-protected-router';
 import useRouter from '../hooks/router/use-router';
-import { CategoryType, IProductDocument } from '../schemas/product-schema';
+import { useCurrentUser } from '../hooks/user/use-current-user';
+import { Colors } from '../utils/colors';
 
-type Props = {};
-
-const AllProducts = (props: Props) => {
+const AllProducts = () => {
   const router = useRouter('All Products');
-  const backgroundStyle = 'bg-white dark:bg-slate-900 h-screen';
-
+  const protectedRouter = useProtectedRouter('All Products');
+  const { authUser } = useCurrentUser();
   const filterOptions = ['All', 'Outdoor', 'Indoor'];
-
-  // TODO: Remove ts ignore
-  const data: IProductDocument[] = [
-    // @ts-ignore
-    {
-      id: 'ID_KJKHKJSDHFKJKS',
-      name: 'Bo gaha',
-      description: `Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullam`,
-      price: '33.00',
-      category: CategoryType.Indoor,
-      image: 'https://',
-      inventory: 23,
-      seller: {
-        first_name: 'lskdjf',
-        last_name: 'skdjhfsjd',
-        id: 'lksksdj',
-      },
-    },
-    // @ts-ignore
-    {
-      id: 'ID_KsdfsdfDHFKJKS',
-      name: 'Kos gaha',
-      description: `Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullam`,
-      price: '33.99',
-      category: CategoryType.Indoor,
-      image: 'https://',
-      inventory: 23,
-      seller: {
-        first_name: 'lskdjf',
-        last_name: 'skdjhfsjd',
-        id: 'lksksdj',
-      },
-    },
-  ];
+  const { products, loading, error } = useProducts();
 
   return (
-    <SafeAreaView className=' bg-white'>
-      <View className='p-4 h-full relative'>
-        <Text className='font-semibold font-main text-3xl text-black/90'>Find your</Text>
-        <Text className='font-semibold font-main text-3xl text-black/90'>favorite plants</Text>
+    <ScreenContainer>
+      <View className='relative flex min-h-[90vh]'>
+        <View className='flex flex-row justify-between items-center mt-8'>
+          <View>
+            <Text className='font-semibold font-main text-3xl text-black/90'>Find your</Text>
+            <Text className='font-semibold font-main text-3xl text-black/90'>favorite plants</Text>
+          </View>
+          <IconButton
+            onPress={() => (authUser ? protectedRouter.navigate('Cart') : null)}
+            variant={'custom'}
+            buttonClassName='flex justify-center bg-white border-2 border-primary-dark/50'
+          >
+            <Icon name='shopping-cart' size={24} color={Colors.TEAL_DARKER.concat('90')}></Icon>
+          </IconButton>
+        </View>
 
-        <View className='w-full rounded-2xl h-32 bg-secondary-light mt-4 flex flex-row items-center px-6 '>
+        <View className='w-full rounded-2xl h-32 bg-secondary-light mt-4 flex flex-row items-center px-6'>
           <View className='flex flex-col mr-auto'>
             <Text className='font-bold font-main text-3xl text-black/90 '>30% OFF</Text>
             <Text className='font-c font-main text-lg text-black/50 '>On Sundays</Text>
@@ -62,30 +43,41 @@ const AllProducts = (props: Props) => {
           <Image className='h-24 w-24 p-3' source={require('../assets/images/plant-4.png')} />
         </View>
 
-        <View className='flex flex-row mt-4' style={{ gap: 7 }}>
+        <View className='flex flex-row mt-6' style={{ gap: 7 }}>
           {filterOptions.map((opt) => {
             return (
               <Chip key={opt} selected>
-                <Text>{opt}</Text>
+                <Text className='font-main'>{opt}</Text>
               </Chip>
             );
           })}
         </View>
 
         <View className='flex flex-wrap flex-row justify-between mt-6' style={{ gap: 2 }}>
-          <FlatList horizontal data={data} renderItem={({ item }) => <ProductCard {...item} />} />
+          {!loading && products ? (
+            <FlatList
+              horizontal
+              data={products}
+              renderItem={({ item }) => <ProductCard product={item} />}
+            />
+          ) : (
+            <ActivityIndicator />
+          )}
+          {/* <FlatList horizontal data={data} renderItem={({ item }) => <ProductCard />} /> */}
         </View>
 
-        <View className='absolute bottom-0 right-0 mx-3 my-3 z-20'>
-          <TouchableOpacity
-            className='bg-primary-main p-4 rounded-full'
+        <View className='absolute bottom-10 right-0 z-20'>
+          <IconButton
             onPress={() => router.navigate('Add Product')}
+            variant={'custom'}
+            size='custom'
+            buttonClassName='flex justify-center bg-primary-main shadow-md'
           >
-            <Image className='h-6 w-6 p-3' source={require('../assets/images/plus.png')} />
-          </TouchableOpacity>
+            <Icon name='plus' size={24} color={Colors.WHITE}></Icon>
+          </IconButton>
         </View>
       </View>
-    </SafeAreaView>
+    </ScreenContainer>
   );
 };
 export default AllProducts;

@@ -27,16 +27,16 @@ export class ReviewSchema extends DocumentBasedSchema {
   static readonly PRODUCT: string = 'product';
 
   public get text(): string {
-    return this.doc.get(ReviewSchema.TEXT);
+    return this.doc.data()?.text;
   }
   public get author(): UserDataPointer {
-    return this.doc.data()?.[ReviewSchema.AUTHOR];
+    return this.doc.data()?.author;
   }
   public get rating(): number {
-    return this.doc.get(ReviewSchema.RATING);
+    return this.doc.data()?.rating;
   }
   public get product(): ProductDataPointer {
-    return this.doc.data()?.[ReviewSchema.PRODUCT];
+    return this.doc.data()?.product;
   }
 
   public toPointer(): ReviewDataPointer {

@@ -23,11 +23,11 @@ export abstract class DocumentBasedSchema {
   }
 
   public get created(): FirebaseFirestoreTypes.Timestamp | null {
-    return this.doc.get(DocumentBasedSchema.CREATED) ?? null;
+    return this.doc.data()?.created ?? null;
   }
 
   public get modified(): FirebaseFirestoreTypes.Timestamp | null {
-    return this.doc.get(DocumentBasedSchema.MODIFIED) ?? null;
+    return this.doc.data()?.modified ?? null;
   }
 
   get ref(): FirebaseFirestoreTypes.DocumentReference {
