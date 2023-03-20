@@ -6,7 +6,7 @@ import { Text, TextInput, View } from 'react-native';
 interface Props {
   control: Control<any, any>;
   name: string;
-  label: string;
+  label?: string;
   placeholder?: string;
   defaultValue?: any;
   inputWrapperClassNames?: string;
