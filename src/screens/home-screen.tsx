@@ -61,7 +61,7 @@ const HomeScreen = () => {
           </ButtonBase>
 
           <ButtonBase
-            onPress={() => router.replace('All Products')}
+            onPress={() => router.navigate('All Products')}
             buttonClassName='mt-3'
             variant={'primary'}
           >

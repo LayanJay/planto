@@ -7,7 +7,6 @@ import { Asset, launchImageLibrary } from 'react-native-image-picker';
 import ButtonBase from '../components/common/buttons/button-base';
 import InputBase from '../components/common/inputs/input-base';
 import useRouter from '../hooks/router/use-router';
-
 import { RootStackScreenProps } from '../interfaces/navigation';
 
 type Props = {};

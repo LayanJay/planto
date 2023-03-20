@@ -1,33 +1,39 @@
-import { FirebaseFirestoreTypes } from '@react-native-firebase/firestore';
 import _ from 'lodash';
-import { ProductPurchasedDataPointer } from '../schemas/product-schema';
+import { ProductLineItemDataPointer } from '../schemas/product-schema';
 import { ReviewDataPointer } from '../schemas/review-schema';
+import { UserDataPointer, UserSchema } from '../schemas/user-schema';
 
 export class UserHelper {
-  public static getSamplePurchases(): ProductPurchasedDataPointer[] {
-    const productPurchasedDate = FirebaseFirestoreTypes?.Timestamp.fromDate(new Date());
+  public static getUserDataPointer(user: UserSchema): UserDataPointer {
+    return user.toPointer();
+  }
+
+  public static getSamplePurchases(): ProductLineItemDataPointer[] {
     return [
       {
         id: '1',
         name: 'Product 1',
         price: '1000',
-        purchased_date: productPurchasedDate,
+        quantity: 1,
+        image: '../assets/images/plant-2.png',
       },
       {
         id: '2',
         name: 'Product 2',
         price: '1500',
-        purchased_date: productPurchasedDate,
+        quantity: 1,
+        image: '../assets/images/plant-3.png',
       },
       {
         id: '3',
         name: 'Product 3',
         price: '1200',
-        purchased_date: productPurchasedDate,
+        quantity: 1,
+        image: '../assets/images/plant-4.png',
       },
     ];
   }
-  public static getSampleReviews(): ReviewDataPointer[] {
+  public static getSampleReviews(user: UserSchema): ReviewDataPointer[] {
     return [
       {
         id: '1',
@@ -37,6 +43,7 @@ export class UserHelper {
           id: '1',
           price: '1500',
           name: 'Product 1',
+          seller: this.getUserDataPointer(user),
         },
       },
       {
@@ -47,6 +54,7 @@ export class UserHelper {
           id: '2',
           price: '1200',
           name: 'Product 2',
+          seller: this.getUserDataPointer(user),
         },
       },
       {
@@ -57,6 +65,7 @@ export class UserHelper {
           id: '3',
           price: '1000',
           name: 'Product 3',
+          seller: this.getUserDataPointer(user),
         },
       },
     ];
