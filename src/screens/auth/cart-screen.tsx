@@ -44,7 +44,15 @@ const CartScreen = () => {
                 <Text className='text-black/40'>LKR</Text>
               </Text>
             </View>
-            <ButtonBase onPress={() => protectedRouter.navigate('Checkout')} buttonClassName='mt-3'>
+            <ButtonBase
+              onPress={
+                cart && cart.line_items.length !== 0
+                  ? () => protectedRouter.navigate('Checkout')
+                  : () => {}
+              }
+              disabled={cart?.line_items.length === 0}
+              buttonClassName='mt-3'
+            >
               <Text className='font-main font-semibold text-lg text-white text-center'>
                 Checkout
               </Text>
