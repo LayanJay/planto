@@ -32,22 +32,22 @@ export class UserSchema extends DocumentBasedSchema {
   static readonly ADDRESS: string = 'address';
 
   public get uid(): string {
-    return this.doc.get(UserSchema.UID) ?? this.doc.id;
+    return this.doc.data()?.uid ?? this.doc.id;
   }
   public get first_name(): string | null {
-    return this.doc.get(UserSchema.FIRST_NAME) ?? null;
+    return this.doc.data()?.first_name ?? null;
   }
   public get last_name(): string | null {
-    return this.doc.get(UserSchema.LAST_NAME) ?? null;
+    return this.doc.data()?.last_name ?? null;
   }
   public get email(): string | null {
-    return this.doc.get(UserSchema.EMAIL) ?? null;
+    return this.doc.data()?.email ?? null;
   }
   public get role(): UserRoles {
-    return this.doc.get(UserSchema.ROLE) ?? '';
+    return this.doc.data()?.role ?? '';
   }
   public get address(): string | null {
-    return this.doc.get(UserSchema.ADDRESS) ?? '';
+    return this.doc.data()?.address ?? '';
   }
 
   public toPointer(): UserDataPointer {
