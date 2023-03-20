@@ -21,7 +21,17 @@ export type RootStackParamList = {
   Home: undefined;
   'Getting Started': undefined;
   'All Questions': undefined;
-  'Single Question': { id: string };
+  'Single Question': {
+    id: string;
+    title: string;
+    question: string;
+    votes: any;
+    answers: any;
+    date: any;
+    author_firstname: string;
+    author_lastname: string;
+    author_id: string;
+  };
   'Add Question': undefined;
   'All Products': undefined;
   Login: undefined;

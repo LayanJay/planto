@@ -10,7 +10,7 @@ import { UserDataPointer } from './user-schema';
 export interface IQuestionDocument extends IDocumentBase {
   title: string;
   question: string;
-  votes: number;
+  votes: Array<string>;
   is_answered: boolean;
   author: UserDataPointer;
   answers: AnswersDataPointer[];
@@ -18,7 +18,7 @@ export interface IQuestionDocument extends IDocumentBase {
 
 export interface QuestionDataPointer extends DataPointer {
   title: string;
-  votes: number;
+  votes: Array<string>;
 }
 
 export interface AnswersDataPointer {
@@ -41,7 +41,7 @@ export class QuestionSchema extends DocumentBasedSchema {
   public get question(): string {
     return this.doc.get(QuestionSchema.QUESTION);
   }
-  public get votes(): number {
+  public get votes(): Array<string> {
     return this.doc.get(QuestionSchema.VOTES);
   }
   public get is_answered(): boolean {
