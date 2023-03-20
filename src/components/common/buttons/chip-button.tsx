@@ -13,6 +13,7 @@ const Chip = (props: Props) => {
       buttonClassName={cx(props.buttonClassName, 'bg-white border px-3 py-1')}
       variant={ButtonVariants.CUSTOM}
       size={ButtonSizes.CUSTOM}
+      onPress={props.onPress}
     >
       {props.children}
     </ButtonBase>

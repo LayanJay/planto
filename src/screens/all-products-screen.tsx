@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import { FlatList, Image, Text, TouchableOpacity, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import Chip from '../components/common/buttons/chip-button';
@@ -9,9 +10,11 @@ type Props = {};
 
 const AllProducts = (props: Props) => {
   const router = useRouter('All Products');
-  const backgroundStyle = 'bg-white dark:bg-slate-900 h-screen';
 
   const filterOptions = ['All', 'Outdoor', 'Indoor'];
+  const [selectedFilter, setSelectedFilter] = useState<(typeof filterOptions)[number]>(
+    filterOptions[0]
+  );
 
   // TODO: Remove ts ignore
   const data: IProductDocument[] = [
@@ -65,11 +68,13 @@ const AllProducts = (props: Props) => {
         <View className='flex flex-row mt-4' style={{ gap: 7 }}>
           {filterOptions.map((opt) => {
             return (
-              <Chip key={opt} selected>
+              <Chip key={opt} onPress={() => setSelectedFilter(opt)} selected>
                 <Text>{opt}</Text>
               </Chip>
             );
           })}
+
+          <Text>{selectedFilter}</Text>
         </View>
 
         <View className='flex flex-wrap flex-row justify-between mt-6' style={{ gap: 2 }}>

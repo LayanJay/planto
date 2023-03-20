@@ -4,8 +4,10 @@ import { useForm } from 'react-hook-form';
 import { Image, Text, View } from 'react-native';
 import ButtonBase from '../components/common/buttons/button-base';
 import useRouter from '../hooks/router/use-router';
+import Icon from 'react-native-vector-icons/Feather';
 
 import { RootStackScreenProps } from '../interfaces/navigation';
+import { Colors } from '../utils/colors';
 
 type Props = {};
 const SingleProductScreen = (props: Props) => {
@@ -13,17 +15,6 @@ const SingleProductScreen = (props: Props) => {
   const route = useRoute<RootStackScreenProps<'Single Product'>['route']>();
 
   const [openDeleteModal, setOpenDeleteModal] = useState(false);
-
-  const {
-    control,
-    reset,
-    handleSubmit,
-    formState: { errors },
-  } = useForm({
-    defaultValues: {
-      reply: '',
-    },
-  });
 
   return (
     <View className='h-full relative p-4 flex'>
@@ -52,6 +43,26 @@ const SingleProductScreen = (props: Props) => {
           <Text>Availability</Text>
           <Text className='text-xl text-black/90 font-bold'>11 Left</Text>
         </View>
+      </View>
+
+      <View className='fex flex-row w-full mt-6' style={{ gap: 6 }}>
+        <ButtonBase
+          variant={'custom'}
+          buttonClassName='w-fit bg-black flex flex-row items-center justify-center space-x-2'
+          size='small'
+        >
+          <Icon name='edit-3' size={14} color={Colors.WHITE}></Icon>
+          <Text className='text-white'>Edit</Text>
+        </ButtonBase>
+
+        <ButtonBase
+          variant={'custom'}
+          buttonClassName='w-fit bg-red/50 flex flex-row items-center justify-center space-x-2'
+          size='small'
+        >
+          <Icon name='trash' size={14} color={Colors.WHITE}></Icon>
+          <Text className='text-white'>Delete</Text>
+        </ButtonBase>
       </View>
 
       {/* Bottom bar */}
