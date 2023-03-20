@@ -1,5 +1,8 @@
 // import { useAuthState } from '@skillnation/react-native-firebase-hooks/lib/typescript/auth';
-import { useCollection } from '@skillnation/react-native-firebase-hooks/lib/typescript/firestore';
+// import { useCollection } from '@skillnation/react-native-firebase-hooks/lib/typescript/firestore';
+
+import { useCollection } from '@skillnation/react-native-firebase-hooks/lib/module/firestore/index';
+
 import { db } from '../../config/firebase-config';
 import { QuestionSchema } from '../../schemas/question-schema';
 import { FirestoreCollections } from '../../utils/firebase-utils';
