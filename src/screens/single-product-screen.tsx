@@ -1,17 +1,14 @@
 import { useRoute } from '@react-navigation/native';
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
-import { Image, Modal, ScrollView, Text, View } from 'react-native';
+import { Image, Text, View } from 'react-native';
 import ButtonBase from '../components/common/buttons/button-base';
-import AnswerCard from '../components/common/forum/answer-card';
-import Input from '../components/common/input';
 import useRouter from '../hooks/router/use-router';
 
 import { RootStackScreenProps } from '../interfaces/navigation';
-import { CategoryType } from '../schemas/product-schema';
 
 type Props = {};
-const SingleQuestionScreen = (props: Props) => {
+const SingleProductScreen = (props: Props) => {
   const router = useRouter('Single Product');
   const route = useRoute<RootStackScreenProps<'Single Product'>['route']>();
 
@@ -73,4 +70,4 @@ const SingleQuestionScreen = (props: Props) => {
     </View>
   );
 };
-export default SingleQuestionScreen;
+export default SingleProductScreen;

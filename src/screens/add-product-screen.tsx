@@ -8,6 +8,10 @@ import ButtonBase from '../components/common/buttons/button-base';
 import InputBase from '../components/common/inputs/input-base';
 import useRouter from '../hooks/router/use-router';
 import { RootStackScreenProps } from '../interfaces/navigation';
+import { CategoryType, ProductSchema } from '../schemas/product-schema';
+import { db, storage } from '../config/firebase-config';
+import { useCurrentUser } from '../hooks/user/use-current-user';
+import { FirestoreCollections } from '../utils/firebase-utils';
 
 type Props = {};
 
@@ -18,17 +22,15 @@ const AddProductScreen = (props: Props) => {
   const [image, setImage] = useState<Asset>();
 
   const [open, setOpen] = useState(false);
-  const [value, setValue] = useState(null);
+  const [value, setValue] = useState('');
+  const [loading, setLoading] = useState(false);
   const [items, setItems] = useState([
     { label: 'Outdoor', value: 'outdoor' },
     { label: 'Indoor', value: 'indoor' },
   ]);
 
-  const { control, reset, handleSubmit, formState } = useForm({
-    defaultValues: {
-      reply: '',
-    },
-  });
+  const { control, reset, formState, handleSubmit } = useForm();
+  const { user } = useCurrentUser(true);
 
   const selectImage = async () => {
     const result = await launchImageLibrary({ mediaType: 'photo' });
@@ -37,6 +39,41 @@ const AddProductScreen = (props: Props) => {
       setImage(result.assets[0]);
     }
   };
+
+  const onSubmit = handleSubmit(async (data) => {
+    setLoading(true);
+
+    // TODO: @Nav: Handle invalid image errors
+    if (!image?.uri) {
+      setLoading(false);
+      return;
+    }
+
+    const filepath = `products/${image.fileName}`;
+    const storageRef = storage().ref(filepath);
+    const imageUpload = await storageRef.putFile(image?.uri);
+    const downloadUrl = await storageRef.getDownloadURL();
+
+    const product = ProductSchema.createDocFromJson({
+      name: data.name,
+      description: data.description,
+      category: value as CategoryType,
+      image: downloadUrl,
+      inventory: data.inventory,
+      price: data.price,
+      seller: {
+        id: user?.id as string,
+        first_name: user?.first_name as string,
+        last_name: user?.last_name as string,
+      },
+    });
+
+    await db().collection(FirestoreCollections.PRODUCTS).add(product);
+
+    setLoading(false);
+
+    router.goBack();
+  });
 
   return (
     <ScrollView className='p-4 flex '>
@@ -47,6 +84,9 @@ const AddProductScreen = (props: Props) => {
           label='Plant Name'
           placeholder='Name of your plant'
           inputWrapperClassNames='mb-4'
+          rules={{
+            required: '*Required',
+          }}
         />
 
         <InputBase
@@ -66,6 +106,9 @@ const AddProductScreen = (props: Props) => {
           label='Price'
           placeholder='Price in USD'
           inputWrapperClassNames='mb-4'
+          rules={{
+            required: '*Required',
+          }}
         />
 
         <TouchableOpacity
@@ -99,9 +142,12 @@ const AddProductScreen = (props: Props) => {
           label='Inventory'
           placeholder='Number of items left in inventory'
           inputWrapperClassNames=' mt-8 mb-4'
+          rules={{
+            required: '*Required',
+          }}
         />
 
-        <ButtonBase variant={'primary'} buttonClassName='mt-4'>
+        <ButtonBase loading={loading} variant={'primary'} onPress={onSubmit} buttonClassName='mt-4'>
           <Text className='font-main font-semibold text-lg text-white text-center'>
             Create Plant
           </Text>
