@@ -8,8 +8,9 @@ import { FirebaseUtils, FirestoreCollections } from './firebase-utils';
 
 export class CartUtils extends FirebaseUtils {
   // create/initialize a cart to the current user
-  public static async createCart(): Promise<void> {
+  public static async createOrResetCart(): Promise<void> {
     const currentUser = this.checkUser();
+
     await db()
       .collection(FirestoreCollections.CARTS)
       .doc(currentUser.uid)
@@ -34,17 +35,18 @@ export class CartUtils extends FirebaseUtils {
     const userCartRef = db().collection(FirestoreCollections.CARTS).doc(currentUser.uid);
     let userCart = new CartSchema(await userCartRef.get());
     if (!userCart.exists) {
-      await this.createCart();
+      await this.createOrResetCart();
       userCart = new CartSchema(await userCartRef.get());
     }
 
     const newLineItems: ProductLineItemDataPointer[] = userCart.line_items;
-    const lineItemIndex = _.findIndex(newLineItems, (lineItem) => lineItem.id === item.id);
+    const lineItemIndex = _.findIndex(newLineItems, (lineItem) => item.id === lineItem.id);
     if (lineItemIndex === -1) {
+      item.quantity = 1;
       newLineItems.push(item);
     } else {
-      item.quantity = ++newLineItems[lineItemIndex].quantity;
-      _.set(newLineItems, [lineItemIndex], item);
+      item.quantity = newLineItems[lineItemIndex].quantity + 1;
+      _.set(newLineItems, `[${lineItemIndex}]`, item);
     }
 
     await this.updateCartDocument(userCartRef, newLineItems);
@@ -66,7 +68,7 @@ export class CartUtils extends FirebaseUtils {
 
     const newLineItems = userCart.line_items;
     lineItemToBeUpdated.quantity = _.clamp(lineItemToBeUpdated.quantity + quantity, 0, 999);
-    _.set(newLineItems, [lineItemIndexToBeUpdated], lineItemToBeUpdated);
+    _.set(newLineItems, `[${lineItemIndexToBeUpdated}]`, lineItemToBeUpdated);
 
     await this.updateCartDocument(userCartRef, newLineItems);
   }
@@ -79,7 +81,7 @@ export class CartUtils extends FirebaseUtils {
     if (!userCart.exists) throw new Error(`User cart not found`);
 
     const newLineItems: ProductLineItemDataPointer[] = userCart.line_items.filter(
-      (lineItem) => lineItem.id === id
+      (lineItem) => lineItem.id !== id
     );
 
     await this.updateCartDocument(userCartRef, newLineItems);
@@ -89,18 +91,16 @@ export class CartUtils extends FirebaseUtils {
     userCartRef: FirebaseFirestoreTypes.DocumentReference<FirebaseFirestoreTypes.DocumentData>,
     newLineItems: ProductLineItemDataPointer[]
   ): Promise<void> {
-    await userCartRef.update({
-      [CartSchema.TOTAL_ITEMS]: _.reduce(
-        newLineItems.map((lineItem) => lineItem.quantity),
-        (sum, item) => sum + item
-      ),
-      [CartSchema.TOTAL_UNIQUE_ITEMS]: _.uniqBy(newLineItems, (ele) => ele.id).length,
-      [CartSchema.LINE_ITEMS]: newLineItems,
-      [CartSchema.SUBTOTAL]: _.reduce(
-        newLineItems.map((lineItem) => parseFloat(lineItem.price) * lineItem.quantity),
-        (sum, item) => sum + item
-      ),
-    });
+    await userCartRef.update(
+      CartSchema.updateDocFromJson({
+        total_items: _.sum(newLineItems.map((lineItem) => lineItem.quantity)),
+        total_unique_items: _.uniqBy(newLineItems, (ele) => ele.id).length,
+        line_items: newLineItems,
+        subtotal: _.sum(
+          newLineItems.map((lineItem) => parseFloat(lineItem.price) * lineItem.quantity)
+        ),
+      })
+    );
   }
 
   public static checkUser(): FirebaseAuthTypes.User {

@@ -1,6 +1,6 @@
 import { FirebaseAuthTypes } from '@react-native-firebase/auth';
 import { auth, db } from '../config/firebase-config';
-import { IQuestionDocument, QuestionSchema } from '../schemas/question-schema';
+import { AnswersDataPointer, IQuestionDocument, QuestionSchema } from '../schemas/question-schema';
 import { FirebaseUtils, FirestoreCollections } from './firebase-utils';
 
 export class QuestionUtils extends FirebaseUtils {
@@ -29,6 +29,44 @@ export class QuestionUtils extends FirebaseUtils {
   public static async deleteQuestion(id: string): Promise<void> {
     await db().collection(FirestoreCollections.QUESTIONS).doc(id).delete();
   }
+
+  public static async updateAnswers(
+    questionId: string,
+    answers: AnswersDataPointer[]
+  ): Promise<void> {
+    try {
+      await db()
+        .collection(FirestoreCollections.QUESTIONS)
+        .doc(questionId)
+        .update({
+          [QuestionSchema.ANSWERS]: answers,
+        });
+    } catch (error) {
+      console.log(`Failed to update answers for question ${questionId}: ${error}`);
+    }
+  }
+
+  public static async updateVotes(
+    questionId: string,
+    userId: string,
+    action: string
+  ): Promise<void> {
+    const votes = [...QuestionSchema.VOTES];
+    const index = votes.indexOf(userId);
+
+    if (action === 'add') {
+      if (index < 0) {
+        votes.push(userId);
+      }
+    } else if (action === 'remove') {
+      if (index >= 0) {
+        votes.splice(index, 1);
+      }
+    }
+
+    await db().collection(FirestoreCollections.QUESTIONS).doc(questionId).update({ votes });
+  }
+
   public static checkUser(): FirebaseAuthTypes.User {
     const currentUser = auth().currentUser;
     if (!currentUser) throw new Error(`User not authenticated.`);

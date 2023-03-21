@@ -28,6 +28,7 @@ export interface ProductDataPointer extends DataPointer {
 }
 
 export interface ProductLineItemDataPointer extends DataPointer {
+  id: string;
   name: string;
   price: string;
   quantity: number;
@@ -44,25 +45,25 @@ export class ProductSchema extends DocumentBasedSchema {
   static readonly SELLER: string = 'seller';
 
   public get name(): string {
-    return this.doc.get(ProductSchema.NAME);
+    return this.doc.data()?.name;
   }
   public get description(): string {
-    return this.doc.get(ProductSchema.DESCRIPTION);
+    return this.doc.data()?.description;
   }
   public get price(): string {
-    return this.doc.get(ProductSchema.PRICE);
+    return this.doc.data()?.price;
   }
   public get category(): CategoryType {
-    return this.doc.get(ProductSchema.CATEGORY);
+    return this.doc.data()?.category;
   }
   public get image(): string {
-    return this.doc.get(ProductSchema.IMAGE);
+    return this.doc.data()?.image;
   }
   public get inventory(): number {
-    return this.doc.get(ProductSchema.NAME) ?? 0;
+    return this.doc.data()?.inventory ?? 0;
   }
   public get seller(): UserDataPointer {
-    return this.doc.data()?.[ProductSchema.SELLER];
+    return this.doc.data()?.seller;
   }
 
   public toPointer(): ProductDataPointer {
@@ -74,12 +75,12 @@ export class ProductSchema extends DocumentBasedSchema {
     };
   }
 
-  public toLineItemPointer(quantity: number): ProductLineItemDataPointer {
+  public toLineItemPointer(): ProductLineItemDataPointer {
     return {
       id: this.id,
       name: this.name,
       price: this.price,
-      quantity: quantity,
+      quantity: 0,
       image: this.image,
     };
   }
@@ -104,5 +105,9 @@ export class ProductSchema extends DocumentBasedSchema {
       Partial<Pick<IProductDocument, 'created' | 'modified'>>
   ) {
     return { ...FirebaseUtils.getCreatedTimestamp(), ...json };
+  }
+
+  public static updateDocFromJson(json: Partial<IProductDocument>) {
+    return { ...FirebaseUtils.getModifiedTimestamp(), ...json };
   }
 }

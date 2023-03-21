@@ -1,5 +1,5 @@
-import { useAuthState } from '@skillnation/react-native-firebase-hooks/lib/typescript/auth';
-import { useDocument } from '@skillnation/react-native-firebase-hooks/lib/typescript/firestore';
+import { useAuthState } from '@skillnation/react-native-firebase-hooks/auth';
+import { useDocument } from '@skillnation/react-native-firebase-hooks/firestore';
 import { auth, db } from '../../config/firebase-config';
 import { CartSchema } from '../../schemas/cart-schema';
 import { FirestoreCollections } from '../../utils/firebase-utils';

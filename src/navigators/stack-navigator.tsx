@@ -5,6 +5,8 @@ import AddProductScreen from '../screens/add-product-screen';
 import AddQuestionScreen from '../screens/add-question-screen';
 import AllProducts from '../screens/all-products-screen';
 import AllQuestionsScreen from '../screens/all-questions-screen';
+import CartScreen from '../screens/auth/cart-screen';
+import CheckoutScreen from '../screens/auth/checkout-screen';
 import EditProfileScreen from '../screens/auth/edit-profile-screen';
 import LoginScreen from '../screens/auth/login-screen';
 import ProfileScreen from '../screens/auth/profile-screen';
@@ -49,7 +51,10 @@ export type RootStackParamList = {
     email: string;
     first_name: string;
     last_name: string;
+    address: string;
   };
+  Checkout: undefined;
+  Cart: undefined;
   // TODO: Add other public routes and it's params here
 };
 
@@ -89,6 +94,12 @@ const StackNavigator = () => {
         component={EditProfileScreen}
         name='EditProfile'
         options={{ headerTitle: 'Edit Profile' }}
+      />
+      <Stack.Screen component={CartScreen} name='Cart' options={{ headerTitle: 'My Cart' }} />
+      <Stack.Screen
+        component={CheckoutScreen}
+        name='Checkout'
+        options={{ headerTitle: 'Checkout' }}
       />
       <Stack.Screen component={AllQuestionsScreen} name='All Questions' />
       <Stack.Screen component={SingleQuestionScreen} name='Single Question' />

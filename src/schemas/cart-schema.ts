@@ -23,19 +23,19 @@ export class CartSchema extends DocumentBasedSchema {
   static readonly OWNER: 'owner';
 
   public get total_items(): number {
-    return this.doc.get(CartSchema.TOTAL_ITEMS) ?? 0;
+    return this.doc.data()?.total_items ?? 0;
   }
   public get total_unique_items(): number {
-    return this.doc.get(CartSchema.TOTAL_UNIQUE_ITEMS) ?? 0;
+    return this.doc.data()?.total_unique_items ?? 0;
   }
   public get subtotal(): number {
-    return this.doc.get(CartSchema.SUBTOTAL) ?? 0;
+    return this.doc.data()?.subtotal ?? 0;
   }
   public get line_items(): ProductLineItemDataPointer[] {
-    return this.doc.data()?.[CartSchema.LINE_ITEMS] ?? [];
+    return this.doc.data()?.line_items ?? [];
   }
   public get owner(): UserDataPointer {
-    return this.doc.data()?.[CartSchema.OWNER];
+    return this.doc.data()?.owner;
   }
 
   public toJson(): ICartDocument {
@@ -56,5 +56,9 @@ export class CartSchema extends DocumentBasedSchema {
       Partial<Pick<ICartDocument, 'created' | 'modified'>>
   ) {
     return { ...FirebaseUtils.getCreatedTimestamp(), ...json };
+  }
+
+  public static updateDocFromJson(json: Partial<ICartDocument>) {
+    return { ...FirebaseUtils.getModifiedTimestamp(), ...json };
   }
 }
