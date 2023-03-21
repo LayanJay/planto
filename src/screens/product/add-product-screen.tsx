@@ -4,14 +4,14 @@ import { useForm } from 'react-hook-form';
 import { Image, ScrollView, Text, TouchableOpacity, View } from 'react-native';
 import DropDownPicker from 'react-native-dropdown-picker';
 import { Asset, launchImageLibrary } from 'react-native-image-picker';
-import ButtonBase from '../components/common/buttons/button-base';
-import InputBase from '../components/common/inputs/input-base';
-import useRouter from '../hooks/router/use-router';
-import { RootStackScreenProps } from '../interfaces/navigation';
-import { CategoryType, ProductSchema } from '../schemas/product-schema';
-import { db, storage } from '../config/firebase-config';
-import { useCurrentUser } from '../hooks/user/use-current-user';
-import { FirestoreCollections } from '../utils/firebase-utils';
+import ButtonBase from '../../components/common/buttons/button-base';
+import InputBase from '../../components/common/inputs/input-base';
+import useRouter from '../../hooks/router/use-router';
+import { RootStackScreenProps } from '../../interfaces/navigation';
+import { CategoryType, ProductSchema } from '../../schemas/product-schema';
+import { db, storage } from '../../config/firebase-config';
+import { useCurrentUser } from '../../hooks/user/use-current-user';
+import { FirestoreCollections } from '../../utils/firebase-utils';
 
 type Props = {};
 
@@ -24,6 +24,7 @@ const AddProductScreen = (props: Props) => {
   const [open, setOpen] = useState(false);
   const [value, setValue] = useState('');
   const [loading, setLoading] = useState(false);
+  const [imageError, setImageError] = useState(false);
   const [items, setItems] = useState([
     { label: 'Outdoor', value: 'outdoor' },
     { label: 'Indoor', value: 'indoor' },
@@ -37,15 +38,16 @@ const AddProductScreen = (props: Props) => {
 
     if (result.assets) {
       setImage(result.assets[0]);
+      setImageError(false);
     }
   };
 
   const onSubmit = handleSubmit(async (data) => {
     setLoading(true);
 
-    // TODO: @Nav: Handle invalid image errors
     if (!image?.uri) {
       setLoading(false);
+      setImageError(true);
       return;
     }
 
@@ -104,10 +106,14 @@ const AddProductScreen = (props: Props) => {
           control={control}
           name='price'
           label='Price'
-          placeholder='Price in USD'
+          placeholder='Price in LKR'
           inputWrapperClassNames='mb-4'
           rules={{
             required: '*Required',
+            pattern: {
+              value: /^[0-9]*$/,
+              message: 'Inventory must be a number',
+            },
           }}
         />
 
@@ -123,7 +129,9 @@ const AddProductScreen = (props: Props) => {
           )}
         </TouchableOpacity>
 
-        <View className='mt-6'>
+        {imageError && <Text className='text-red text-right text-xs truncate'>*Required</Text>}
+
+        <View className='mt-6 z-10'>
           <Text className='mb-2'>Category</Text>
           <DropDownPicker
             listMode='SCROLLVIEW'
@@ -144,6 +152,10 @@ const AddProductScreen = (props: Props) => {
           inputWrapperClassNames=' mt-8 mb-4'
           rules={{
             required: '*Required',
+            pattern: {
+              value: /^[0-9]*$/,
+              message: 'Inventory must be a number',
+            },
           }}
         />
 

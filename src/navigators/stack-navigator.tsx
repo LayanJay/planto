@@ -1,9 +1,10 @@
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { useCurrentUser } from '../hooks/user/use-current-user';
-import { IProductDocument } from '../schemas/product-schema';
-import AddProductScreen from '../screens/add-product-screen';
+import { IProductDocument, ProductSchema } from '../schemas/product-schema';
+import AddProductScreen from '../screens/product/add-product-screen';
+import EditProductScreen from '../screens/product/edit-product-screen';
 import AddQuestionScreen from '../screens/add-question-screen';
-import AllProducts from '../screens/all-products-screen';
+import AllProducts from '../screens/product/all-products-screen';
 import AllQuestionsScreen from '../screens/all-questions-screen';
 import CartScreen from '../screens/auth/cart-screen';
 import CheckoutScreen from '../screens/auth/checkout-screen';
@@ -16,7 +17,7 @@ import HomeScreen from '../screens/home-screen';
 import AddReviewScreen from '../screens/review/add-review-screen';
 import EditReviewScreen from '../screens/review/edit-review-screen';
 import ReviewsScreen from '../screens/review/reviews-screen';
-import SingleProductScreen from '../screens/single-product-screen';
+import SingleProductScreen from '../screens/product/single-product-screen';
 import SingleQuestionScreen from '../screens/single-question-screen';
 import { Colors } from '../utils/colors';
 
@@ -43,7 +44,8 @@ export type RootStackParamList = {
   Login: undefined;
   Reviews: { id: string };
   'All Products': undefined;
-  'Single Product': Partial<IProductDocument>; // TODO: @Nav: remove partial
+  'Single Product': IProductDocument;
+  'Edit Product': IProductDocument;
   'Add Product': undefined;
   'Sign Up': undefined;
   Profile: undefined;
@@ -120,6 +122,7 @@ const StackNavigator = () => {
       <Stack.Screen component={AllProducts} name='All Products' />
       <Stack.Screen component={SingleProductScreen} name='Single Product' />
       <Stack.Screen component={AddProductScreen} name='Add Product' />
+      <Stack.Screen component={EditProductScreen} name='Edit Product' />
     </Stack.Navigator>
   );
 };
