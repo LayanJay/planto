@@ -36,16 +36,16 @@ export class QuestionSchema extends DocumentBasedSchema {
   static readonly ANSWERS: string = 'answers';
 
   public get title(): string {
-    return this.doc.get(QuestionSchema.TITLE);
+    return this.doc.data()?.title;
   }
   public get question(): string {
-    return this.doc.get(QuestionSchema.QUESTION);
+    return this.doc.data()?.question;
   }
   public get votes(): Array<string> {
-    return this.doc.get(QuestionSchema.VOTES);
+    return this.doc.data()?.votes;
   }
   public get is_answered(): boolean {
-    return this.doc.get(QuestionSchema.ISANSWERED);
+    return this.doc.data()?.is_answered;
   }
   public get author(): UserDataPointer {
     return this.doc.data()?.[QuestionSchema.AUTHOR];

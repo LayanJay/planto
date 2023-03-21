@@ -52,6 +52,7 @@ export class UserUtils extends FirebaseUtils {
     await this.updateUserDocument(currentUser.uid, {
       first_name: change.first_name,
       last_name: change.last_name,
+      address: change.address,
     });
     await currentUser.updateProfile({
       displayName: `${change.first_name} ${change.last_name}`,
@@ -87,8 +88,7 @@ export class UserUtils extends FirebaseUtils {
           email: userCred.user.email,
           first_name: userCred.user.displayName?.split(' ')[0] ?? '',
           last_name: userCred.user.displayName?.split(' ')[1] ?? '',
-          purchases: [],
-          reviews: [],
+          address: '',
           role: UserRoles.CUSTOMER,
           uid: userCred.user.uid,
         })
