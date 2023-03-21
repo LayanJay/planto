@@ -1,6 +1,6 @@
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { useCurrentUser } from '../hooks/user/use-current-user';
-import { IProductDocument } from '../schemas/product-schema';
+import { IProductDocument, ProductSchema } from '../schemas/product-schema';
 import AddQuestionScreen from '../screens/add-question-screen';
 import AllQuestionsScreen from '../screens/all-questions-screen';
 import CartScreen from '../screens/auth/cart-screen';

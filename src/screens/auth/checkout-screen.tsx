@@ -68,11 +68,13 @@ const CheckoutScreen = () => {
                   <Icon name='map-pin' size={24} color={Colors.TEAL_DARKER}></Icon>
                 </View>
                 <View>
-                  <Text className='font-main font-semibold'>
+                  <Text className='font-main font-semibold capitalize'>
                     {_.truncate(user.address, { length: 40 })}
                   </Text>
-                  <Text className='font-main font-medium text-black/50'>
-                    {_.words(user.address, /[^, ]+/g)[4]}
+                  <Text className='font-main font-medium text-black/50 capitalize'>
+                    {_(user.address)
+                      .words(/[^, ]+/g)
+                      .last()}
                   </Text>
                 </View>
               </View>
@@ -137,13 +139,14 @@ const CheckoutScreen = () => {
               <Text className='font-medium font-main text-lg text-black/60'>Sub Total</Text>
               <Text className='font-semibold font-main text-lg text-black/90'>
                 {cart?.subtotal ?? '0.00'}
-                <Text className='text-primary-dark/70'>LKR</Text>
+                <Text className='text-primary-dark/70'> LKR</Text>
               </Text>
             </View>
             <View className='flex flex-row justify-between'>
               <Text className='font-medium font-main text-lg text-black/60'>Shipping</Text>
               <Text className='font-semibold font-main text-lg text-black/90'>
-                0<Text className='text-primary-dark/70'>LKR</Text>
+                {'0.00'}
+                <Text className='text-primary-dark/70'> LKR</Text>
               </Text>
             </View>
             <View className='border-b border-b-black/10 pt-4 mb-4' />
@@ -151,7 +154,7 @@ const CheckoutScreen = () => {
               <Text className='font-semibold font-main text-2xl text-black/90'>Total</Text>
               <Text className='font-semibold font-main text-2xl text-black/90'>
                 {cart?.subtotal ?? '0.00'}
-                <Text className='text-primary-dark/70'>LKR</Text>
+                <Text className='text-primary-dark/70'> LKR</Text>
               </Text>
             </View>
           </View>

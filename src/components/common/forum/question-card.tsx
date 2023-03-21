@@ -51,9 +51,7 @@ const QuestionCard = ({ id }: Props) => {
 
           <Text className='font-bold font-main text-xs pt-1'>{question?.votes?.length}</Text>
         </View>
-        <Text className='font-bold font-main w-3/4 px-2'>
-          {question?.title} ldkjk sljdfh lksjhdf kjsh dkjfhv lskdjfhisud fissudhf iguh{' '}
-        </Text>
+        <Text className='font-bold font-main w-3/4 px-2'>{question?.title}</Text>
       </View>
 
       {question?.created && (
