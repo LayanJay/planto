@@ -2,6 +2,7 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { useCurrentUser } from '../hooks/user/use-current-user';
 import { IProductDocument, ProductSchema } from '../schemas/product-schema';
 import AddProductScreen from '../screens/product/add-product-screen';
+import EditProductScreen from '../screens/product/edit-product-screen';
 import AddQuestionScreen from '../screens/add-question-screen';
 import AllProducts from '../screens/product/all-products-screen';
 import AllQuestionsScreen from '../screens/all-questions-screen';
@@ -44,6 +45,7 @@ export type RootStackParamList = {
   Reviews: { id: string };
   'All Products': undefined;
   'Single Product': IProductDocument;
+  'Edit Product': IProductDocument;
   'Add Product': undefined;
   'Sign Up': undefined;
   Profile: undefined;
@@ -120,6 +122,7 @@ const StackNavigator = () => {
       <Stack.Screen component={AllProducts} name='All Products' />
       <Stack.Screen component={SingleProductScreen} name='Single Product' />
       <Stack.Screen component={AddProductScreen} name='Add Product' />
+      <Stack.Screen component={EditProductScreen} name='Edit Product' />
     </Stack.Navigator>
   );
 };

@@ -73,6 +73,7 @@ const SingleProductScreen = (props: Props) => {
                 variant={'custom'}
                 buttonClassName='w-fit bg-black flex flex-row items-center justify-center space-x-2'
                 size='small'
+                onPress={() => router.push('Edit Product', { ...route.params })}
               >
                 <Icon name='edit-3' size={14} color={Colors.WHITE}></Icon>
                 <Text className='text-white'>Edit</Text>

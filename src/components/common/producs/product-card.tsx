@@ -54,7 +54,7 @@ const ProductCard = (props: Props) => {
       onPress={() => router.push('Single Product', { ...props.product.toJson() })}
     >
       <View className='flex flex-row justify-between w-full'>
-        <Text className='text-black font-bold font-main text-lg capitalize'>
+        <Text className='w-full max-w-[100px] text-black font-bold font-main text-lg capitalize break-all'>
           {props.product.name}
         </Text>
         <Text className='font-main font-medium text-xl'>{props.product.price}LKR</Text>

@@ -26,6 +26,7 @@ const InputBase = (props: Props) => {
     <Controller
       control={props.control}
       rules={props.rules}
+      defaultValue={props.defaultValue}
       name={props.name}
       render={({ field, formState }) => (
         <View className={cx('relative flex items-start', props.inputWrapperClassNames)}>
