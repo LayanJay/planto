@@ -1,6 +1,6 @@
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { useCurrentUser } from '../hooks/user/use-current-user';
-import { IProductDocument, ProductSchema } from '../schemas/product-schema';
+import { IProductDocument } from '../schemas/product-schema';
 import AddQuestionScreen from '../screens/add-question-screen';
 import AllQuestionsScreen from '../screens/all-questions-screen';
 import CartScreen from '../screens/auth/cart-screen';
@@ -10,7 +10,6 @@ import LoginScreen from '../screens/auth/login-screen';
 import ProfileScreen from '../screens/auth/profile-screen';
 import SignUpScreen from '../screens/auth/signup-screen';
 import GetStartedScreen from '../screens/get-started-screen';
-import HomeScreen from '../screens/home-screen';
 import AddProductScreen from '../screens/product/add-product-screen';
 import AllProducts from '../screens/product/all-products-screen';
 import EditProductScreen from '../screens/product/edit-product-screen';
@@ -20,8 +19,6 @@ import EditReviewScreen from '../screens/review/edit-review-screen';
 import ReviewsScreen from '../screens/review/reviews-screen';
 import SingleQuestionScreen from '../screens/single-question-screen';
 import { Colors } from '../utils/colors';
-import Icon from 'react-native-vector-icons/Feather';
-import useProtectedRouter from '../hooks/router/use-protected-router';
 
 const Stack = createNativeStackNavigator();
 

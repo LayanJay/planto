@@ -19,26 +19,6 @@ const ProductCard = (props: Props) => {
   const handleAddToCart = async () => {
     setIsLoading(true);
     try {
-      // TODO: remove later
-      // await db()
-      //   .collection(FirestoreCollections.PRODUCTS)
-      //   .add(
-      //     ProductSchema.createDocFromJson({
-      //       category: CategoryType.Indoor,
-      //       name: 'Plant 5',
-      //       price: '899',
-      //       description:
-      //         'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed euismod, nisl vel ultricies lacinia, nunc nisl ultricies nisl, nec ultricies nisl nisl nec nunc. Sed euismod, nisl vel ultricies lacinia, nunc nisl ultricies nisl, nec ultricies nisl nisl nec nunc.',
-      //       image: await storage().ref('products/plant-5.png').getDownloadURL(),
-      //       inventory: 10,
-      //       seller: {
-      //         first_name: 'Menake',
-      //         last_name: 'Dasunpriya',
-      //         id: '0Tt2uvBCozMnlS1PSigHfGyZz2n2',
-      //       },
-      //     })
-      //   );
-
       await CartUtils.addToCart(props.product.toLineItemPointer());
       Alert.alert('Success', 'Product added to cart');
       setIsLoading(false);

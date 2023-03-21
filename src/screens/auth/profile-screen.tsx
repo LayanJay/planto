@@ -30,7 +30,7 @@ const ProfileScreen = () => {
 
   const expandHeight = () => {
     Animated.spring(userInformationRef.current, {
-      toValue: 400,
+      toValue: 300,
       tension: 30,
       // duration: 200,
       useNativeDriver: false,
