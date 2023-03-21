@@ -1,4 +1,5 @@
 import { FirebaseAuthTypes } from '@react-native-firebase/auth';
+import { firebase } from '@react-native-firebase/firestore';
 import { auth, db } from '../config/firebase-config';
 import { AnswersDataPointer, IQuestionDocument, QuestionSchema } from '../schemas/question-schema';
 import { FirebaseUtils, FirestoreCollections } from './firebase-utils';
@@ -30,16 +31,13 @@ export class QuestionUtils extends FirebaseUtils {
     await db().collection(FirestoreCollections.QUESTIONS).doc(id).delete();
   }
 
-  public static async updateAnswers(
-    questionId: string,
-    answers: AnswersDataPointer[]
-  ): Promise<void> {
+  public static async updateAnswers(questionId: string, answer: AnswersDataPointer): Promise<void> {
     try {
       await db()
         .collection(FirestoreCollections.QUESTIONS)
         .doc(questionId)
         .update({
-          [QuestionSchema.ANSWERS]: answers,
+          [QuestionSchema.ANSWERS]: firebase.firestore.FieldValue.arrayUnion(answer),
         });
     } catch (error) {
       console.log(`Failed to update answers for question ${questionId}: ${error}`);
@@ -51,7 +49,10 @@ export class QuestionUtils extends FirebaseUtils {
     userId: string,
     action: string
   ): Promise<void> {
-    const votes = [...QuestionSchema.VOTES];
+    const questionRef = db().collection(FirestoreCollections.QUESTIONS).doc(questionId);
+    let question = new QuestionSchema(await questionRef.get());
+
+    let votes = question.votes;
     const index = votes.indexOf(userId);
 
     if (action === 'add') {
@@ -60,7 +61,7 @@ export class QuestionUtils extends FirebaseUtils {
       }
     } else if (action === 'remove') {
       if (index >= 0) {
-        votes.splice(index, 1);
+        votes = votes.filter((vote) => vote != userId);
       }
     }
 

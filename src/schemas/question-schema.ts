@@ -1,7 +1,6 @@
 /**
  * Wraps a question document to make accessing attributes easier
  */
-import { FirebaseFirestoreTypes } from '@react-native-firebase/firestore';
 import { DataPointer } from '../interfaces/data-pointer';
 import { FirebaseUtils } from '../utils/firebase-utils';
 import { DocumentBasedSchema, IDocumentBase } from './document-based-schema';
@@ -21,10 +20,10 @@ export interface QuestionDataPointer extends DataPointer {
   votes: Array<string>;
 }
 
-export interface AnswersDataPointer {
+export interface AnswersDataPointer extends DataPointer {
   text: string;
   answered_by: UserDataPointer;
-  created_at: FirebaseFirestoreTypes.Timestamp;
+  created_at: Date;
 }
 
 export class QuestionSchema extends DocumentBasedSchema {
@@ -81,5 +80,9 @@ export class QuestionSchema extends DocumentBasedSchema {
       Partial<Pick<IQuestionDocument, 'created' | 'modified'>>
   ) {
     return { ...FirebaseUtils.getCreatedTimestamp(), ...json };
+  }
+
+  public static updateDocFromJson(json: Partial<IQuestionDocument>) {
+    return { ...FirebaseUtils.getModifiedTimestamp(), ...json };
   }
 }
