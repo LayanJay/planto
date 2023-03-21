@@ -53,9 +53,9 @@ const AllProducts = () => {
               <Chip
                 key={opt}
                 onPress={() => setSelectedFilter(opt as keyof typeof CategoryType)}
-                selected
+                selected={opt === selectedFilter}
               >
-                <Text className='font-main'>{opt}</Text>
+                {opt}
               </Chip>
             );
           })}
