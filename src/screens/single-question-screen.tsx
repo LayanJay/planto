@@ -38,6 +38,8 @@ const SingleQuestionScreen = (props: Props) => {
     },
   });
 
+  const onSubmit = handleSubmit(async (data) => {});
+
   return (
     <View className='p-4 flex'>
       {!deleteLoading ? (
@@ -89,7 +91,7 @@ const SingleQuestionScreen = (props: Props) => {
               }}
             />
             <View className='flex flex-col w-full'>
-              <ButtonBase buttonClassName='mb-3' onPress={() => router.navigate('Login')}>
+              <ButtonBase buttonClassName='mb-3' onPress={onSubmit}>
                 <Text className='text-white font-main font-semibold text-lg text-center uppercase'>
                   Post
                 </Text>

@@ -29,6 +29,13 @@ export class QuestionUtils extends FirebaseUtils {
   public static async deleteQuestion(id: string): Promise<void> {
     await db().collection(FirestoreCollections.QUESTIONS).doc(id).delete();
   }
+
+  // public static async addAnswer(params: AnswersDataPointer, id: string): Promise<void> {
+  //   const questionRef = db().collection(FirestoreCollections.QUESTIONS).doc(id);
+  //   let question = new QuestionSchema(await questionRef.get());
+  //   const newAnswer: AnswersDataPointer[]= question.answers;
+  // }
+
   public static checkUser(): FirebaseAuthTypes.User {
     const currentUser = auth().currentUser;
     if (!currentUser) throw new Error(`User not authenticated.`);
