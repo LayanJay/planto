@@ -33,6 +33,7 @@ const InputBase = (props: Props) => {
 
           <TextInput
             value={field.value}
+            defaultValue={props.defaultValue}
             onChangeText={field.onChange}
             placeholder={props.placeholder}
             className={cx(
