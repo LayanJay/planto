@@ -24,7 +24,7 @@ const SingleProductScreen = (props: Props) => {
   const { user } = useCurrentUser(true);
 
   const deleteProduct = async () => {
-    await db().collection(FirestoreCollections.PRODUCTS).doc(route.params.id).delete();
+    await db().collection(FirestoreCollections.PRODUCTS).doc(route.params.id!).delete();
     router.goBack();
   };
 
