@@ -11,7 +11,7 @@ type Props = {
 
 const AnswerCard = ({ data }: Props) => {
   return (
-    <View className='pt-2 pb-3 border-b border-grey-light'>
+    <View className='pt-2 pb-3 border-b border-black/20'>
       <Text className='text-black/70'>{data.text}</Text>
       <View className='flex flex-row pt-2'>
         <Text className='text-black/70 text-xs'>
@@ -19,7 +19,7 @@ const AnswerCard = ({ data }: Props) => {
         </Text>
 
         {data.answered_by && (
-          <Text className='text-black/70 font-semibold text-xs'>
+          <Text className='text-primary-main font-semibold text-xs'>
             {' '}
             by {data.answered_by.first_name + ' ' + data.answered_by.last_name}
           </Text>

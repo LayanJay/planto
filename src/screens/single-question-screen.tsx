@@ -6,7 +6,9 @@ import { Image, Keyboard, Modal, ScrollView, Text, TouchableOpacity, View } from
 import uuid from 'react-native-uuid';
 import ButtonBase from '../components/common/buttons/button-base';
 import AnswerCard from '../components/common/forum/answer-card';
-import Input from '../components/common/input';
+import InputBase from '../components/common/inputs/input-base';
+
+import ScreenContainer from '../components/layout/screen-container';
 import { useGetQuestion } from '../hooks/questions/use-get-question';
 import useRouter from '../hooks/router/use-router';
 import { useCurrentUser } from '../hooks/user/use-current-user';
@@ -63,60 +65,73 @@ const SingleQuestionScreen = (props: Props) => {
   };
 
   return (
-    <View className='p-4 flex'>
+    <ScreenContainer>
       {!deleteLoading ? (
-        <View>
-          <Text className='font-main text-2xl font-semibold text-black/70'>{question?.title}</Text>
-          <View className='flex flex-row justify-between w-full'>
-            <Text className='font-main text-xs pt-1 text-black/70'>
-              by {question?.author.first_name + ' ' + question?.author.last_name}
+        <View className='mt-6'>
+          <View className='flex flex-row items-center justify-between'>
+            <Text className='font-main text-2xl font-semibold text-black/70'>
+              {question?.title}
             </Text>
-            <Text className='font-main text-xs pt-1 text-black/70'>
-              {dayjs(question?.created!.toDate()).format('DD-MM-YYYY')}
-            </Text>
-          </View>
-          <View className='pl-1 pr-6 flex items-center'>
+
             <View>
               {question?.votes.includes(user?.uid as string) ? (
                 <TouchableOpacity
+                  className='flex items-center justify-center'
                   onPress={async () => {
                     await handleUpdateVote(question.id, user && user?.uid, 'remove');
                   }}
                 >
                   <Image source={require('../assets/images/like.png')} className='h-4 w-4' />
+
+                  <Text className='font-main text-xs pt-1 text-black/70'>
+                    {question?.votes.length}
+                  </Text>
                 </TouchableOpacity>
               ) : (
                 <TouchableOpacity
+                  className='flex items-center justify-center'
                   onPress={async () =>
                     await handleUpdateVote(question?.id!, user && user?.uid, 'add')
                   }
                 >
                   <Image source={require('../assets/images/heart.png')} className='h-4 w-4' />
+
+                  <Text className='font-main text-xs pt-1 text-black/70'>
+                    {question?.votes.length}
+                  </Text>
                 </TouchableOpacity>
               )}
             </View>
-
-            <Text className='font-main text-xs pt-1 text-black/70'>{question?.votes.length}</Text>
           </View>
+
+          <View className='mb-4'>
+            <View className='flex flex-row justify-between w-full'>
+              <Text className='font-main text-xs pt-1 text-primary-main'>
+                by {question?.author.first_name + ' ' + question?.author.last_name}
+              </Text>
+              <Text className='font-main text-xs pt-1 text-black/70'>
+                {dayjs(question?.created!.toDate()).format('DD-MM-YYYY')}
+              </Text>
+            </View>
+          </View>
+
           <Text className='font-main text-base w-4/5 text-black/70'>{question?.question}</Text>
 
           <View>
-            <Input
-              style={'border p-2 rounded-sm'}
-              inputStyle={'h-12'}
+            <InputBase
+              inputWrapperClassNames='mt-8'
               control={control as any}
-              errors={errors}
               name={'reply'}
-              label={''}
+              label={'Got an answer?'}
               placeholder={'Share your thoughts here...'}
-              registerOptions={{
+              rules={{
                 required: {
                   value: true,
                   message: '*Required',
                 },
               }}
             />
-            <View className='flex flex-col w-full'>
+            <View className='flex flex-col w-full mt-4'>
               <ButtonBase buttonClassName='mb-3' onPress={onSubmit} disabled={submitLoading}>
                 <Text className='text-white font-main font-semibold text-lg text-center uppercase'>
                   Post
@@ -136,7 +151,8 @@ const SingleQuestionScreen = (props: Props) => {
               )}
             </View>
           </View>
-          <View className='h-96 pt-2'>
+
+          <View className='h-96 pt-2 mt-8'>
             <Text className='font-main text-lg text-black/70'>Answers</Text>
             <ScrollView className='pt-1 h-full'>
               {question?.answers && question.answers.length > 0 ? (
@@ -186,7 +202,7 @@ const SingleQuestionScreen = (props: Props) => {
           </View>
         </View>
       </Modal>
-    </View>
+    </ScreenContainer>
   );
 };
 export default SingleQuestionScreen;

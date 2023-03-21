@@ -115,7 +115,11 @@ const StackNavigator = () => {
       />
       <Stack.Screen component={ReviewsScreen} name='Reviews' options={{ headerTitle: 'Reviews' }} />
       <Stack.Screen component={AllProducts} name='All Products' />
-      <Stack.Screen component={SingleProductScreen} name='Single Product' />
+      <Stack.Screen
+        component={SingleProductScreen}
+        name='Single Product'
+        options={{ headerTitle: 'Plant' }}
+      />
       <Stack.Screen component={AddProductScreen} name='Add Product' />
       <Stack.Screen component={EditProductScreen} name='Edit Product' />
     </Stack.Navigator>

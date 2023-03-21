@@ -36,24 +36,29 @@ const QuestionCard = ({ id }: Props) => {
 
   return (
     <TouchableOpacity
-      className='mb-2 py-5 px-4 flex flex-row justify-around items-center bg-primary-light rounded-lg'
+      className='mb-2 py-5 px-4  bg-primary-light/0 border-2 border-primary-main rounded-lg flex'
       onPress={() =>
         router.push('Single Question', {
           id: id,
         })
       }
     >
-      <View className='pr-6 flex items-end'>
-        <View>
-          <Image source={require('../../../assets/images/like.png')} className='h-4 w-4' />
-        </View>
+      <View className='flex flex-row justify-start'>
+        <View className='pr-6 flex items-center justify-center'>
+          <View>
+            <Image source={require('../../../assets/images/like.png')} className='h-4 w-4' />
+          </View>
 
-        <Text className='font-bold font-main text-xs pt-1'>{question?.votes.length}</Text>
+          <Text className='font-bold font-main text-xs pt-1'>{question?.votes?.length}</Text>
+        </View>
+        <Text className='font-bold font-main w-3/4 px-2'>
+          {question?.title} ldkjk sljdfh lksjhdf kjsh dkjfhv lskdjfhisud fissudhf iguh{' '}
+        </Text>
       </View>
-      <Text className='font-bold font-main w-3/4 px-2'>{question?.title}</Text>
+
       {question?.created && (
-        <Text className='font-bold font-main text-xs'>
-          {dayjs(question.created.toDate()).fromNow(true)} ago
+        <Text className='font-bold font-main text-xs self-end'>
+          {dayjs(question.created.toDate()).fromNow(false)}
         </Text>
       )}
     </TouchableOpacity>
