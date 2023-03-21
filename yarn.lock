@@ -1722,11 +1722,6 @@
   resolved "https://registry.yarnpkg.com/@react-native-community/eslint-plugin/-/eslint-plugin-1.3.0.tgz#9e558170c106bbafaa1ef502bd8e6d4651012bf9"
   integrity sha512-+zDZ20NUnSWghj7Ku5aFphMzuM9JulqCW+aPXT6IfIXFbb8tzYTTOSeRFOtuekJ99ibW2fUCSsjuKNlwDIbHFg==
 
-"@react-native-firebase/app-types@0.2.3":
-  version "0.2.3"
-  resolved "https://registry.yarnpkg.com/@react-native-firebase/app-types/-/app-types-0.2.3.tgz#2a81681a2cbe6ca80d818e653f1ad50c32753578"
-  integrity sha512-EKSvTg/bkD8+ugOeLzNDM8IGYlVetAfy8P++yiByHEULDNIPH8azVyYx5n7rUANjAB/4albgoEuTFehN85ZCNw==
-
 "@react-native-firebase/app@^17.3.2":
   version "17.3.2"
   resolved "https://registry.yarnpkg.com/@react-native-firebase/app/-/app-17.3.2.tgz#c39dd34f5389ff65845c5d67313bbf2371275a8f"
@@ -1744,11 +1739,6 @@
     "@expo/config-plugins" "^5.0.4"
     plist "^3.0.5"
 
-"@react-native-firebase/common@0.2.3":
-  version "0.2.3"
-  resolved "https://registry.yarnpkg.com/@react-native-firebase/common/-/common-0.2.3.tgz#0009e3c5de875fa380c3a46ff36d250262bb18a7"
-  integrity sha512-CyvRTD5fODD65ywGThleB+WP7E9wrQv/XB+cy+R8KgEkf3AKDPnI5mjS7t9P8jGLzYZQWy7VU/ynp6f6H/5laQ==
-
 "@react-native-firebase/firestore@^17.3.2":
   version "17.3.2"
   resolved "https://registry.yarnpkg.com/@react-native-firebase/firestore/-/firestore-17.3.2.tgz#1b15d65bd0cb042f48cbbb4b85eeff0c0dcb5796"
@@ -1758,14 +1748,6 @@
   version "17.3.2"
   resolved "https://registry.yarnpkg.com/@react-native-firebase/storage/-/storage-17.3.2.tgz#f5d75c9ce2fc05da437fecb0900de4314c5cf9a1"
   integrity sha512-Pojwd5SuM8lvJBDfVV9ylyTOb8bwildhdAetLgyIdvyVwE9QqzpZoOebb283ceJ0h6OdznHiR66JJStcyclUwg==
-
-"@react-native-firebase/utils@^0.2.3":
-  version "0.2.3"
-  resolved "https://registry.yarnpkg.com/@react-native-firebase/utils/-/utils-0.2.3.tgz#25d8b37da3509088679595da73f71d70ab55ddb9"
-  integrity sha512-/ERNhCHVbwR5ge16vi7pqPWxqlJLnB2zSWgfW6DqGSEvK8ziA3rEAtEH7tnS2RTwTGQX3D3eT8D25Z2tZMyt7Q==
-  dependencies:
-    "@react-native-firebase/app-types" "0.2.3"
-    "@react-native-firebase/common" "0.2.3"
 
 "@react-native-google-signin/google-signin@^9.0.2":
   version "9.0.2"
@@ -6518,6 +6500,11 @@ react-native-screens@^3.20.0:
   dependencies:
     react-freeze "^1.0.0"
     warn-once "^0.1.0"
+
+react-native-uuid@^2.0.1:
+  version "2.0.1"
+  resolved "https://registry.yarnpkg.com/react-native-uuid/-/react-native-uuid-2.0.1.tgz#ed4e2dfb1683eddb66967eb5dca140dfe1abddb9"
+  integrity sha512-cptnoIbL53GTCrWlb/+jrDC6tvb7ypIyzbXNJcpR3Vab0mkeaaVd5qnB3f0whXYzS+SMoSQLcUUB0gEWqkPC0g==
 
 react-native-vector-icons@^9.2.0:
   version "9.2.0"
