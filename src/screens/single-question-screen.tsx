@@ -1,11 +1,13 @@
+import { FirebaseFirestoreTypes } from '@react-native-firebase/firestore';
 import { useRoute } from '@react-navigation/native';
 import dayjs from 'dayjs';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { Image, Modal, ScrollView, Text, TouchableOpacity, View } from 'react-native';
 import ButtonBase from '../components/common/buttons/button-base';
 import AnswerCard from '../components/common/forum/answer-card';
 import Input from '../components/common/input';
+import { db } from '../config/firebase-config';
 import useRouter from '../hooks/router/use-router';
 import { useCurrentUser } from '../hooks/user/use-current-user';
 import { RootStackScreenProps } from '../interfaces/navigation';
@@ -17,7 +19,8 @@ const SingleQuestionScreen = (props: Props) => {
   const router = useRouter('Single Question');
   const route = useRoute<RootStackScreenProps<'Single Question'>['route']>();
   const [deleteLoading, setDeleteLoading] = useState(false);
-
+  const [submitLoading, setSubmitLoading] = useState(false);
+  const [action, setAction] = useState('');
   const [openDeleteModal, setOpenDeleteModal] = useState(false);
   const [voted, setVoted] = useState<boolean>(false);
   // const [question, loading, error] = useGetQuestion('1');
@@ -26,6 +29,12 @@ const SingleQuestionScreen = (props: Props) => {
     await QuestionUtils.deleteQuestion(id);
     router.replace('All Questions');
   };
+
+  useEffect(() => {
+    if (route.params.votes.includes(user?.uid)) {
+      setVoted(true);
+    }
+  }, [route.params.votes, user?.uid]);
 
   const {
     control,
@@ -38,7 +47,27 @@ const SingleQuestionScreen = (props: Props) => {
     },
   });
 
-  const onSubmit = handleSubmit(async (data) => {});
+  const onSubmit = handleSubmit(async (data) => {
+    setSubmitLoading(true);
+    await QuestionUtils.updateAnswers(route.params.id, [
+      {
+        text: data.reply,
+        answered_by: {
+          id: authUser && authUser.uid,
+          first_name: user && user.first_name,
+          last_name: user && user.last_name,
+        },
+        created_at: db.FieldValue.serverTimestamp() as FirebaseFirestoreTypes.Timestamp,
+      },
+    ]);
+    setSubmitLoading(false);
+  });
+
+  const handleUpdateVote = async (questionId: string, userId: string | null) => {
+    if (user && userId && authUser) {
+      await QuestionUtils.updateVotes(questionId, userId, action);
+    }
+  };
 
   return (
     <View className='p-4 flex'>
@@ -58,11 +87,23 @@ const SingleQuestionScreen = (props: Props) => {
           <View className='pl-1 pr-6 flex items-center'>
             <View>
               {voted ? (
-                <TouchableOpacity onPress={() => setVoted(false)}>
+                <TouchableOpacity
+                  onPress={() => {
+                    {
+                      handleUpdateVote(route.params.id, user && user?.uid);
+                      setAction('remove');
+                    }
+                  }}
+                >
                   <Image source={require('../assets/images/like.png')} className='h-4 w-4' />
                 </TouchableOpacity>
               ) : (
-                <TouchableOpacity onPress={() => setVoted(true)}>
+                <TouchableOpacity
+                  onPress={() => {
+                    handleUpdateVote(route.params.id, user && user?.uid);
+                    setAction('add');
+                  }}
+                >
                   <Image source={require('../assets/images/heart.png')} className='h-4 w-4' />
                 </TouchableOpacity>
               )}
@@ -112,7 +153,21 @@ const SingleQuestionScreen = (props: Props) => {
           <View className='h-96 pt-2'>
             <Text className='font-main text-lg text-black/70'>Answers</Text>
             <ScrollView className='pt-1 h-full'>
-              <AnswerCard data={'s'} />
+              {route.params.answers && route.params.answers.length > 0 ? (
+                route.params.answers
+                  .sort((a: any, b: any) =>
+                    dayjs(a.created_at && b.created_at && a.created_at.toDate()).isBefore(
+                      b.created_at && b.created_at.toDate()
+                    )
+                      ? 1
+                      : -1
+                  )
+                  .map((ans: any) => <AnswerCard key={ans.answered_by} data={ans} />)
+              ) : (
+                <View className='py-8 flex items-center w-full'>
+                  <Text>Nothing here yet.</Text>
+                </View>
+              )}
             </ScrollView>
           </View>
         </View>
