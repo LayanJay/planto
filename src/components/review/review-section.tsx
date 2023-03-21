@@ -15,7 +15,7 @@ const ReviewSection = ({ product_id }: Props) => {
   return (
     <>
       {loading || authLoading ? (
-        <Text className='font-main'>Loading...</Text>
+        <Text className='font-main '>Loading...</Text>
       ) : (
         <>
           {exists && review ? (

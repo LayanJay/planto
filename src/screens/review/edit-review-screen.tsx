@@ -80,8 +80,10 @@ const EditReviewScreen = () => {
               <Text className='font-main text-black text-base font-bold capitalize'>
                 {product?.name}
               </Text>
-              <Text className='font-main text-black text-base mt-1 mr-24'>
-                {product?.description}
+              <Text className='font-main text-black text-base mt-1 mr-24 truncate text-ellipsis overflow-ellipsis overflow-hidden'>
+                {product?.description?.length! > 100
+                  ? `${product?.description.substring(0, 100)}...`
+                  : product?.description}
               </Text>
             </View>
           </View>

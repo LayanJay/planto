@@ -20,6 +20,8 @@ import ReviewsScreen from '../screens/review/reviews-screen';
 import SingleProductScreen from '../screens/product/single-product-screen';
 import SingleQuestionScreen from '../screens/single-question-screen';
 import { Colors } from '../utils/colors';
+import Icon from 'react-native-vector-icons/Feather';
+import useProtectedRouter from '../hooks/router/use-protected-router';
 
 const Stack = createNativeStackNavigator();
 
@@ -62,6 +64,7 @@ export type RootStackParamList = {
 
 const StackNavigator = () => {
   const { authUser, loading } = useCurrentUser();
+
   return (
     <Stack.Navigator
       initialRouteName={!loading && authUser ? 'Home' : 'Getting Started'}
@@ -90,7 +93,7 @@ const StackNavigator = () => {
           headerTitle: '',
         }}
       />
-      <Stack.Screen component={HomeScreen} name='Home' />
+      <Stack.Screen component={AllProducts} name='Home' />
       <Stack.Screen component={ProfileScreen} name='Profile' />
       <Stack.Screen
         component={EditProfileScreen}

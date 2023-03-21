@@ -5,6 +5,7 @@ import { Image, Text, View } from 'react-native';
 import ButtonBase from '../../components/common/buttons/button-base';
 import useRouter from '../../hooks/router/use-router';
 import Icon from 'react-native-vector-icons/Feather';
+import MatIcon from 'react-native-vector-icons/MaterialIcons';
 
 import { RootStackScreenProps } from '../../interfaces/navigation';
 import { Colors } from '../../utils/colors';
@@ -13,6 +14,9 @@ import { ScrollView } from 'react-native';
 import { useCurrentUser } from '../../hooks/user/use-current-user';
 import { db } from '../../config/firebase-config';
 import { FirestoreCollections } from '../../utils/firebase-utils';
+import ReviewSection from '../../components/review/review-section';
+import { useListReviews } from '../../hooks/review/use-list-reviews';
+import { TouchableOpacity } from 'react-native';
 
 type Props = {};
 
@@ -20,6 +24,7 @@ const SingleProductScreen = (props: Props) => {
   const router = useRouter('Single Product');
   const route = useRoute<RootStackScreenProps<'Single Product'>['route']>();
   const [deleteModalOpen, setDeleteModalOpen] = useState(false);
+  const { reviews, loading, count, averageRating } = useListReviews(route.params.id!);
 
   const { user } = useCurrentUser(true);
 
@@ -51,7 +56,7 @@ const SingleProductScreen = (props: Props) => {
           <Text className='mt-4 text-base'>{route.params.description}</Text>
 
           <View className='fex flex-row w-full mt-6'>
-            <View className='w-1/2'>
+            <View className='w-1/3'>
               <Text>Seller</Text>
               <Text className='text-xl text-black/90 font-bold'>
                 {route.params.seller.first_name}
@@ -61,10 +66,26 @@ const SingleProductScreen = (props: Props) => {
               </Text>
             </View>
 
-            <View className='w-1/2'>
+            <View className='w-1/3'>
               <Text>Availability </Text>
               <Text className='text-xl text-black/90 font-bold'>{route.params.inventory} Left</Text>
             </View>
+
+            <View className='w-1/3'>
+              <Text>Rating</Text>
+              <TouchableOpacity
+                onPress={() => router.push('Reviews', { id: route.params.id! })}
+                className='flex flex-row items-center'
+                style={{ gap: 5 }}
+              >
+                <MatIcon name='star' size={20} color={Colors.BLACK} />
+                <Text className='text-xl text-black/90 font-bold'>{averageRating?.toFixed(2)}</Text>
+              </TouchableOpacity>
+            </View>
+          </View>
+
+          <View className='mt-8'>
+            <ReviewSection product_id={route.params.id!} />
           </View>
 
           {user && user.id === route.params.seller.id && (

@@ -12,6 +12,7 @@ import useRouter from '../../hooks/router/use-router';
 import { useCurrentUser } from '../../hooks/user/use-current-user';
 import { Colors } from '../../utils/colors';
 import { CategoryType } from '../../schemas/product-schema';
+import ButtonBase from '../../components/common/buttons/button-base';
 
 const AllProducts = () => {
   const router = useRouter('All Products');
@@ -29,13 +30,35 @@ const AllProducts = () => {
             <Text className='font-semibold font-main text-3xl text-black/90'>Find your</Text>
             <Text className='font-semibold font-main text-3xl text-black/90'>favorite plants</Text>
           </View>
-          <IconButton
-            onPress={() => (authUser ? protectedRouter.navigate('Cart') : null)}
-            variant={'custom'}
-            buttonClassName='flex justify-center bg-white border-2 border-primary-dark/50'
-          >
-            <Icon name='shopping-cart' size={24} color={Colors.TEAL_DARKER.concat('90')}></Icon>
-          </IconButton>
+
+          <View className='flex flex-row' style={{ gap: 5 }}>
+            <IconButton
+              onPress={() => (authUser ? protectedRouter.navigate('Cart') : null)}
+              variant={'custom'}
+              sizeOverride={'w-10 h-10'}
+              buttonClassName='flex justify-center bg-white border-2 border-primary-dark/50'
+            >
+              <Icon name='shopping-cart' size={18} color={Colors.TEAL_DARKER.concat('90')}></Icon>
+            </IconButton>
+
+            <IconButton
+              onPress={() => (authUser ? protectedRouter.navigate('All Questions') : null)}
+              variant={'custom'}
+              sizeOverride={'w-10 h-10'}
+              buttonClassName='flex justify-center bg-white border-2 border-primary-dark/50'
+            >
+              <Icon name='message-square' size={18} color={Colors.TEAL_DARKER.concat('90')}></Icon>
+            </IconButton>
+
+            <IconButton
+              onPress={() => (authUser ? protectedRouter.navigate('Profile') : null)}
+              variant={'custom'}
+              sizeOverride={'w-10 h-10'}
+              buttonClassName='flex justify-center bg-white border-2 border-primary-dark/50'
+            >
+              <Icon name='user' size={18} color={Colors.TEAL_DARKER.concat('90')}></Icon>
+            </IconButton>
+          </View>
         </View>
 
         <View className='w-full rounded-2xl h-32 bg-secondary-light mt-4 flex flex-row items-center px-6'>
@@ -61,7 +84,7 @@ const AllProducts = () => {
           })}
         </View>
 
-        <View className='flex flex-wrap flex-row justify-between mt-6' style={{ gap: 2 }}>
+        <View className='flex flex-wrap flex-row justify-between mt-6 mb-16' style={{ gap: 2 }}>
           {!loading && products ? (
             <FlatList
               horizontal

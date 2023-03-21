@@ -11,8 +11,10 @@ type Props = {
 const YourReviewCard = ({ review }: Props) => {
   return (
     <View>
-      <Text className=' text-2xl text-black dark:text-white font-main '>Your Review</Text>
-      <View className='py-4'>
+      <Text className=' text-2xl font-bold text-black/90 dark:text-white font-main '>
+        Your Review
+      </Text>
+      <View className='py-2'>
         <ReviewCard review={review} options={true} />
       </View>
     </View>

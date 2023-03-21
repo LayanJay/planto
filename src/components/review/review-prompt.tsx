@@ -12,7 +12,9 @@ const ReviewPrompt = ({ product_id }: Props) => {
   const router = useRouter('Add Review');
   return (
     <View className='mb-8'>
-      <Text className=' text-2xl text-black dark:text-white font-main'>Rate this product</Text>
+      <Text className=' text-2xl font-bold text-black/90 dark:text-white font-main'>
+        Rate this product
+      </Text>
       <Text className='mt-2 text-md text-black dark:text-white font-main'>
         Tell us what you think about this product
       </Text>
