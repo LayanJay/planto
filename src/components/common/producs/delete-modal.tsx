@@ -15,6 +15,11 @@ const DeleteProductModal = (props: Props) => {
     props.onCancel();
   };
 
+  const handleDelete = () => {
+    setModalVisible(false);
+    props.onDelete();
+  };
+
   return (
     <Modal
       animationType='fade'
@@ -33,7 +38,7 @@ const DeleteProductModal = (props: Props) => {
               variant={'custom'}
               size='small'
               buttonClassName='bg-red/70 flex items-center justify-center'
-              onPress={handleClose}
+              onPress={handleDelete}
             >
               <Text style={styles.textStyle}>Delete</Text>
             </ButtonBase>

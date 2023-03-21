@@ -4,14 +4,14 @@ import { useForm } from 'react-hook-form';
 import { Image, ScrollView, Text, TouchableOpacity, View } from 'react-native';
 import DropDownPicker from 'react-native-dropdown-picker';
 import { Asset, launchImageLibrary } from 'react-native-image-picker';
-import ButtonBase from '../components/common/buttons/button-base';
-import InputBase from '../components/common/inputs/input-base';
-import useRouter from '../hooks/router/use-router';
-import { RootStackScreenProps } from '../interfaces/navigation';
-import { CategoryType, ProductSchema } from '../schemas/product-schema';
-import { db, storage } from '../config/firebase-config';
-import { useCurrentUser } from '../hooks/user/use-current-user';
-import { FirestoreCollections } from '../utils/firebase-utils';
+import ButtonBase from '../../components/common/buttons/button-base';
+import InputBase from '../../components/common/inputs/input-base';
+import useRouter from '../../hooks/router/use-router';
+import { RootStackScreenProps } from '../../interfaces/navigation';
+import { CategoryType, ProductSchema } from '../../schemas/product-schema';
+import { db, storage } from '../../config/firebase-config';
+import { useCurrentUser } from '../../hooks/user/use-current-user';
+import { FirestoreCollections } from '../../utils/firebase-utils';
 
 type Props = {};
 
@@ -104,7 +104,7 @@ const AddProductScreen = (props: Props) => {
           control={control}
           name='price'
           label='Price'
-          placeholder='Price in USD'
+          placeholder='Price in LKR'
           inputWrapperClassNames='mb-4'
           rules={{
             required: '*Required',

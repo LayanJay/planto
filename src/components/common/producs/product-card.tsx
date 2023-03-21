@@ -61,7 +61,7 @@ const ProductCard = (props: Props) => {
       </View>
 
       <View className='flex-grow flex items-center justify-center'>
-        <Image className='h-40 w-40 p-3' source={{ uri: props.product.image }} />
+        <Image className='h-40 w-40 p-3 rounded-lg' source={{ uri: props.product.image }} />
       </View>
 
       <View className='flex flex-row'>

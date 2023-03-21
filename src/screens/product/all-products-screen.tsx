@@ -2,21 +2,23 @@ import { useState } from 'react';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { ActivityIndicator, FlatList, Image, Text, View } from 'react-native';
 import Icon from 'react-native-vector-icons/Feather';
-import Chip from '../components/common/buttons/chip-button';
-import IconButton from '../components/common/buttons/icon-button';
-import ProductCard from '../components/common/producs/product-card';
-import ScreenContainer from '../components/layout/screen-container';
-import { useProducts } from '../hooks/product/use-products';
-import useProtectedRouter from '../hooks/router/use-protected-router';
-import useRouter from '../hooks/router/use-router';
-import { useCurrentUser } from '../hooks/user/use-current-user';
-import { Colors } from '../utils/colors';
+import Chip from '../../components/common/buttons/chip-button';
+import IconButton from '../../components/common/buttons/icon-button';
+import ProductCard from '../../components/common/producs/product-card';
+import ScreenContainer from '../../components/layout/screen-container';
+import { useProducts } from '../../hooks/product/use-products';
+import useProtectedRouter from '../../hooks/router/use-protected-router';
+import useRouter from '../../hooks/router/use-router';
+import { useCurrentUser } from '../../hooks/user/use-current-user';
+import { Colors } from '../../utils/colors';
+import { CategoryType } from '../../schemas/product-schema';
 
 const AllProducts = () => {
   const router = useRouter('All Products');
   const protectedRouter = useProtectedRouter('All Products');
   const { authUser } = useCurrentUser();
   const filterOptions = ['All', 'Outdoor', 'Indoor'];
+  const [selectedFilter, setSelectedFilter] = useState<keyof typeof CategoryType | 'All'>('All');
   const { products, loading, error } = useProducts();
 
   return (
@@ -42,32 +44,35 @@ const AllProducts = () => {
             <Text className='font-c font-main text-lg text-black/50 '>On Sundays</Text>
           </View>
 
-          <Image className='h-24 w-24 p-3' source={require('../assets/images/plant-4.png')} />
+          <Image className='h-24 w-24 p-3' source={require('../../assets/images/plant-4.png')} />
         </View>
 
         <View className='flex flex-row mt-6' style={{ gap: 7 }}>
           {filterOptions.map((opt) => {
             return (
-              <Chip key={opt} onPress={() => setSelectedFilter(opt)} selected>
+              <Chip
+                key={opt}
+                onPress={() => setSelectedFilter(opt as keyof typeof CategoryType)}
+                selected
+              >
                 <Text className='font-main'>{opt}</Text>
               </Chip>
             );
           })}
-
-          <Text>{selectedFilter}</Text>
         </View>
 
         <View className='flex flex-wrap flex-row justify-between mt-6' style={{ gap: 2 }}>
           {!loading && products ? (
             <FlatList
               horizontal
-              data={products}
+              data={products.filter((item) =>
+                selectedFilter === 'All' ? true : item.category === CategoryType[selectedFilter]
+              )}
               renderItem={({ item }) => <ProductCard product={item} />}
             />
           ) : (
             <ActivityIndicator />
           )}
-          {/* <FlatList horizontal data={data} renderItem={({ item }) => <ProductCard />} /> */}
         </View>
 
         <View className='absolute bottom-10 right-0 z-20'>
