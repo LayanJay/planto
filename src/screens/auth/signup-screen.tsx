@@ -116,7 +116,7 @@ const SignUpScreen = () => {
               </Pressable>
             </View>
           </View>
-          <View className='flex flex-1 flex-row space-x-2 items-center mb-4'>
+          <View className='flex flex-row space-x-2 items-center mb-4'>
             <View className='h-1 border-b border-black/20 grow'></View>
             <Text className='font-main text-black/40'>or</Text>
             <View className='h-1 border-b border-black/20 grow'></View>

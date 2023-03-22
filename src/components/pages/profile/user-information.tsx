@@ -71,6 +71,21 @@ const UserInformation = (props: Props) => {
       );
     }
   };
+
+  const handleSignOut = async () => {
+    try {
+      router.replace('Home');
+      await UserUtils.signOut();
+    } catch (error: any) {
+      console.log('🚀 ~ file: user-information.tsx:79 ~ handleSignOut ~ error:', error);
+      Alert.alert(
+        'Sign out attempt failed!',
+        error.message.split('] ')[1],
+        [{ text: 'Ok', onPress: () => router.navigate('Login') }],
+        { cancelable: true }
+      );
+    }
+  };
   return (
     <TouchableWithoutFeedback onPress={() => props.expandHeight()}>
       <Animated.View
@@ -85,7 +100,16 @@ const UserInformation = (props: Props) => {
             <PurchasesInformationCard />
             <ReviewsInformationCard />
           </View>
-
+          <TouchableOpacity
+            onPress={handleSignOut}
+            activeOpacity={0.7}
+            className='flex flex-row items-center justify-between bg-primary-main/30 rounded-2xl p-4'
+          >
+            <>
+              <Text className='font-main font-semibold text-primary-dark/90'>Sign Out</Text>
+              <Icon name='log-out' color={Colors.TEAL_DARKER.concat('90')} size={18} />
+            </>
+          </TouchableOpacity>
           <TouchableOpacity
             onPress={handleUserAccountDelete}
             activeOpacity={0.7}
@@ -96,7 +120,7 @@ const UserInformation = (props: Props) => {
             ) : (
               <>
                 <Text className='font-main font-semibold text-red/80'>Delete Account</Text>
-                <Icon name='chevron-right' color={Colors.RED.concat('90')} size={18} />
+                <Icon name='trash-2' color={Colors.RED.concat('90')} size={18} />
               </>
             )}
           </TouchableOpacity>

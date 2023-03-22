@@ -78,7 +78,7 @@ const AllProducts = () => {
           </IconButton>
 
           <IconButton
-            onPress={() => (authUser ? protectedRouter.navigate('Cart') : null)}
+            onPress={() => protectedRouter.navigate('Cart')}
             variant={'custom'}
             size='custom'
             buttonClassName='flex justify-center bg-secondary-dark shadow-md'
@@ -96,7 +96,7 @@ const AllProducts = () => {
           </IconButton>
 
           <IconButton
-            onPress={() => (authUser ? protectedRouter.navigate('All Questions') : null)}
+            onPress={() => protectedRouter.navigate('All Questions')}
             variant={'custom'}
             size='custom'
             buttonClassName='flex justify-center bg-secondary-dark shadow-md'
@@ -105,7 +105,7 @@ const AllProducts = () => {
           </IconButton>
 
           <IconButton
-            onPress={() => (authUser ? protectedRouter.navigate('Profile') : null)}
+            onPress={() => protectedRouter.navigate('Profile')}
             variant={'custom'}
             size='custom'
             buttonClassName='flex justify-center bg-secondary-dark shadow-md'

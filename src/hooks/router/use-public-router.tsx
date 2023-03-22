@@ -19,7 +19,8 @@ const usePublicRouter = (currentRoute: keyof RootStackParamList) => {
           }
           navigation.replace(routeName);
         } else {
-          navigation.replace('Login');
+          if (routeName === 'Login') navigation.navigate('Login');
+          if (routeName === 'Sign Up') navigation.navigate('Sign Up');
         }
       }
     },
@@ -32,7 +33,8 @@ const usePublicRouter = (currentRoute: keyof RootStackParamList) => {
           }
           navigation.push(routeName);
         } else {
-          navigation.push('Login');
+          if (routeName === 'Login') navigation.navigate('Login');
+          if (routeName === 'Sign Up') navigation.navigate('Sign Up');
         }
       }
     },
@@ -43,9 +45,10 @@ const usePublicRouter = (currentRoute: keyof RootStackParamList) => {
             navigation.replace('Home');
             return;
           }
-          navigation.navigate(routeName);
+          navigation.navigate(routeName as any);
         } else {
-          navigation.navigate('Login');
+          if (routeName === 'Login') navigation.navigate('Login');
+          if (routeName === 'Sign Up') navigation.navigate('Sign Up');
         }
       }
     },
