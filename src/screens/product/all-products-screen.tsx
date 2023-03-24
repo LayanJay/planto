@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { ActivityIndicator, FlatList, Image, Text, View } from 'react-native';
+import { ActivityIndicator, FlatList, Image, ScrollView, Text, View } from 'react-native';
 import Icon from 'react-native-vector-icons/Feather';
 import Chip from '../../components/common/buttons/chip-button';
 import IconButton from '../../components/common/buttons/icon-button';
@@ -22,7 +22,7 @@ const AllProducts = () => {
 
   return (
     <ScreenContainer>
-      <View className='relative flex min-h-[90vh]'>
+      <ScrollView className='relative flex min-h-[90vh]'>
         <View className='flex flex-row justify-between items-center mt-8'>
           <View>
             <Text className='font-semibold font-main text-3xl text-black/90'>Find your</Text>
@@ -53,7 +53,7 @@ const AllProducts = () => {
           })}
         </View>
 
-        <View className='flex flex-wrap flex-row justify-between mt-6 mb-16' style={{ gap: 2 }}>
+        <View className='flex flex-wrap flex-row justify-between mt-6 mb-28' style={{ gap: 2 }}>
           {!loading && products ? (
             <FlatList
               horizontal
@@ -67,7 +67,7 @@ const AllProducts = () => {
           )}
         </View>
 
-        <View className='absolute flex flex-row justify-evenly bottom-9 left-0 right-0 z-20'>
+        <View className='absolute flex flex-row justify-evenly bottom-9 left-0 right-0 z-20 pb-8'>
           <IconButton
             onPress={() => protectedRouter.navigate('Home')}
             variant={'custom'}
@@ -113,7 +113,7 @@ const AllProducts = () => {
             <Icon name='user' size={24} color={Colors.WHITE}></Icon>
           </IconButton>
         </View>
-      </View>
+      </ScrollView>
     </ScreenContainer>
   );
 };

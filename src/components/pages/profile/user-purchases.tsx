@@ -11,9 +11,10 @@ const UserPurchases = (props: Props) => {
   return (
     <TouchableWithoutFeedback onPress={() => props.shrinkHeight()}>
       <View className='bg-white'>
-        <View className='flex-1 bg-white -mx-6 -mt-6 rounded-t-[32px] px-6 py-6 mb-4'>
-          <Text className='font-main font-semibold text-xl text-black pb-6'>My Purchases</Text>
+        <View className=' bg-white -mx-6 -mt-6 rounded-t-[32px] px-6 py-6 '>
+          <Text className='font-main font-semibold text-xl text-black pb-3'>My Purchases</Text>
         </View>
+
         {!loading && purchases ? (
           <FlatList
             className='h-full'
