@@ -1,9 +1,8 @@
 import { useRoute } from '@react-navigation/native';
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
-import { Image, ScrollView, Text, TouchableOpacity, View } from 'react-native';
+import { ScrollView, Text, View } from 'react-native';
 import DropDownPicker from 'react-native-dropdown-picker';
-import { Asset, launchImageLibrary } from 'react-native-image-picker';
 import ButtonBase from '../../components/common/buttons/button-base';
 import InputBase from '../../components/common/inputs/input-base';
 import useRouter from '../../hooks/router/use-router';

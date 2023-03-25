@@ -8,17 +8,15 @@ import ScreenContainer from '../../components/layout/screen-container';
 import { useProducts } from '../../hooks/product/use-products';
 import useProtectedRouter from '../../hooks/router/use-protected-router';
 import useRouter from '../../hooks/router/use-router';
-import { useCurrentUser } from '../../hooks/user/use-current-user';
 import { CategoryType } from '../../schemas/product-schema';
 import { Colors } from '../../utils/colors';
 
 const AllProducts = () => {
   const router = useRouter('All Products');
   const protectedRouter = useProtectedRouter('All Products');
-  const { authUser } = useCurrentUser();
   const filterOptions = ['All', 'Outdoor', 'Indoor'];
   const [selectedFilter, setSelectedFilter] = useState<keyof typeof CategoryType | 'All'>('All');
-  const { products, loading, error } = useProducts();
+  const { products, loading } = useProducts();
 
   return (
     <ScreenContainer>
