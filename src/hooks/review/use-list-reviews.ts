@@ -24,14 +24,15 @@ export function useListReviews(product_id: string): {
     loading,
     error,
     count: reviews ? reviews.size : null,
-    averageRating: reviews
-      ? parseFloat(
-          (
-            reviews.docs.reduce((acc, obj) => {
-              return acc + parseInt(obj.get('rating') as string);
-            }, 0) / reviews.size
-          ).toFixed(2)
-        )
-      : null,
+    averageRating:
+      reviews && !reviews?.empty
+        ? parseFloat(
+            (
+              reviews.docs.reduce((acc, obj) => {
+                return acc + parseInt(obj.get('rating') as string);
+              }, 0) / reviews.size
+            ).toFixed(2)
+          )
+        : 0.0,
   };
 }

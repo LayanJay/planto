@@ -89,7 +89,9 @@ const AddReviewScreen = () => {
                 {product?.name}
               </Text>
               <Text className='font-main text-black text-base mt-1 mr-24'>
-                {product?.description}
+                {product?.description?.length! > 100
+                  ? `${product?.description.substring(0, 100)}...`
+                  : product?.description}
               </Text>
             </View>
           </View>

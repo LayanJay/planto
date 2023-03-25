@@ -1,18 +1,31 @@
-import { Text, TouchableWithoutFeedback, View } from 'react-native';
-import { UserHelper } from '../../../helpers/user-helper';
+import { ActivityIndicator, FlatList, Text, TouchableWithoutFeedback, View } from 'react-native';
+import { useUserPurchases } from '../../../hooks/user/use-user-purchases';
+import PurchaseItem from './purchase-item';
 
 interface Props {
   shrinkHeight: () => void;
 }
 
 const UserPurchases = (props: Props) => {
-  const userPurchases = UserHelper.getSamplePurchases();
-  // console.log('🚀 ~ file: user-purchases.tsx:10 ~ UserPurchases ~ userPurchases:', userPurchases);
-
+  const { purchases, loading } = useUserPurchases();
   return (
     <TouchableWithoutFeedback onPress={() => props.shrinkHeight()}>
-      <View className='flex-1 bg-white -mx-6 -mt-6 rounded-t-[32px] px-6 py-6'>
-        <Text className='font-main font-semibold text-xl text-black pb-6'>My Purchases</Text>
+      <View className='bg-white'>
+        <View className=' bg-white -mx-6 -mt-6 rounded-t-[32px] px-6 py-6 '>
+          <Text className='font-main font-semibold text-xl text-black pb-3'>My Purchases</Text>
+        </View>
+
+        {!loading && purchases ? (
+          <FlatList
+            className='h-full'
+            data={purchases}
+            renderItem={({ item }) => <PurchaseItem purchase={item} />}
+          />
+        ) : (
+          <View className='flex items-center justify-center'>
+            <ActivityIndicator />
+          </View>
+        )}
       </View>
     </TouchableWithoutFeedback>
   );

@@ -1,9 +1,12 @@
 import dayjs from 'dayjs';
 import { Image, ScrollView, Text, TouchableOpacity, View } from 'react-native';
+import Icon from 'react-native-vector-icons/Feather';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import IconButton from '../components/common/buttons/icon-button';
 import QuestionCard from '../components/common/forum/question-card';
 import { useAllQuestions } from '../hooks/questions/use-all-questions';
 import useRouter from '../hooks/router/use-router';
+import { Colors } from '../utils/colors';
 
 type Props = {};
 const AllQuestionsScreen = (props: Props) => {
@@ -59,12 +62,14 @@ const AllQuestionsScreen = (props: Props) => {
           )}
         </ScrollView>
         <View className='absolute bottom-0 right-0 mx-3 my-3 z-20'>
-          <TouchableOpacity
-            className='bg-primary-light p-4 rounded-full'
+          <IconButton
             onPress={() => router.navigate('Add Question')}
+            variant={'custom'}
+            size='custom'
+            buttonClassName='flex justify-center bg-primary-main shadow-md'
           >
-            <Image className='h-6 w-6 p-3' source={require('../assets/images/plus.png')} />
-          </TouchableOpacity>
+            <Icon name='plus' size={24} color={Colors.WHITE}></Icon>
+          </IconButton>
         </View>
       </View>
     </SafeAreaView>

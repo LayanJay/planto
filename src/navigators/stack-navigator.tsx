@@ -10,7 +10,6 @@ import LoginScreen from '../screens/auth/login-screen';
 import ProfileScreen from '../screens/auth/profile-screen';
 import SignUpScreen from '../screens/auth/signup-screen';
 import GetStartedScreen from '../screens/get-started-screen';
-import HomeScreen from '../screens/home-screen';
 import AddProductScreen from '../screens/product/add-product-screen';
 import AllProducts from '../screens/product/all-products-screen';
 import EditProductScreen from '../screens/product/edit-product-screen';
@@ -54,6 +53,7 @@ export type RootStackParamList = {
 
 const StackNavigator = () => {
   const { authUser, loading } = useCurrentUser();
+
   return (
     <Stack.Navigator
       initialRouteName={!loading && authUser ? 'Home' : 'Getting Started'}
@@ -82,7 +82,7 @@ const StackNavigator = () => {
           headerTitle: '',
         }}
       />
-      <Stack.Screen component={HomeScreen} name='Home' />
+      <Stack.Screen component={AllProducts} name='Home' />
       <Stack.Screen component={ProfileScreen} name='Profile' />
       <Stack.Screen
         component={EditProfileScreen}
@@ -112,7 +112,11 @@ const StackNavigator = () => {
       />
       <Stack.Screen component={ReviewsScreen} name='Reviews' options={{ headerTitle: 'Reviews' }} />
       <Stack.Screen component={AllProducts} name='All Products' />
-      <Stack.Screen component={SingleProductScreen} name='Single Product' />
+      <Stack.Screen
+        component={SingleProductScreen}
+        name='Single Product'
+        options={{ headerTitle: 'Plant' }}
+      />
       <Stack.Screen component={AddProductScreen} name='Add Product' />
       <Stack.Screen component={EditProductScreen} name='Edit Product' />
     </Stack.Navigator>

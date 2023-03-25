@@ -35,6 +35,10 @@ export class UserUtils extends FirebaseUtils {
     }
   }
 
+  public static async signOut(): Promise<void> {
+    await auth().signOut();
+  }
+
   public static async updateUserAccount(change: Partial<IUserDocument>): Promise<void> {
     // we let users to update their name only
     const currentUser = auth().currentUser;
